@@ -180,6 +180,17 @@ def main():
             console.print(f"[bold red]Failed to push kernel:[/bold red] {push_res.stderr}")
             sys.exit(1)
 
+        # Auto-detect pushed version number if not explicitly provided
+        if not args.version:
+            v_match = re.search(r"Kernel version (\d+)", push_res.stdout)
+            if v_match:
+                detected_version = v_match.group(1)
+                console.print(f"[dim]Detected kernel version: {detected_version}[/dim]")
+            else:
+                detected_version = None
+        else:
+            detected_version = str(args.version)
+
         if args.push_only:
             console.print(f"[bold green]✓ Successfully pushed to Kaggle:[/bold green] https://www.kaggle.com/code/{kernel_id}")
             return
@@ -188,6 +199,8 @@ def main():
         success = monitor_kernel(kernel_id)
         if not success:
             sys.exit(1)
+    else:
+        detected_version = str(args.version) if args.version else None
 
     # 4. Submit to competition
     console.print(f"[bold cyan]Submitting {SUBMISSION_FILE} from kernel {kernel_id} to {COMPETITION_NAME}...[/bold cyan]")
@@ -204,8 +217,8 @@ def main():
         "-m",
         args.message,
     ]
-    if args.version:
-        submit_cmd.extend(["-v", str(args.version)])
+    if detected_version:
+        submit_cmd.extend(["-v", detected_version])
 
     sub_res = run_command(submit_cmd)
     console.print(sub_res.stdout)
