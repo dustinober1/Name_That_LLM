@@ -47,12 +47,13 @@ def prepare_kernel_bundle(
     title: str = "Name That LLM - Solution Pipeline",
     enable_gpu: bool = False,
     username: str = "dustinober",
+    model_type: str = "blend",
 ) -> Path:
     """Prepare the directory with notebook and kernel-metadata.json required by kaggle CLI."""
     KERNEL_DIR.mkdir(parents=True, exist_ok=True)
 
     # 1. Ensure latest submission notebook is built
-    build_submission_notebook()
+    build_submission_notebook(model_type=model_type)
     src_notebook = PROJECT_ROOT / "notebooks" / "kaggle_submission.ipynb"
     dest_notebook = KERNEL_DIR / "kaggle_submission.ipynb"
     shutil.copyfile(src_notebook, dest_notebook)
@@ -128,9 +129,21 @@ def monitor_kernel(kernel_id: str, max_wait_seconds: int = 1800) -> bool:
 def main():
     parser = argparse.ArgumentParser(description="Push notebook to Kaggle and submit to competition.")
     parser.add_argument("-m", "--message", type=str, required=True, help="Submission message")
-    parser.add_argument("-k", "--kernel-slug", type=str, default="name-that-llm-baseline", help="Kernel slug")
+    parser.add_argument(
+        "-k",
+        "--kernel-slug",
+        type=str,
+        default="name-that-llm-solution-pipeline",
+        help="Kernel slug",
+    )
     parser.add_argument("-u", "--username", type=str, default=None, help="Kaggle username")
     parser.add_argument("-v", "--version", type=str, default=None, help="Specific kernel version to submit")
+    parser.add_argument(
+        "--model-type",
+        choices=["blend", "lgbm", "linear"],
+        default="blend",
+        help="Model architecture for submission notebook",
+    )
     parser.add_argument("--gpu", action="store_true", help="Enable GPU on Kaggle")
     parser.add_argument("--push-only", action="store_true", help="Only push notebook without submitting")
     parser.add_argument("--submit-only", action="store_true", help="Submit already-executed kernel output")
@@ -156,6 +169,7 @@ def main():
             kernel_slug=args.kernel_slug,
             enable_gpu=args.gpu,
             username=username,
+            model_type=args.model_type,
         )
 
         # 2. Push notebook to Kaggle
@@ -190,8 +204,8 @@ def main():
         "-m",
         args.message,
     ]
-    version_str = str(args.version) if args.version else "1"
-    submit_cmd.extend(["-v", version_str])
+    if args.version:
+        submit_cmd.extend(["-v", str(args.version)])
 
     sub_res = run_command(submit_cmd)
     console.print(sub_res.stdout)
