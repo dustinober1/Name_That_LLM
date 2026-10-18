@@ -11,6 +11,7 @@ Handles:
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -140,8 +141,8 @@ def main():
     parser.add_argument("-v", "--version", type=str, default=None, help="Specific kernel version to submit")
     parser.add_argument(
         "--model-type",
-        choices=["blend", "lgbm", "linear"],
-        default="blend",
+        choices=["blend", "lgbm", "linear", "hierarchical"],
+        default="hierarchical",
         help="Model architecture for submission notebook",
     )
     parser.add_argument("--gpu", action="store_true", help="Enable GPU on Kaggle")

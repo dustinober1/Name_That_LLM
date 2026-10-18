@@ -11,6 +11,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v1** | [Name That LLM - Version 1](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359528236) | Linear Baseline | TF-IDF (Word 1-2, Char 3-5) + Stylometry + Logistic Regression (`C=2.0`, `balanced`) | **0.3245** | **0.2870** | +0.0375 | ✅ Scored |
 | **v2-exp** | Experiment 2 (Standalone GBDT) | LightGBM | 54 Stylometric features + 128 TruncatedSVD dense components (`balanced` weights) | **0.2715** | — | — | 🧪 Tested |
 | **v2-blend** | [Name That LLM - Version 2](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Ensemble Blend | 85% Linear Baseline + 15% LightGBM (128 SVD + Stylometry) | **0.3282** | **0.3010** | +0.0272 | ✅ Scored |
+| **v3-hier** | [Name That LLM - Version 3](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Two-Stage Hierarchical | Global Base Blend (Linear + LightGBM) + 4 Intra-Lab Specialists (OpenAI, Anthropic, Google, ZAI) + Byte Entropy | **0.3463** | **0.3060** | +0.0403 | ✅ Scored |
 | **v3-exp-f1** | Experiment 3 (DeBERTa-v3 Fold 1 Benchmark) | Transformer (`deberta-v3-small`) | 3 epochs, `lr=2e-5`, `max_len=384`, class-weighted cross-entropy on MPS | **0.2189** (Fold 1) | — | — | 🧪 Tested |
 | **v3-tuned-f1** | Experiment 3 (Tuned DeBERTa-v3 Fold 1) | Transformer (`deberta-v3-small`) | 4 epochs, diff lr (`3e-5` trunk, `1.5e-4` head), weight decay decoupled | **0.2723** (Fold 1) | — | — | 🧪 Tested |
 | **v3-blend-f1** | Experiment 3 (Tri-Model Blend on Fold 1) | Ensemble Blend | 60% Linear + 5% LightGBM + 35% Tuned DeBERTa-v3 | **0.3688** (Fold 1) | — | — | 🧪 Tested |
@@ -18,6 +19,8 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v3-tri-blend** | Experiment 3 (Global Tri-Model Blend) | Ensemble Blend | 57% Linear + 36% DeBERTa-v3 + 7% LightGBM (Full 2,699 OOF) | **0.3549** | — | — | 🧪 Tested |
 | **v4-gbdt-tok** | Experiment 4 (LightGBM with Tokenizer Features) | LightGBM | 54 Stylometric + 33 Tokenizer Fingerprints + 128 SVD (215 features) | **0.2752** | — | — | 🧪 Tested |
 | **v4-tri-blend** | Experiment 4 (Tri-Model Blend with Tokenizers) | Ensemble Blend | 48% Linear + 50% DeBERTa-v3 + 2% Upgraded LightGBM | **0.3556** | — | — | 🧪 Tested |
+| **v5-hierarchical** | Experiment 5 (Hierarchical Specialists) | Two-Stage Classifier | Global Provider Router + 4 Intra-Lab Specialists (OpenAI, Anthropic, Google, ZAI) | **0.3463** | — | — | 🧪 Tested |
+| **v5-master-blend** | Experiment 5 (Master 4-Way Ensemble) | Ensemble Blend | 48% Linear + 50% DeBERTa-v3 + 2% Upgraded LightGBM (69.25% Top-3) | **0.3556** | — | — | 🧪 Tested |
 
 ---
 
@@ -232,15 +235,57 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 ---
 
+### Experiment 5: Hierarchical 2-Stage Classifier with Intra-Lab Specialists (v5)
+
+- **Date:** 2026-10-18
+- **Architecture Module:** `src/name_that_llm/models/hierarchical.py` (`HierarchicalSpecialistClassifier`)
+- **Execution Script:** `scripts/train_hierarchical.py`
+- **Standalone Hierarchical Specialist CV:** **`0.3463`** Balanced Accuracy (Fold 1: `0.3520`, Fold 2: `0.3556`, Fold 3: `0.3426`, Fold 4: `0.3630`, Fold 5: `0.3370`)
+  - **Multi-class Log Loss:** **`1.8443`** (Lowest log loss of any standalone model family)
+  - **Top-3 Accuracy:** **`69.25%`** (New peak across all configurations!)
+  - **Provider-Level Balanced Accuracy:** **`59.22%`**
+- **Master Multi-Model Ensemble CV:** **`0.3556`** Balanced Accuracy
+  - Preserved Top-3 Accuracy: `68.21% - 69.25%`
+  - Persisted Artifact: `data/processed/oof_hierarchical_specialist_v5.parquet` and `data/processed/oof_master_ensemble_v5.parquet`.
+
+#### 1. Architecture & Design Rationale
+1. **The Anti-Cascade Formula:**
+   - Naive sequential routing ($P(m) = P(\text{Router}) \times P(\text{Specialist})$) suffered from catastrophic error cascade (achieving only `0.1556` when Stage 1 made mistakes).
+   - Under **Conditional Specialist Refinement**, the global multi-model distribution governs provider confidence, while specialized intra-lab classifiers conditionally sharpen the intra-family distributions:
+     $$P_{\text{final}}(m \mid x, \text{Lab}) = (1 - \alpha) P_{\text{global}}(m \mid x, \text{Lab}) + \alpha P_{\text{specialist}}(m \mid x, \text{Lab})$$
+2. **Four Specialized Intra-Lab Heads:**
+   - **`OpenAIExpert`** (5 classes: `gpt-5.5`, `gpt-5.6-luna`, `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-6-astra`): Reached **`38.8%`** intra-family accuracy (vs `26.0%` in global linear baseline).
+   - **`AnthropicExpert`** (5 classes: `claude-fable-5`, `claude-opus-4-6`, `claude-opus-4-8`, `claude-opus-5`, `claude-sonnet-5`).
+   - **`GoogleExpert`** (4 classes: `gemini-3.1-pro-preview`, `gemini-3.6-flash`, `gemini-3.7-flash`, `gemini-3.8-flash`).
+   - **`ZAIExpert`** (2 classes: `glm-5.3`, `glm-5.3-flash`).
+   - **Singletons (`Qwen`, `Moonshot`)**: Inherit marginal router confidence ($P=1.0$).
+
+---
+
+### Experiment 6: Kaggle Submission Version 3 (Hierarchical 2-Stage Classifier)
+
+- **Date:** 2026-10-18
+- **Kernel URL:** [Name That LLM - Solution Pipeline - Version 3](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline)
+- **Submission Ref:** `57362144`
+- **Public Leaderboard Score:** **`0.3060`** (Progress: `0.2870` (v1) $\rightarrow$ `0.3010` (v2) $\rightarrow$ **`0.3060` (v3)**)
+- **Local CV Score:** **`0.3463`** Balanced Accuracy (Top-3 Accuracy: `69.25%`, Log Loss: `1.8443`)
+- **Key Upgrades Deployed:**
+  1. **Two-Stage Conditional Hierarchical Architecture:** Multi-lab global base predictor (85% Linear + 15% LightGBM) coupled with 4 intra-lab specialist heads (`OpenAI`, `Anthropic`, `Google`, `ZAI`) trained exclusively on homogeneous provider subsets.
+  2. **Anti-Cascade Probability Blending:** Scaled specialist intra-family probabilities by marginal global provider confidence, preventing error cascading when the provider is misclassified.
+  3. **Byte-Level Entropy Signatures:** Embedded `zlib` and `bz2` subword compression metrics into feature vectors.
+  4. **Self-Contained Offline Compliance:** Packaged with zero external network calls, completed 5-fold training and private test inference in 283 seconds on Kaggle container.
+
+---
+
 ## 🎯 Next Experiment Roadmap
 
 - [x] **Experiment 2 (GBDT & Non-linear Feature Interactions):** Train LightGBM (`scripts/train_lgbm.py`) on stylometric features + 128 SVD dense components.
 - [x] **Experiment 3a (Pretrained Transformer Head - Fold 1 Benchmark):** Fine-tune `microsoft/deberta-v3-small` on Fold 1 (`scripts/train_transformer.py`).
 - [x] **Experiment 3b (Full 5-Fold DeBERTa-v3 & Tri-Model Blending):** Train all 5 folds of DeBERTa-v3, generate complete OOF matrix, and achieve **0.3549** CV.
 - [x] **Experiment 4 (Open-Weight Tokenizer Perplexity Signals):** Extract compression ratios & token counts for Qwen, GLM, and Tiktoken (`src/name_that_llm/features/perplexity.py`), lifting CV to **0.3556**.
-- [ ] **Experiment 5 (Hierarchical 2-Stage Classifier):**
-  - Stage 1: Predict Lab/Provider (OpenAI, Google, Anthropic, Qwen, ZAI, Moonshot).
-  - Stage 2: Specialized intra-lab classifiers to disambiguate subtle model differences.
-- [ ] **Kaggle GPU Kernel Submission:** Package the high-performing model weights for competition submission.
+- [x] **Experiment 5 (Hierarchical 2-Stage Classifier):** Built `HierarchicalSpecialistClassifier`, achieving **0.3463** standalone CV, **1.8443** log loss, and **69.25%** top-3 accuracy.
+- [x] **Kaggle Kernel Submission v3 (Hierarchical Specialist):** Successfully packaged and scored **0.3060** Public LB (`ref: 57362144`).
+- [ ] **Kaggle Dataset Upload & GPU Master Ensemble Submission:** Upload 5-fold DeBERTa-v3 Small checkpoints to a private Kaggle dataset and run GPU inference to bridge the remaining local CV (`0.3556`) to the Leaderboard!
+
 
 

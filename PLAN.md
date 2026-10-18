@@ -3,8 +3,8 @@
 > **Current Status:**  
 > - **v1 Baseline:** `0.2870` Public LB (`0.3245` CV) — Logistic Regression (TF-IDF + Stylometry)  
 > - **v2 Ensemble:** `0.3010` Public LB (`0.3282` CV) — 85% Linear + 15% LightGBM Blend  
-> - **Current Competition Leader (#1):** **`0.616`**  
-> - **Target:** Close the +0.315 gap to achieve competitive medal-tier standing (`0.58 - 0.62+`).
+> - **v3 Hierarchical:** `0.3060` Public LB (`0.3463` CV) — 2-Stage Hierarchical Specialist Ensemble  
+> - **Target:** Close the remaining gap to achieve competitive medal-tier standing (`0.58 - 0.62+`).
 
 ---
 
