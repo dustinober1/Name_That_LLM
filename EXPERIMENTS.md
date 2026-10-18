@@ -22,7 +22,8 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v5-hierarchical** | Experiment 5 (Hierarchical Specialists) | Two-Stage Classifier | Global Provider Router + 4 Intra-Lab Specialists (OpenAI, Anthropic, Google, ZAI) | **0.3463** | — | — | 🧪 Tested |
 | **v5-master-blend** | Experiment 5 (Master 4-Way Ensemble) | Ensemble Blend | 48% Linear + 50% DeBERTa-v3 + 2% Upgraded LightGBM (69.25% Top-3) | **0.3556** | — | — | 🧪 Tested |
 | **v4-gpu-sub** | [Name That LLM - Version 4](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359737151) | GPU Master Ensemble | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Small on CUDA | **0.3556** | **0.3290** | +0.0266 | ✅ Scored |
-| **v5-hungarian-cv** | Experiment 8 (Hungarian Prompt Assignment) | Post-Processing | Lexical TF-IDF Prompt Clustering + Bipartite Matching on Master Ensemble | **0.4327** | — | — | 🧪 Tested |
+| **v5-hungarian-sub** | [Name That LLM - Version 5](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | GPU Ensemble + Hungarian Matching | 50% Hierarchical Base + 50% DeBERTa-v3 + TF-IDF Prompt Clustering + Hungarian Bipartite Assignment | **0.4327** | *Evaluating* | — | ⏳ In Progress |
+
 
 
 
@@ -319,6 +320,21 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 ---
 
+### Experiment 9: Kaggle Submission Version 5 (GPU Ensemble + Hungarian Prompt Matching)
+
+- **Date:** 2026-10-18
+- **Kernel URL:** [Name That LLM - Solution Pipeline - Version 5](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline)
+- **Dataset Attached:** `dustinober/name-that-llm-deberta-checkpoints` (5 fine-tuned DeBERTa-v3 Small fold models)
+- **Submission Ref:** `57371212`
+- **Public Leaderboard Score:** Evaluation In Progress (`SubmissionStatus.PENDING`)
+- **Local CV Score:** **`0.4327`** Balanced Accuracy (A **+0.0771 (+7.71%)** gain over v4's `0.3556`)
+- **Key Upgrades Deployed:**
+  1. **Prompt Clustering:** Reconstructed unseen test prompt groups using TF-IDF cosine distance with hierarchical clustering (`average` linkage at distance threshold `0.90`).
+  2. **Hungarian Bipartite Assignment:** Evaluated optimal 1-to-1 matching via `scipy.optimize.linear_sum_assignment` across all candidate models within each prompt, enforcing zero model duplicates per prompt.
+  3. **GPU Master Ensemble:** Blended 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Small before bipartite decoding.
+
+---
+
 ## 🎯 Next Experiment Roadmap
 
 - [x] **Experiment 2 (GBDT & Non-linear Feature Interactions):** Train LightGBM (`scripts/train_lgbm.py`) on stylometric features + 128 SVD dense components.
@@ -327,9 +343,11 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 - [x] **Experiment 4 (Open-Weight Tokenizer Perplexity Signals):** Extract compression ratios & token counts for Qwen, GLM, and Tiktoken (`src/name_that_llm/features/perplexity.py`), lifting CV to **0.3556**.
 - [x] **Experiment 5 (Hierarchical 2-Stage Classifier):** Built `HierarchicalSpecialistClassifier`, achieving **0.3463** standalone CV, **1.8443** log loss, and **69.25%** top-3 accuracy.
 - [x] **Kaggle Kernel Submission v3 (Hierarchical Specialist):** Successfully packaged and scored **0.3060** Public LB (`ref: 57362144`).
-- [x] **Kaggle Dataset Upload & GPU Master Ensemble (v4):** Uploaded 5-fold DeBERTa-v3 Small checkpoints to Kaggle dataset and executed GPU inference.
+- [x] **Kaggle Dataset Upload & GPU Master Ensemble (v4):** Uploaded 5-fold DeBERTa-v3 Small checkpoints to Kaggle dataset and scored **0.3290** Public LB (`ref: 57370723`).
 - [x] **Experiment 8 (Prompt Clustering & Hungarian Assignment):** Implemented in `src/name_that_llm/post_processing.py`, lifting CV from **0.3556** to **0.4327** (+7.71%).
-- [ ] **Kaggle Kernel Submission v5 (GPU Ensemble + Hungarian Assignment):** Push upgraded notebook to Kaggle and submit for Public LB score!
+- [x] **Kaggle Kernel Submission v5 (GPU Ensemble + Hungarian Assignment):** Pushed Version 5 and submitted for Public LB score (`ref: 57371212`).
+- [ ] **Phase 6 (Backbone Scaling):** Fine-tune `microsoft/deberta-v3-base` (86M) and `ModernBERT` with gradient accumulation to target **0.50 - 0.60+** LB!
+
 
 
 
