@@ -22,7 +22,10 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v5-hierarchical** | Experiment 5 (Hierarchical Specialists) | Two-Stage Classifier | Global Provider Router + 4 Intra-Lab Specialists (OpenAI, Anthropic, Google, ZAI) | **0.3463** | — | — | 🧪 Tested |
 | **v5-master-blend** | Experiment 5 (Master 4-Way Ensemble) | Ensemble Blend | 48% Linear + 50% DeBERTa-v3 + 2% Upgraded LightGBM (69.25% Top-3) | **0.3556** | — | — | 🧪 Tested |
 | **v4-gpu-sub** | [Name That LLM - Version 4](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359737151) | GPU Master Ensemble | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Small on CUDA | **0.3556** | **0.3290** | +0.0266 | ✅ Scored |
-| **v5-hungarian-sub** | [Name That LLM - Version 5](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | GPU Ensemble + Hungarian Matching | 50% Hierarchical Base + 50% DeBERTa-v3 + TF-IDF Prompt Clustering + Hungarian Bipartite Assignment | **0.4327** | *Evaluating* | — | ⏳ In Progress |
+| **v5-hungarian-sub** | [Name That LLM - Version 5](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | GPU Ensemble + Hungarian Matching | 50% Hierarchical Base + 50% DeBERTa-v3 + TF-IDF Prompt Clustering + Hungarian Bipartite Assignment | **0.4327** | **0.3300** | +0.1027 | ✅ Scored |
+| **v6-base-f1** | Experiment 10 (DeBERTa-v3 Base Fold 1) | Transformer (`deberta-v3-base`) | 3 epochs, `batch=4`, `accum=2`, `lr=2e-5`, hidden size 768 (86M params) | **0.2967** (Fold 1) | — | — | 🧪 Tested |
+| **v6-base-hung** | Experiment 10 (Base + Hierarchical + Hungarian) | Master Ensemble + Hungarian | 50% DeBERTa-v3 Base + 50% Hierarchical Specialist + Hungarian Matching | **0.5006** (Fold 1) | — | — | 🧪 Tested |
+
 
 
 
@@ -326,12 +329,29 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 - **Kernel URL:** [Name That LLM - Solution Pipeline - Version 5](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline)
 - **Dataset Attached:** `dustinober/name-that-llm-deberta-checkpoints` (5 fine-tuned DeBERTa-v3 Small fold models)
 - **Submission Ref:** `57371212`
-- **Public Leaderboard Score:** Evaluation In Progress (`SubmissionStatus.PENDING`)
+- **Public Leaderboard Score:** **`0.3300`** (Progress: `0.2870` (v1) $\rightarrow$ `0.3010` (v2) $\rightarrow$ `0.3060` (v3) $\rightarrow$ `0.3290` (v4) $\rightarrow$ **`0.3300` (v5)**)
 - **Local CV Score:** **`0.4327`** Balanced Accuracy (A **+0.0771 (+7.71%)** gain over v4's `0.3556`)
 - **Key Upgrades Deployed:**
   1. **Prompt Clustering:** Reconstructed unseen test prompt groups using TF-IDF cosine distance with hierarchical clustering (`average` linkage at distance threshold `0.90`).
   2. **Hungarian Bipartite Assignment:** Evaluated optimal 1-to-1 matching via `scipy.optimize.linear_sum_assignment` across all candidate models within each prompt, enforcing zero model duplicates per prompt.
   3. **GPU Master Ensemble:** Blended 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Small before bipartite decoding.
+
+---
+
+### Experiment 10: Backbone Scaling — DeBERTa-v3 Base Benchmark (Breaks 0.50 CV!)
+
+- **Date:** 2026-10-18
+- **Model Backbone:** `microsoft/deberta-v3-base` (86M parameters, hidden size 768, 12 layers)
+- **Execution Script:** `scripts/train_transformer.py` (`--accum-steps 2`, `--batch-size 4`, `lr=2e-5`)
+- **Fold 1 Standalone Score:** **`0.2967`** Balanced Accuracy (Standard Acc: `0.2968`, Top-3: `66.42%`, Loss: `1.8837`)
+  - A decisive **+0.0244 (+2.44%)** improvement over tuned DeBERTa-v3 Small (`0.2723`) in just 3 epochs!
+- **Fold 1 Tri-Model Synergy:**
+  - 50% DeBERTa-v3 Base + 50% Hierarchical Specialists (Raw Argmax): **`0.3836`** (+0.0261 over standalone hierarchical)
+  - **★ With Prompt Hungarian Assignment:** **`0.5006` Balanced Accuracy**!
+- **Key Takeaways & Path Forward:**
+  - Scaling backbone capacity from 44M (Small) to 86M (Base) directly improves class separation on difficult intra-family models (`gpt-5.6-sol` recall reached 30%, `kimi-k3` reached 33%, `gemini-3.7-flash` reached 47%).
+  - Blending Base with Hierarchical Specialists and Hungarian Assignment breaks the **`0.50` CV barrier** for the first time.
+  - Training all 5 folds of `microsoft/deberta-v3-base` will be our primary engine to push Public Leaderboard toward **`0.45 - 0.55+`**.
 
 ---
 
