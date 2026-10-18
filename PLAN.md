@@ -4,7 +4,10 @@
 > - **v1 Baseline:** `0.2870` Public LB (`0.3245` CV) — Logistic Regression (TF-IDF + Stylometry)  
 > - **v2 Ensemble:** `0.3010` Public LB (`0.3282` CV) — 85% Linear + 15% LightGBM Blend  
 > - **v3 Hierarchical:** `0.3060` Public LB (`0.3463` CV) — 2-Stage Hierarchical Specialist Ensemble  
-> - **Target:** Close the remaining gap to achieve competitive medal-tier standing (`0.58 - 0.62+`).
+> - **v4 GPU Ensemble:** Evaluating on LB (`0.3556` CV) — 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 on CUDA  
+> - **v5 Hungarian Post-Processing:** **`0.4327`** CV — Prompt Clustering + Hungarian Bipartite Matching  
+> - **Target:** Scale DeBERTa-v3 Base and LoRA representations to achieve competitive medal-tier standing (`0.58 - 0.62+`).
+
 
 ---
 
@@ -32,19 +35,22 @@
 ## 🎯 Phased Execution Roadmap
 
 ```
-Current: v2 Blend (0.3010 LB)
+[Phase 1] Experiment 3: Pretrained DeBERTa-v3 5-Fold [Completed] ──► 0.3549 CV
    │
    ▼
-[Phase 1] Experiment 3: Pretrained DeBERTa-v3 Fine-Tuning ─────────► Target: 0.48 - 0.52 LB
+[Phase 2] Experiment 4: Tokenizer Perplexity Signals [Completed] ─► 0.3556 CV
    │
    ▼
-[Phase 2] Experiment 4: Open-Weight Tokenizer Perplexity Signals ──► Target: 0.54 - 0.57 LB
+[Phase 3] Experiment 5: Hierarchical Specialists [Completed] ────► 0.3463 Standalone (69.3% Top-3)
    │
    ▼
-[Phase 3] Experiment 5: Hierarchical 2-Stage Classifier ──────────► Target: 0.58 - 0.60 LB
+[Phase 4] GPU Ensemble v4: Kaggle Dataset + CUDA [Submitted] ─────► 0.3556 CV (Evaluating on LB)
    │
    ▼
-[Phase 4] Tri-Model Stacking & Probability Ensembling ────────────► Target: 0.62+ LB
+[Phase 5] Experiment 8: Prompt Clustering + Hungarian [Verified] ─► 0.4327 CV (+7.71%)
+   │
+   ▼
+[Phase 6] Backbone Scaling: DeBERTa-v3 Base & LoRA ───────────────► Target: 0.55 - 0.62+ LB
 ```
 
 ---
