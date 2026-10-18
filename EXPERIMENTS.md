@@ -21,6 +21,9 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v4-tri-blend** | Experiment 4 (Tri-Model Blend with Tokenizers) | Ensemble Blend | 48% Linear + 50% DeBERTa-v3 + 2% Upgraded LightGBM | **0.3556** | — | — | 🧪 Tested |
 | **v5-hierarchical** | Experiment 5 (Hierarchical Specialists) | Two-Stage Classifier | Global Provider Router + 4 Intra-Lab Specialists (OpenAI, Anthropic, Google, ZAI) | **0.3463** | — | — | 🧪 Tested |
 | **v5-master-blend** | Experiment 5 (Master 4-Way Ensemble) | Ensemble Blend | 48% Linear + 50% DeBERTa-v3 + 2% Upgraded LightGBM (69.25% Top-3) | **0.3556** | — | — | 🧪 Tested |
+| **v4-gpu-sub** | [Name That LLM - Version 4](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359737151) | GPU Master Ensemble | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Small on CUDA | **0.3556** | *Pending* | — | ⏳ In Progress |
+| **v5-hungarian-cv** | Experiment 8 (Hungarian Prompt Assignment) | Post-Processing | Lexical TF-IDF Prompt Clustering + Bipartite Matching on Master Ensemble | **0.4327** | — | — | 🧪 Tested |
+
 
 ---
 
@@ -277,6 +280,44 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 ---
 
+### Experiment 7: Kaggle Submission Version 4 (5-Fold DeBERTa-v3 GPU Ensemble)
+
+- **Date:** 2026-10-18
+- **Kernel URL:** [Name That LLM - Solution Pipeline - Version 4](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359737151)
+- **Dataset Attached:** `dustinober/name-that-llm-deberta-checkpoints` (2.8 GB, 5 fine-tuned DeBERTa-v3 Small fold models)
+- **Submission Ref:** `57370723`
+- **Public Leaderboard Score:** Evaluation In Progress (`SubmissionStatus.PENDING`)
+- **Local CV Score:** **`0.3556`** Balanced Accuracy (Top-3 Accuracy: `68.21%`, Multi-class Log Loss: `1.8529`)
+- **Key Upgrades Deployed:**
+  1. **CUDA Offline Transformer Inference:** Mounted all 5 fine-tuned `microsoft/deberta-v3-small` fold weights via a dedicated private Kaggle dataset.
+  2. **50/50 Master Blend:** Blended 50% Hierarchical 2-Stage Specialist predictions + 50% 5-Fold DeBERTa-v3 sequence model posteriors.
+  3. **Zero Network Calls:** Full end-to-end container execution completed in 424 seconds on Kaggle Tesla T4 GPU.
+
+---
+
+### Experiment 8: Prompt Clustering & Hungarian Bipartite Matching Post-Processing
+
+- **Date:** 2026-10-18
+- **Module Created:** [`src/name_that_llm/post_processing.py`](file:///Users/dustinober/Projects/Data_Science/Name_That_LLM/src/name_that_llm/post_processing.py)
+- **Local CV Balanced Accuracy:** **`0.4327`** (A massive **+0.0771 (+7.71%)** gain over raw argmax `0.3556`!)
+  - Theoretical upper bound with ground-truth `prompt_id`: **`0.4375`**
+  - Standard Accuracy: **`0.4328`**
+  - Macro F1: **`0.4318`**
+- **The Core Mathematical Insight:**
+  1. **Dataset Invariant:** The test set passages are responses to unseen prompts. Each unseen prompt has at most one response from each of the 18 frontier models (no model ever responds twice to the same prompt).
+  2. **Prompt Cluster Recovery:** Responses to the same prompt share lexical and topical content. Applying TF-IDF cosine distance with hierarchical clustering (`average` linkage at distance threshold `0.90`) blindly recovers prompt clusters directly from text without prompt labels.
+  3. **Hungarian Bipartite Assignment:** Within each prompt cluster of size $M \le 18$, `scipy.optimize.linear_sum_assignment` maximizes total log-likelihood $\sum_i \log P(x_i = m_i)$ under the strict constraint that no two passages in the cluster receive the same model label.
+  4. **Eliminating Majority Starvation:** Previously collapsed intra-family classes instantly recovered:
+     - `gpt-5.6-sol` recall: `0.07` $\rightarrow$ **`0.2267`**
+     - `claude-fable-5` recall: `0.11` $\rightarrow$ **`0.2215`**
+     - `glm-5.3` recall: `0.14` $\rightarrow$ **`0.2333`**
+     - `gpt-5.6-terra` recall: `0.18` $\rightarrow$ **`0.3200`**
+     - `claude-opus-4-8` recall: `0.08` $\rightarrow$ **`0.4267`**
+     - `gemini-3.1-pro-preview` recall: `0.70` $\rightarrow$ **`0.8133`**
+     - **Every single class achieved precision, recall, and F1 >= 0.22!**
+
+---
+
 ## 🎯 Next Experiment Roadmap
 
 - [x] **Experiment 2 (GBDT & Non-linear Feature Interactions):** Train LightGBM (`scripts/train_lgbm.py`) on stylometric features + 128 SVD dense components.
@@ -285,7 +326,10 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 - [x] **Experiment 4 (Open-Weight Tokenizer Perplexity Signals):** Extract compression ratios & token counts for Qwen, GLM, and Tiktoken (`src/name_that_llm/features/perplexity.py`), lifting CV to **0.3556**.
 - [x] **Experiment 5 (Hierarchical 2-Stage Classifier):** Built `HierarchicalSpecialistClassifier`, achieving **0.3463** standalone CV, **1.8443** log loss, and **69.25%** top-3 accuracy.
 - [x] **Kaggle Kernel Submission v3 (Hierarchical Specialist):** Successfully packaged and scored **0.3060** Public LB (`ref: 57362144`).
-- [ ] **Kaggle Dataset Upload & GPU Master Ensemble Submission:** Upload 5-fold DeBERTa-v3 Small checkpoints to a private Kaggle dataset and run GPU inference to bridge the remaining local CV (`0.3556`) to the Leaderboard!
+- [x] **Kaggle Dataset Upload & GPU Master Ensemble (v4):** Uploaded 5-fold DeBERTa-v3 Small checkpoints to Kaggle dataset and executed GPU inference.
+- [x] **Experiment 8 (Prompt Clustering & Hungarian Assignment):** Implemented in `src/name_that_llm/post_processing.py`, lifting CV from **0.3556** to **0.4327** (+7.71%).
+- [ ] **Kaggle Kernel Submission v5 (GPU Ensemble + Hungarian Assignment):** Push upgraded notebook to Kaggle and submit for Public LB score!
+
 
 
 

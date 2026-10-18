@@ -59,6 +59,8 @@ def prepare_kernel_bundle(
     dest_notebook = KERNEL_DIR / "kaggle_submission.ipynb"
     shutil.copyfile(src_notebook, dest_notebook)
 
+    datasets = ["dustinober/name-that-llm-deberta-checkpoints"] if enable_gpu else []
+
     # 2. Write kernel-metadata.json
     metadata = {
         "id": f"{username}/{kernel_slug}",
@@ -70,7 +72,7 @@ def prepare_kernel_bundle(
         "enable_gpu": "true" if enable_gpu else "false",
         "enable_tpu": "false",
         "enable_internet": "false",  # Must be false for competition submission
-        "dataset_sources": [],
+        "dataset_sources": datasets,
         "competition_sources": [COMPETITION_NAME],
         "kernel_sources": [],
         "model_sources": [],
