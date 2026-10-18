@@ -1,5 +1,10 @@
 """Train LightGBM gradient boosted trees with stylometric and SVD features."""
 
+import os
+
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 import argparse
 from rich.console import Console
 
@@ -13,16 +18,22 @@ console = Console()
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Train LightGBM with Stylometry and SVD.")
+    parser = argparse.ArgumentParser(description="Train LightGBM with Stylometry, Tokenizer Fingerprinting, and SVD.")
     parser.add_argument("--folds", type=int, default=DEFAULT_N_FOLDS, help="Number of CV folds")
     parser.add_argument("--n-svd", type=int, default=128, help="Number of SVD components")
     parser.add_argument("--n-estimators", type=int, default=200, help="Number of boosting trees")
     parser.add_argument("--lr", type=float, default=0.05, help="Learning rate")
     parser.add_argument("--seed", type=int, default=RANDOM_SEED, help="Random seed")
     parser.add_argument(
+        "--use-tokenizers",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Include tokenizer fingerprinting features (Qwen, GLM, tiktoken)",
+    )
+    parser.add_argument(
         "--output-name",
         type=str,
-        default="lgbm_stylometry",
+        default="lgbm_stylometry_tokenizer",
         help="Experiment name prefix",
     )
     return parser.parse_args()
@@ -40,6 +51,7 @@ def main():
     def model_factory():
         return GBDTClassifierPipeline(
             n_svd_components=args.n_svd,
+            use_tokenizer_features=args.use_tokenizers,
             n_estimators=args.n_estimators,
             learning_rate=args.lr,
             random_state=args.seed,

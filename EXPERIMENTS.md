@@ -16,6 +16,8 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v3-blend-f1** | Experiment 3 (Tri-Model Blend on Fold 1) | Ensemble Blend | 60% Linear + 5% LightGBM + 35% Tuned DeBERTa-v3 | **0.3688** (Fold 1) | — | — | 🧪 Tested |
 | **v3-5fold** | Experiment 3 (Full 5-Fold DeBERTa-v3) | Transformer (`deberta-v3-small`) | 4 epochs, diff lr (`3e-5` / `1.5e-4`), full 5-fold StratifiedGroupKFold | **0.2504** | — | — | 🧪 Tested |
 | **v3-tri-blend** | Experiment 3 (Global Tri-Model Blend) | Ensemble Blend | 57% Linear + 36% DeBERTa-v3 + 7% LightGBM (Full 2,699 OOF) | **0.3549** | — | — | 🧪 Tested |
+| **v4-gbdt-tok** | Experiment 4 (LightGBM with Tokenizer Features) | LightGBM | 54 Stylometric + 33 Tokenizer Fingerprints + 128 SVD (215 features) | **0.2752** | — | — | 🧪 Tested |
+| **v4-tri-blend** | Experiment 4 (Tri-Model Blend with Tokenizers) | Ensemble Blend | 48% Linear + 50% DeBERTa-v3 + 2% Upgraded LightGBM | **0.3556** | — | — | 🧪 Tested |
 
 ---
 
@@ -189,14 +191,56 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 ---
 
+### Experiment 4: Tokenizer Perplexity & Compression Fingerprinting (v4)
+
+- **Date:** 2026-10-18
+- **Feature Extractor Module:** `src/name_that_llm/features/perplexity.py` (`TokenizerFeatureExtractor`)
+- **Standalone Upgraded LightGBM CV:** **`0.2752`** Balanced Accuracy (Fold 1: `0.2908`, Fold 2: `0.2963`, Fold 3: `0.2796`, Fold 4: `0.2352`, Fold 5: `0.2741`)
+  - Standalone gain: **`+0.0037`** over previous stylometry-only LightGBM (`0.2715`).
+- **Global Upgraded Tri-Model Blend CV:** **`0.3556`** Balanced Accuracy (**+0.0311** over Linear Baseline `0.3245`)
+  - Standard Accuracy: `0.3557`
+  - Macro F1: `0.3371`
+  - Top-3 Accuracy: `68.21%`
+  - Multi-class Log Loss: `1.8529`
+  - Optimal Weights: **48.0% Linear + 50.0% DeBERTa-v3 + 2.0% Upgraded LightGBM**
+
+#### 1. Extracted Tokenizer Features (33 New Dimensions $\rightarrow$ 215 Total)
+1. **OpenAI Tiktoken Signals (`cl100k_base` & `o200k_base`):**
+   - Exact token counts, characters-per-token, and bytes-per-token.
+   - Subword byte length statistics (mean, std, and short token fragmentation ratio).
+2. **Alibaba Qwen 2.5 Tokenizer (`Qwen/Qwen2.5-7B`):**
+   - Native BPE token counts and characters-per-token compression.
+   - Subword character length distribution and fragmentation ratios.
+3. **Zhipu AI GLM-4 Tokenizer (`THUDM/glm-4-9b-chat`):**
+   - Native GLM token counts and characters-per-token compression.
+   - Subword length distributions and fragmentation rates.
+4. **Cross-Tokenizer Relative Ratios:**
+   - Pairwise ratios across all tokenizers (`qwen/cl100k`, `glm/cl100k`, `o200k/cl100k`, `qwen/glm`, `qwen/o200k`, `glm/o200k`).
+5. **Byte-Level Entropy Signatures:**
+   - `zlib` and `bz2` compression ratios.
+
+#### 2. Key Diagnostic Discoveries
+- **`qwen3.8-max` Recall Surges to 60.0%:**
+  - In v1 baseline: `49.3%` (74/150).
+  - In v3 blend: `56.0%` (84/150).
+  - In v4 blend with tokenizers: **`60.0%` (90/150)** (+10.7% recall over baseline).
+- **`glm-5.3` Recall Improves:**
+  - Standalone LightGBM recall on `glm-5.3` climbed from `14.0%` to **`19.3%`** (29/150).
+- **Ensemble Synergy:**
+  - Blending these non-linear tokenizer compression interactions with Linear and DeBERTa boosts global CV to **`0.3556`**.
+  - Persisted OOF: `data/processed/oof_tri_blend_v4_tokenizer.parquet`.
+
+---
+
 ## 🎯 Next Experiment Roadmap
 
 - [x] **Experiment 2 (GBDT & Non-linear Feature Interactions):** Train LightGBM (`scripts/train_lgbm.py`) on stylometric features + 128 SVD dense components.
 - [x] **Experiment 3a (Pretrained Transformer Head - Fold 1 Benchmark):** Fine-tune `microsoft/deberta-v3-small` on Fold 1 (`scripts/train_transformer.py`).
 - [x] **Experiment 3b (Full 5-Fold DeBERTa-v3 & Tri-Model Blending):** Train all 5 folds of DeBERTa-v3, generate complete OOF matrix, and achieve **0.3549** CV.
-- [ ] **Experiment 3c (Kaggle GPU Submission):** Package the 5-fold DeBERTa weights and submit v3 to the Kaggle Leaderboard.
-- [ ] **Experiment 4 (Open-Weight Tokenizer Perplexity Signals):** Extract compression ratios & token counts for Qwen and GLM (`src/name_that_llm/features/perplexity.py`).
+- [x] **Experiment 4 (Open-Weight Tokenizer Perplexity Signals):** Extract compression ratios & token counts for Qwen, GLM, and Tiktoken (`src/name_that_llm/features/perplexity.py`), lifting CV to **0.3556**.
 - [ ] **Experiment 5 (Hierarchical 2-Stage Classifier):**
   - Stage 1: Predict Lab/Provider (OpenAI, Google, Anthropic, Qwen, ZAI, Moonshot).
   - Stage 2: Specialized intra-lab classifiers to disambiguate subtle model differences.
+- [ ] **Kaggle GPU Kernel Submission:** Package the high-performing model weights for competition submission.
+
 
