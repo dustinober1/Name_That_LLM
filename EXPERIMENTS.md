@@ -21,8 +21,9 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v4-tri-blend** | Experiment 4 (Tri-Model Blend with Tokenizers) | Ensemble Blend | 48% Linear + 50% DeBERTa-v3 + 2% Upgraded LightGBM | **0.3556** | — | — | 🧪 Tested |
 | **v5-hierarchical** | Experiment 5 (Hierarchical Specialists) | Two-Stage Classifier | Global Provider Router + 4 Intra-Lab Specialists (OpenAI, Anthropic, Google, ZAI) | **0.3463** | — | — | 🧪 Tested |
 | **v5-master-blend** | Experiment 5 (Master 4-Way Ensemble) | Ensemble Blend | 48% Linear + 50% DeBERTa-v3 + 2% Upgraded LightGBM (69.25% Top-3) | **0.3556** | — | — | 🧪 Tested |
-| **v4-gpu-sub** | [Name That LLM - Version 4](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359737151) | GPU Master Ensemble | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Small on CUDA | **0.3556** | *Pending* | — | ⏳ In Progress |
+| **v4-gpu-sub** | [Name That LLM - Version 4](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359737151) | GPU Master Ensemble | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Small on CUDA | **0.3556** | **0.3290** | +0.0266 | ✅ Scored |
 | **v5-hungarian-cv** | Experiment 8 (Hungarian Prompt Assignment) | Post-Processing | Lexical TF-IDF Prompt Clustering + Bipartite Matching on Master Ensemble | **0.4327** | — | — | 🧪 Tested |
+
 
 
 ---
@@ -286,7 +287,7 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 - **Kernel URL:** [Name That LLM - Solution Pipeline - Version 4](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359737151)
 - **Dataset Attached:** `dustinober/name-that-llm-deberta-checkpoints` (2.8 GB, 5 fine-tuned DeBERTa-v3 Small fold models)
 - **Submission Ref:** `57370723`
-- **Public Leaderboard Score:** Evaluation In Progress (`SubmissionStatus.PENDING`)
+- **Public Leaderboard Score:** **`0.3290`** (Progress: `0.2870` (v1) $\rightarrow$ `0.3010` (v2) $\rightarrow$ `0.3060` (v3) $\rightarrow$ **`0.3290` (v4)**)
 - **Local CV Score:** **`0.3556`** Balanced Accuracy (Top-3 Accuracy: `68.21%`, Multi-class Log Loss: `1.8529`)
 - **Key Upgrades Deployed:**
   1. **CUDA Offline Transformer Inference:** Mounted all 5 fine-tuned `microsoft/deberta-v3-small` fold weights via a dedicated private Kaggle dataset.
