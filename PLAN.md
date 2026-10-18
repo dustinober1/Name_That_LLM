@@ -78,17 +78,22 @@ Replace the bag-of-words representation with contextual sequence modeling. Fine-
      - `gemini-3.1-pro-preview` jumped from **0.70** to **0.90** (27/30).
      - `claude-opus-5` jumped from **0.51** to **0.67** (20/30).
    - **Tri-Model Ensemble Synergy on Fold 1:**
-     - Blending 70% Linear + 15% LightGBM + 15% DeBERTa reaches **`0.3409`** (+0.0147 over Linear baseline `0.3262`).
-3. **Execute Full 5-Fold Training & Save OOF Predictions:**
+     - Blending 60% Linear + 5% LightGBM + 35% Tuned DeBERTa reaches **`0.3688`** (+0.0427 over Linear baseline `0.3262`).
+3. **[Completed] Execute Full 5-Fold Training & Save OOF Predictions:**
    ```bash
    uv run python scripts/train_transformer.py \
      --model-name microsoft/deberta-v3-small \
-     --epochs 3 \
+     --epochs 4 \
      --batch-size 8 \
-     --lr 2e-5 \
+     --lr 3e-5 \
+     --head-lr 1.5e-4 \
      --max-length 384
    ```
-   - Persist OOF probability matrix to `data/processed/oof_deberta_v3_small.parquet`.
+   - Persisted OOF probability matrix: `data/processed/oof_microsoft_deberta-v3-small.parquet`.
+   - Saved 5 checkpoints to `models/checkpoints/microsoft_deberta-v3-small_fold{0..4}`.
+   - **Global 5-Fold Tri-Model Blend Score:** **`0.3549`** Balanced Accuracy (**+0.0304** over Linear Baseline `0.3245`, **+0.0267** over v2 blend `0.3282`).
+   - Optimal Global Weights: 57.0% Linear + 36.0% DeBERTa-v3 + 7.0% LightGBM.
+   - Top-3 Accuracy: **`68.80%`**, Multi-class Log Loss: **`1.8558`**.
 4. **Build Kaggle GPU Kernel & Submit:**
    - DeBERTa fine-tuning or inference inside Kaggle offline container requires GPU (`--gpu` flag).
    - Update `scripts/build_submission_notebook.py` to support `--model-type transformer`.

@@ -39,7 +39,8 @@ def parse_args():
     parser.add_argument("--folds", type=int, default=DEFAULT_N_FOLDS, help="Number of folds")
     parser.add_argument("--epochs", type=int, default=3, help="Training epochs per fold")
     parser.add_argument("--batch-size", type=int, default=8, help="Batch size")
-    parser.add_argument("--lr", type=float, default=2e-5, help="Learning rate")
+    parser.add_argument("--lr", type=float, default=3e-5, help="Learning rate for transformer backbone")
+    parser.add_argument("--head-lr", type=float, default=None, help="Learning rate for classification head (defaults to 5x lr)")
     parser.add_argument("--max-length", type=int, default=384, help="Max token length")
     parser.add_argument("--seed", type=int, default=RANDOM_SEED, help="Random seed")
     parser.add_argument("--fold-to-run", type=int, default=None, help="Run only a single fold (0-indexed)")
@@ -72,6 +73,7 @@ def main():
             max_length=args.max_length,
             batch_size=args.batch_size,
             lr=args.lr,
+            head_lr=args.head_lr,
             epochs=args.epochs,
             device=device,
         )

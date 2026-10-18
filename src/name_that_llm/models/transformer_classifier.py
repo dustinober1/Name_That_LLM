@@ -74,8 +74,9 @@ class TransformerClassifier:
         num_classes: int = NUM_CLASSES,
         max_length: int = 384,
         batch_size: int = 8,
-        lr: float = 2e-5,
-        epochs: int = 3,
+        lr: float = 3e-5,
+        head_lr: Optional[float] = None,
+        epochs: int = 4,
         device: Optional[torch.device] = None,
     ):
         self.model_name = model_name
@@ -83,6 +84,7 @@ class TransformerClassifier:
         self.max_length = max_length
         self.batch_size = batch_size
         self.lr = lr
+        self.head_lr = head_lr or (lr * 5.0)
         self.epochs = epochs
         self.device = device or get_device()
 
@@ -105,7 +107,41 @@ class TransformerClassifier:
         loss_fn = nn.CrossEntropyLoss(
             weight=torch.tensor(class_weights, dtype=torch.float32).to(self.device)
         )
-        optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.lr, weight_decay=0.01)
+
+        # Differential learning rate parameter groups
+        no_decay = ["bias", "LayerNorm.weight"]
+        optimizer_grouped_parameters = [
+            {
+                "params": [
+                    p
+                    for n, p in self.model.named_parameters()
+                    if not any(nd in n for nd in no_decay)
+                    and not any(hp in n for hp in ["classifier", "pooler"])
+                ],
+                "weight_decay": 0.01,
+                "lr": self.lr,
+            },
+            {
+                "params": [
+                    p
+                    for n, p in self.model.named_parameters()
+                    if any(nd in n for nd in no_decay)
+                    and not any(hp in n for hp in ["classifier", "pooler"])
+                ],
+                "weight_decay": 0.0,
+                "lr": self.lr,
+            },
+            {
+                "params": [
+                    p
+                    for n, p in self.model.named_parameters()
+                    if any(hp in n for hp in ["classifier", "pooler"])
+                ],
+                "weight_decay": 0.01,
+                "lr": self.head_lr,
+            },
+        ]
+        optimizer = torch.optim.AdamW(optimizer_grouped_parameters)
 
         train_dataset = TextClassificationDataset(
             train_texts, train_labels, self.tokenizer, max_length=self.max_length

@@ -12,7 +12,10 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v2-exp** | Experiment 2 (Standalone GBDT) | LightGBM | 54 Stylometric features + 128 TruncatedSVD dense components (`balanced` weights) | **0.2715** | — | — | 🧪 Tested |
 | **v2-blend** | [Name That LLM - Version 2](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Ensemble Blend | 85% Linear Baseline + 15% LightGBM (128 SVD + Stylometry) | **0.3282** | **0.3010** | +0.0272 | ✅ Scored |
 | **v3-exp-f1** | Experiment 3 (DeBERTa-v3 Fold 1 Benchmark) | Transformer (`deberta-v3-small`) | 3 epochs, `lr=2e-5`, `max_len=384`, class-weighted cross-entropy on MPS | **0.2189** (Fold 1) | — | — | 🧪 Tested |
-| **v3-blend-f1** | Experiment 3 (Tri-Model Blend on Fold 1) | Ensemble Blend | 70% Linear + 15% LightGBM + 15% DeBERTa-v3-small | **0.3409** (Fold 1) | — | — | 🧪 Tested |
+| **v3-tuned-f1** | Experiment 3 (Tuned DeBERTa-v3 Fold 1) | Transformer (`deberta-v3-small`) | 4 epochs, diff lr (`3e-5` trunk, `1.5e-4` head), weight decay decoupled | **0.2723** (Fold 1) | — | — | 🧪 Tested |
+| **v3-blend-f1** | Experiment 3 (Tri-Model Blend on Fold 1) | Ensemble Blend | 60% Linear + 5% LightGBM + 35% Tuned DeBERTa-v3 | **0.3688** (Fold 1) | — | — | 🧪 Tested |
+| **v3-5fold** | Experiment 3 (Full 5-Fold DeBERTa-v3) | Transformer (`deberta-v3-small`) | 4 epochs, diff lr (`3e-5` / `1.5e-4`), full 5-fold StratifiedGroupKFold | **0.2504** | — | — | 🧪 Tested |
+| **v3-tri-blend** | Experiment 3 (Global Tri-Model Blend) | Ensemble Blend | 57% Linear + 36% DeBERTa-v3 + 7% LightGBM (Full 2,699 OOF) | **0.3549** | — | — | 🧪 Tested |
 
 ---
 
@@ -104,32 +107,85 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-18
 - **Model Backbone:** `microsoft/deberta-v3-small` (44M params)
-- **Local Fold 1 CV (Standalone DeBERTa):** **`0.2189`** Balanced Accuracy (Loss: 2.0594, Top-3: 52.69%, Provider Bal Acc: 46.12%)
-- **Local Fold 1 Tri-Model Blend (70% Linear + 15% LightGBM + 15% DeBERTa):** **`0.3409`** Balanced Accuracy (**+0.0147** over Linear baseline `0.3262`, **+0.0127** over v2 blend `0.3282`)
+- **Local Fold 1 CV (Initial 3-Epoch Benchmark):** **`0.2189`** Balanced Accuracy (Loss: 2.0594, Top-3: 52.69%, Provider Bal Acc: 46.12%)
+- **Local Fold 1 CV (Tuned 4-Epoch with Differential LR):** **`0.2723`** Balanced Accuracy (Loss: 1.7424, Top-3: 62.34%, Provider Bal Acc: 60.95%)
+- **Local Fold 1 Tri-Model Blend (60% Linear + 5% LightGBM + 35% Tuned DeBERTa):** **`0.3688`** Balanced Accuracy (**+0.0427** over Linear baseline `0.3262`, **+0.0406** over v2 blend `0.3282`)
 
 #### 1. Setup & Architecture
 - **Hardware Acceleration:** Apple Silicon `mps` device, loaded with `dtype=torch.float32` to prevent fp16 disentangled attention NaN underflow.
-- **Training Parameters:** 3 epochs, `batch_size=8`, `lr=2e-5`, linear warmup (10%), gradient clipping (`1.0`), max sequence length 384 tokens.
+- **Tuned Training Parameters:** 4 epochs, `batch_size=8`, `lr=3e-5` (backbone trunk), `head_lr=1.5e-4` (5x multiplier on pooler/classifier), linear warmup (10%), gradient clipping (`1.0`), max sequence length 384 tokens.
 - **Loss:** Class-weighted cross-entropy loss inversely proportional to training class frequencies.
 - **OOF Output:** Saved to `data/processed/oof_microsoft_deberta-v3-small_fold0.parquet`.
 - **Model Checkpoint:** Saved to `models/checkpoints/microsoft_deberta-v3-small_fold0`.
 
 #### 2. Key Diagnostic Discoveries
-1. **Intra-Family Breakthrough:**
-   - DeBERTa successfully broke through several intra-family blind spots that stumped the n-gram models:
-     - `gpt-5.6-sol`: Surged from **0.07** (linear) to **0.33** (10/30 correct).
-     - `claude-fable-5`: Jumped from **0.01** (linear) to **0.21** (6/29 correct).
-     - `gemini-3.1-pro-preview`: Rose to **0.90** (27/30 correct vs 0.70 baseline).
-     - `claude-opus-5`: Rose to **0.67** (20/30 correct vs 0.51 baseline).
-     - `qwen3.8-max`: Rose to **0.57** (17/30 correct vs 0.49 baseline).
-2. **Underfitting after 3 Epochs:**
-   - Training loss reached 2.0594 after 3 epochs. In an 18-class problem, 3 epochs at `lr=2e-5` is insufficient for full convergence on smaller minority classes, leaving 8 classes with 0 recall.
-3. **Tri-Model Ensembling Synergy (+0.0147 jump on Fold 1):**
-   - Combining the 3 fundamentally different inductive biases:
-     - **Linear (70%):** Strong n-gram anchors across all 18 classes.
-     - **LightGBM (15%):** Stylometric syntax interactions and text structure.
-     - **DeBERTa-v3 (15%):** Deep semantic sequence representations that disambiguate intra-lab pairs.
-   - Boosts Fold 1 Balanced Accuracy from `0.3262` $\rightarrow$ **`0.3409`**!
+1. **Convergence and Per-Class Recall Surge:**
+   - With differential learning rate (`1.5e-4` on head) and 4 epochs, training loss dropped from `2.059` to `1.742`.
+   - Standalone Balanced Accuracy jumped from `0.2189` to **`0.2723`**.
+   - Provider-level balanced accuracy climbed to **`60.95%`** (beating linear baseline's `54.52%`).
+   - Classes with non-zero recall expanded from 10 to 17 out of 18:
+     - `qwen3.8-max`: **0.60** (18/30)
+     - `claude-opus-4-6`: **0.63** (19/30)
+     - `claude-opus-5`: **0.57** (17/30)
+     - `gemini-3.1-pro-preview`: **0.53** (16/30)
+     - `kimi-k3`: **0.37** (11/30)
+     - `gpt-5.5`: **0.37** (11/30)
+     - `glm-5.3-flash`: **0.33** (10/30)
+     - `claude-opus-4-8`: **0.33** (10/30)
+     - `gemini-3.8-flash`: **0.33** (10/30)
+     - `gpt-5.6-sol`: **0.27** (8/30)
+     - `claude-sonnet-5`: **0.20** (6/30)
+2. **Tri-Model Ensembling Synergy (+0.0427 Jump on Fold 1):**
+   - Combining:
+     - **Linear Baseline (60%):** Robust global n-gram distribution across the entire vocabulary.
+     - **LightGBM (5%):** Stylometric syntax interactions.
+     - **Tuned DeBERTa-v3 (35%):** Contextual sequence modeling and provider routing.
+   - Pushes Fold 1 Balanced Accuracy to **`0.3688`** (+4.27% over Linear, +4.06% over v2 blend).
+
+---
+
+### Experiment 3b: Full 5-Fold DeBERTa-v3 & Global Tri-Model Blend (v3)
+
+- **Date:** 2026-10-18
+- **Standalone 5-Fold DeBERTa-v3 CV:** **`0.2504`** Balanced Accuracy (Loss: 2.0497, Top-3: 61.28%, Provider Bal Acc: 53.87%)
+- **Global 5-Fold Tri-Model Blend CV:** **`0.3549`** Balanced Accuracy (**+0.0304** over Linear Baseline `0.3245`, **+0.0267** over v2 blend `0.3282`)
+  - **Standard Accuracy:** `0.3549`
+  - **Macro F1:** `0.3371`
+  - **Top-3 Accuracy:** **`68.80%`** (Nearly 70% of true models are in top 3!)
+  - **Multi-class Log Loss:** **`1.8558`** (Substantial drop from linear baseline's `2.4102`)
+  - **Provider-Level Balanced Accuracy:** **`59.09%`**
+
+#### 1. Optimal Global Blend Weights (Convex Combination over all 2,699 samples)
+- **Linear Baseline (TF-IDF + Stylometry):** **`57.0%`**
+- **Fine-Tuned DeBERTa-v3 (Contextual Sequence Transformer):** **`36.0%`**
+- **LightGBM (Stylometric Features + 128 SVD):** **`7.0%`**
+
+#### 2. Per-Class Recall Progression (v1 Baseline $\rightarrow$ v3 Tri-Model Blend)
+| Target Model | v1 Linear Baseline | v3 Tri-Model Blend | Absolute Delta |
+| :--- | :---: | :---: | :---: |
+| `gemini-3.1-pro-preview` | 0.70 | **0.74** | +0.04 |
+| `claude-opus-4-6` | 0.47 | **0.57** | **+0.10** |
+| `qwen3.8-max` | 0.49 | **0.56** | **+0.07** |
+| `claude-opus-5` | 0.51 | **0.55** | +0.04 |
+| `gpt-6-astra` | 0.49 | **0.53** | +0.04 |
+| `gpt-5.5` | 0.41 | **0.41** | 0.00 |
+| `claude-sonnet-5` | 0.35 | **0.41** | **+0.06** |
+| `gemini-3.7-flash` | 0.38 | **0.39** | +0.01 |
+| `gemini-3.8-flash` | 0.29 | **0.37** | **+0.08** |
+| `kimi-k3` | 0.25 | **0.31** | **+0.06** |
+| `gemini-3.6-flash` | 0.36 | 0.29 | -0.07 |
+| `gpt-5.6-luna` | 0.24 | **0.25** | +0.01 |
+| `claude-opus-4-8` | 0.20 | **0.25** | **+0.05** |
+| `glm-5.3-flash` | 0.20 | **0.20** | 0.00 |
+| `gpt-5.6-terra` | 0.18 | **0.19** | +0.01 |
+| `glm-5.3` | 0.14 | **0.17** | **+0.03** |
+| `claude-fable-5` | 0.01 | **0.13** | **+0.12** |
+| `gpt-5.6-sol` | 0.07 | 0.06 | -0.01 |
+
+#### 3. Key Findings
+1. **Steady Metric Ascent:** Local 5-fold CV climbed steadily: `0.3245` (v1 Linear) $\rightarrow$ `0.3282` (v2 Blend) $\rightarrow$ **`0.3549`** (v3 Tri-Model Blend).
+2. **Top-3 Recall Reaches 68.80%:** The true model is now in the top 3 predictions for more than 2 out of every 3 passages.
+3. **Persisted Artifact:** Full 2,699-sample blended OOF matrix saved to `data/processed/oof_tri_blend_v3.parquet`.
 
 ---
 
@@ -137,7 +193,8 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - [x] **Experiment 2 (GBDT & Non-linear Feature Interactions):** Train LightGBM (`scripts/train_lgbm.py`) on stylometric features + 128 SVD dense components.
 - [x] **Experiment 3a (Pretrained Transformer Head - Fold 1 Benchmark):** Fine-tune `microsoft/deberta-v3-small` on Fold 1 (`scripts/train_transformer.py`).
-- [ ] **Experiment 3b (Full 5-Fold DeBERTa-v3 & Kaggle GPU Submission):** Train all 5 folds of DeBERTa-v3, generate complete OOF matrix, and build Kaggle GPU submission notebook.
+- [x] **Experiment 3b (Full 5-Fold DeBERTa-v3 & Tri-Model Blending):** Train all 5 folds of DeBERTa-v3, generate complete OOF matrix, and achieve **0.3549** CV.
+- [ ] **Experiment 3c (Kaggle GPU Submission):** Package the 5-fold DeBERTa weights and submit v3 to the Kaggle Leaderboard.
 - [ ] **Experiment 4 (Open-Weight Tokenizer Perplexity Signals):** Extract compression ratios & token counts for Qwen and GLM (`src/name_that_llm/features/perplexity.py`).
 - [ ] **Experiment 5 (Hierarchical 2-Stage Classifier):**
   - Stage 1: Predict Lab/Provider (OpenAI, Google, Anthropic, Qwen, ZAI, Moonshot).
