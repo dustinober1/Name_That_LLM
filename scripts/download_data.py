@@ -15,8 +15,8 @@ console = Console()
 
 def check_kaggle_credentials() -> bool:
     """Check if Kaggle API credentials exist in environment or default file path."""
-    kaggle_json = Path.home() / ".kaggle" / "kaggle.json"
-    if kaggle_json.exists():
+    kaggle_dir = Path.home() / ".kaggle"
+    if (kaggle_dir / "access_token").exists() or (kaggle_dir / "kaggle.json").exists():
         return True
     if os.environ.get("KAGGLE_USERNAME") and os.environ.get("KAGGLE_KEY"):
         return True

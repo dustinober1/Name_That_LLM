@@ -84,8 +84,10 @@ def prepare_kernel_bundle(
 
 def check_auth() -> bool:
     """Verify Kaggle CLI credentials exist."""
-    kaggle_json = Path.home() / ".kaggle" / "kaggle.json"
-    if kaggle_json.exists() or (os.environ.get("KAGGLE_USERNAME") and os.environ.get("KAGGLE_KEY")):
+    kaggle_dir = Path.home() / ".kaggle"
+    if (kaggle_dir / "access_token").exists() or (kaggle_dir / "kaggle.json").exists():
+        return True
+    if os.environ.get("KAGGLE_USERNAME") and os.environ.get("KAGGLE_KEY"):
         return True
     return False
 
@@ -188,8 +190,8 @@ def main():
         "-m",
         args.message,
     ]
-    if args.version:
-        submit_cmd.extend(["-v", str(args.version)])
+    version_str = str(args.version) if args.version else "1"
+    submit_cmd.extend(["-v", version_str])
 
     sub_res = run_command(submit_cmd)
     console.print(sub_res.stdout)

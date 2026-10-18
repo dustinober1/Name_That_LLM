@@ -1,5 +1,5 @@
 {
-  "id": "dustinober/name-that-llm-baseline",
+  "id": "dustinober/name-that-llm-solution-pipeline",
   "title": "Name That LLM - Solution Pipeline",
   "code_file": "kaggle_submission.ipynb",
   "language": "python",
