@@ -30,7 +30,9 @@ See [EXPERIMENTS.md](file:///Users/dustinober/Projects/Data_Science/Name_That_LL
 
 | Version | Model Family | Key Architecture | Local CV (Bal Acc) | Public LB (Bal Acc) | Link |
 | :-: | :--- | :--- | :---: | :---: | :---: |
-| **v1** | Linear Baseline | TF-IDF (Word + Char) + Hand-crafted Stylometry + Logistic Regression | **0.3245** | **0.2870** | [Version 1 on Kaggle](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359528236) |
+| **v1** | Linear Baseline | TF-IDF (Word + Char) + Stylometry + Logistic Regression (`balanced`) | **0.3245** | **0.2870** | [Version 1 on Kaggle](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359528236) |
+| **v2-exp** | Standalone GBDT | 54 Stylometric features + 128 SVD components (LightGBM) | **0.2715** | — | — |
+| **v2-blend** | **Ensemble Blend** | **85% Linear Baseline + 15% LightGBM (128 SVD + Stylometry)** | **`0.3282`** | **`0.3010`** | [Version 2 on Kaggle](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) |
 
 ---
 
