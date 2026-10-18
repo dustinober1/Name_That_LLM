@@ -24,6 +24,16 @@ Production-grade, leak-free machine learning framework for the Kaggle **[Name Th
 
 ---
 
+## 🏆 Current Leaderboard & Experiment Log
+
+See [EXPERIMENTS.md](file:///Users/dustinober/Projects/Data_Science/Name_That_LLM/EXPERIMENTS.md) for full diagnostic breakdowns and error analysis.
+
+| Version | Model Family | Key Architecture | Local CV (Bal Acc) | Public LB (Bal Acc) | Link |
+| :-: | :--- | :--- | :---: | :---: | :---: |
+| **v1** | Linear Baseline | TF-IDF (Word + Char) + Hand-crafted Stylometry + Logistic Regression | **0.3245** | **0.2870** | [Version 1 on Kaggle](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359528236) |
+
+---
+
 ## ⚡ Core Challenge & Critical Invariant
 
 > [!IMPORTANT]
