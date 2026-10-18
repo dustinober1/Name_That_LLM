@@ -77,12 +77,14 @@ class TransformerClassifier:
         lr: float = 3e-5,
         head_lr: Optional[float] = None,
         epochs: int = 4,
+        accum_steps: int = 1,
         device: Optional[torch.device] = None,
     ):
         self.model_name = model_name
         self.num_classes = num_classes
         self.max_length = max_length
         self.batch_size = batch_size
+        self.accum_steps = max(1, accum_steps)
         self.lr = lr
         self.head_lr = head_lr or (lr * 5.0)
         self.epochs = epochs
@@ -148,7 +150,7 @@ class TransformerClassifier:
         )
         train_loader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True)
 
-        total_steps = len(train_loader) * self.epochs
+        total_steps = (len(train_loader) // self.accum_steps) * self.epochs
         warmup_steps = int(0.1 * total_steps)
         scheduler = get_linear_schedule_with_warmup(
             optimizer, num_warmup_steps=warmup_steps, num_training_steps=total_steps
@@ -160,8 +162,8 @@ class TransformerClassifier:
         for epoch in range(self.epochs):
             self.model.train()
             running_loss = 0.0
-            for batch in train_loader:
-                optimizer.zero_grad()
+            optimizer.zero_grad()
+            for step, batch in enumerate(train_loader):
                 input_ids = batch["input_ids"].to(self.device)
                 attention_mask = batch["attention_mask"].to(self.device)
                 targets = batch["labels"].to(self.device)
@@ -171,12 +173,15 @@ class TransformerClassifier:
                     kwargs["token_type_ids"] = batch["token_type_ids"].to(self.device)
 
                 outputs = self.model(**kwargs)
-                loss = loss_fn(outputs.logits, targets)
+                loss = loss_fn(outputs.logits, targets) / self.accum_steps
                 loss.backward()
-                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
-                optimizer.step()
-                scheduler.step()
-                running_loss += loss.item()
+                running_loss += loss.item() * self.accum_steps
+
+                if (step + 1) % self.accum_steps == 0 or (step + 1) == len(train_loader):
+                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
+                    optimizer.step()
+                    scheduler.step()
+                    optimizer.zero_grad()
 
             avg_loss = running_loss / len(train_loader)
             if val_texts is not None and val_labels is not None:
