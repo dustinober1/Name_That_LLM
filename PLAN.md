@@ -60,7 +60,7 @@ Replace the bag-of-words representation with contextual sequence modeling. Fine-
 - Device support: Automatic fallback to Apple Silicon `mps` or Nvidia `cuda`.
 
 ### Execution Steps
-1. **Run Fold 1 Benchmark (Fast Sanity Check):**
+1. **[Completed] Run Fold 1 Benchmark (Fast Sanity Check):**
    ```bash
    uv run python scripts/train_transformer.py \
      --model-name microsoft/deberta-v3-small \
@@ -70,9 +70,15 @@ Replace the bag-of-words representation with contextual sequence modeling. Fine-
      --lr 2e-5 \
      --max-length 384
    ```
-2. **Evaluate Fold 1 Balanced Accuracy:**
-   - Expected single-fold jump: `> 0.40 - 0.45` (vs linear baseline's `0.32`).
-   - Verify whether recall on `claude-fable-5` and `gpt-5.6-sol` recovers.
+2. **[Completed] Evaluate Fold 1 Balanced Accuracy & Recall Recovery:**
+   - Standalone Fold 1 DeBERTa-v3: **`0.2189`** (underfitted after 3 epochs, loss: 2.059).
+   - **Critical Validation:** Severe intra-family blind spots were dramatically recovered:
+     - `gpt-5.6-sol` recall jumped from **0.07** (linear) to **0.33** (10/30).
+     - `claude-fable-5` recall jumped from **0.01** (linear) to **0.21** (6/29).
+     - `gemini-3.1-pro-preview` jumped from **0.70** to **0.90** (27/30).
+     - `claude-opus-5` jumped from **0.51** to **0.67** (20/30).
+   - **Tri-Model Ensemble Synergy on Fold 1:**
+     - Blending 70% Linear + 15% LightGBM + 15% DeBERTa reaches **`0.3409`** (+0.0147 over Linear baseline `0.3262`).
 3. **Execute Full 5-Fold Training & Save OOF Predictions:**
    ```bash
    uv run python scripts/train_transformer.py \

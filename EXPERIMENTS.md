@@ -11,6 +11,8 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v1** | [Name That LLM - Version 1](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359528236) | Linear Baseline | TF-IDF (Word 1-2, Char 3-5) + Stylometry + Logistic Regression (`C=2.0`, `balanced`) | **0.3245** | **0.2870** | +0.0375 | ✅ Scored |
 | **v2-exp** | Experiment 2 (Standalone GBDT) | LightGBM | 54 Stylometric features + 128 TruncatedSVD dense components (`balanced` weights) | **0.2715** | — | — | 🧪 Tested |
 | **v2-blend** | [Name That LLM - Version 2](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Ensemble Blend | 85% Linear Baseline + 15% LightGBM (128 SVD + Stylometry) | **0.3282** | **0.3010** | +0.0272 | ✅ Scored |
+| **v3-exp-f1** | Experiment 3 (DeBERTa-v3 Fold 1 Benchmark) | Transformer (`deberta-v3-small`) | 3 epochs, `lr=2e-5`, `max_len=384`, class-weighted cross-entropy on MPS | **0.2189** (Fold 1) | — | — | 🧪 Tested |
+| **v3-blend-f1** | Experiment 3 (Tri-Model Blend on Fold 1) | Ensemble Blend | 70% Linear + 15% LightGBM + 15% DeBERTa-v3-small | **0.3409** (Fold 1) | — | — | 🧪 Tested |
 
 ---
 
@@ -98,11 +100,46 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 ---
 
+### Experiment 3: Pretrained DeBERTa-v3 Fine-Tuning (Fold 1 Benchmark & Tri-Model Blend)
+
+- **Date:** 2026-10-18
+- **Model Backbone:** `microsoft/deberta-v3-small` (44M params)
+- **Local Fold 1 CV (Standalone DeBERTa):** **`0.2189`** Balanced Accuracy (Loss: 2.0594, Top-3: 52.69%, Provider Bal Acc: 46.12%)
+- **Local Fold 1 Tri-Model Blend (70% Linear + 15% LightGBM + 15% DeBERTa):** **`0.3409`** Balanced Accuracy (**+0.0147** over Linear baseline `0.3262`, **+0.0127** over v2 blend `0.3282`)
+
+#### 1. Setup & Architecture
+- **Hardware Acceleration:** Apple Silicon `mps` device, loaded with `dtype=torch.float32` to prevent fp16 disentangled attention NaN underflow.
+- **Training Parameters:** 3 epochs, `batch_size=8`, `lr=2e-5`, linear warmup (10%), gradient clipping (`1.0`), max sequence length 384 tokens.
+- **Loss:** Class-weighted cross-entropy loss inversely proportional to training class frequencies.
+- **OOF Output:** Saved to `data/processed/oof_microsoft_deberta-v3-small_fold0.parquet`.
+- **Model Checkpoint:** Saved to `models/checkpoints/microsoft_deberta-v3-small_fold0`.
+
+#### 2. Key Diagnostic Discoveries
+1. **Intra-Family Breakthrough:**
+   - DeBERTa successfully broke through several intra-family blind spots that stumped the n-gram models:
+     - `gpt-5.6-sol`: Surged from **0.07** (linear) to **0.33** (10/30 correct).
+     - `claude-fable-5`: Jumped from **0.01** (linear) to **0.21** (6/29 correct).
+     - `gemini-3.1-pro-preview`: Rose to **0.90** (27/30 correct vs 0.70 baseline).
+     - `claude-opus-5`: Rose to **0.67** (20/30 correct vs 0.51 baseline).
+     - `qwen3.8-max`: Rose to **0.57** (17/30 correct vs 0.49 baseline).
+2. **Underfitting after 3 Epochs:**
+   - Training loss reached 2.0594 after 3 epochs. In an 18-class problem, 3 epochs at `lr=2e-5` is insufficient for full convergence on smaller minority classes, leaving 8 classes with 0 recall.
+3. **Tri-Model Ensembling Synergy (+0.0147 jump on Fold 1):**
+   - Combining the 3 fundamentally different inductive biases:
+     - **Linear (70%):** Strong n-gram anchors across all 18 classes.
+     - **LightGBM (15%):** Stylometric syntax interactions and text structure.
+     - **DeBERTa-v3 (15%):** Deep semantic sequence representations that disambiguate intra-lab pairs.
+   - Boosts Fold 1 Balanced Accuracy from `0.3262` $\rightarrow$ **`0.3409`**!
+
+---
+
 ## 🎯 Next Experiment Roadmap
 
 - [x] **Experiment 2 (GBDT & Non-linear Feature Interactions):** Train LightGBM (`scripts/train_lgbm.py`) on stylometric features + 128 SVD dense components.
-- [ ] **Experiment 3 (Pretrained Transformer Head):** Fine-tune `microsoft/deberta-v3-small` using class-weighted loss and 5-fold StratifiedGroupKFold (`scripts/train_transformer.py`).
-- [ ] **Experiment 4 (Ensembling & Probability Blending):** Blend out-of-fold probability matrices (Linear + LightGBM + DeBERTa) using SLSQP log-loss optimization (`src/name_that_llm/ensemble.py`).
+- [x] **Experiment 3a (Pretrained Transformer Head - Fold 1 Benchmark):** Fine-tune `microsoft/deberta-v3-small` on Fold 1 (`scripts/train_transformer.py`).
+- [ ] **Experiment 3b (Full 5-Fold DeBERTa-v3 & Kaggle GPU Submission):** Train all 5 folds of DeBERTa-v3, generate complete OOF matrix, and build Kaggle GPU submission notebook.
+- [ ] **Experiment 4 (Open-Weight Tokenizer Perplexity Signals):** Extract compression ratios & token counts for Qwen and GLM (`src/name_that_llm/features/perplexity.py`).
 - [ ] **Experiment 5 (Hierarchical 2-Stage Classifier):**
   - Stage 1: Predict Lab/Provider (OpenAI, Google, Anthropic, Qwen, ZAI, Moonshot).
   - Stage 2: Specialized intra-lab classifiers to disambiguate subtle model differences.
+
