@@ -10,7 +10,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | :-: | :--- | :--- | :--- | :-: | :-: | :-: | :-: |
 | **v1** | [Name That LLM - Version 1](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline?scriptVersionId=359528236) | Linear Baseline | TF-IDF (Word 1-2, Char 3-5) + Stylometry + Logistic Regression (`C=2.0`, `balanced`) | **0.3245** | **0.2870** | +0.0375 | ✅ Scored |
 | **v2-exp** | Experiment 2 (Standalone GBDT) | LightGBM | 54 Stylometric features + 128 TruncatedSVD dense components (`balanced` weights) | **0.2715** | — | — | 🧪 Tested |
-| **v2-blend** | Ensemble (Linear + GBDT Blend) | Blend | 85% Linear Baseline + 15% LightGBM Probability Blend | **0.3282** | Pending | — | 🚀 Ready |
+| **v2-blend** | [Name That LLM - Version 2](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Ensemble Blend | 85% Linear Baseline + 15% LightGBM (128 SVD + Stylometry) | **0.3282** | **0.3010** | +0.0272 | ✅ Scored |
 
 ---
 
