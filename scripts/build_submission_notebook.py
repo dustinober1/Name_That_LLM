@@ -583,7 +583,7 @@ def get_hierarchical_cells():
         "\n",
         "if p_modern is not None and p_deberta is not None:\n",
         "    final_combined_probs = 0.35 * p_modern + 0.45 * p_deberta + 0.20 * test_probs_total\n",
-        "    print('Successfully blended Tri-Model Master Ensemble (ModernBERT + DeBERTa Base + Hierarchical)!')\n",
+        "    print('Successfully blended Tri-Model Master Ensemble (35% ModernBERT + 45% DeBERTa Base + 20% Hierarchical)!')\n",
         "elif p_modern is not None:\n",
         "    final_combined_probs = 0.50 * p_modern + 0.50 * test_probs_total\n",
         "    print('Blended 50% ModernBERT + 50% Hierarchical Specialist!')\n",

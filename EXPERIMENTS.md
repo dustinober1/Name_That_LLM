@@ -27,6 +27,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v6-base-hung** | Experiment 10 (Base + Hierarchical + Hungarian) | Master Ensemble + Hungarian | 50% DeBERTa-v3 Base + 50% Hierarchical Specialist + Hungarian Matching | **0.5006** (Fold 1) | — | — | 🧪 Tested |
 | **v6-base-sub** | [Name That LLM - Version 6](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 86M Base GPU + Hungarian Matching | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Base + Prompt Clustering + Hungarian Assignment | **0.4783** | **0.3380** | +0.1403 | ✅ Scored |
 | **v7-tri-sub** | [Name That LLM - Version 7](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Master Ensemble | 35% ModernBERT (5 folds) + 45% DeBERTa Base (5 folds) + 20% Hierarchical + Hungarian | **0.5023** | **0.3820** | +0.1203 | ✅ Scored |
+| **v8-tri-opt** | [Name That LLM - Version 8](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Ensemble (50% Hierarchical) | 20% ModernBERT (5 folds) + 30% DeBERTa Base (5 folds) + 50% Hierarchical + Hungarian | **0.5194** | **0.3720** | +0.1474 | ✅ Scored |
 
 ---
 
@@ -412,6 +413,22 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
   1. **Dual Pretrained Transformer Inference:** Combined ModernBERT-base (22 layers, RoPE, BPE) and DeBERTa-v3 Base (12 layers, disentangled attention, SPM) for maximum neural feature diversity.
   2. **Tri-Model Master Blend:** Blended ModernBERT + DeBERTa Base + 4 Hierarchical Intra-Lab Specialists.
   3. **Optimal Bipartite Matching:** Solves 1-to-1 prompt assignment with Hungarian matching to eliminate duplicates.
+
+---
+
+### Experiment 14: Kaggle Submission Version 8 (50% Hierarchical vs Deep Transformer Generalization)
+
+- **Date:** 2026-10-19
+- **Kernel URL:** [Name That LLM - Solution Pipeline - Version 8](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline)
+- **Submission Ref:** `57393216`
+- **Blend Weights:** `20% ModernBERT + 30% DeBERTa-v3 Base + 50% Hierarchical Specialists` + Hungarian Prompt Matching
+- **Local CV Score:** **`0.5194`** (highest CV achieved across full 2,699 samples)
+- **Public Leaderboard Score:** **`0.3720`** (vs `0.3820` for v7)
+- **Key Takeaway & Diagnostic Insight:**
+  - On training prompts (local CV), the shallow Hierarchical Specialist (TF-IDF + Stylometry) achieves very high scores (`0.5194`) by memorizing training topic distributions.
+  - However, on the **unseen, out-of-distribution hidden test prompts**, the deep neural representations (`ModernBERT-base` with 22 layers, RoPE, BPE vocabulary + `DeBERTa-v3 Base` with disentangled attention) generalize significantly better.
+  - Increasing the shallow model's weight from 20% to 50% reduced generalization on novel prompts.
+  - **Rule Established:** The deep transformers must constitute **75%–85% of total ensemble weight**, with the shallow intra-lab specialists reserved as a minor regularizer (15%–20%) to resolve intra-family ties.
 
 ---
 
