@@ -26,7 +26,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v6-base-f1** | Experiment 10 (DeBERTa-v3 Base Fold 1) | Transformer (`deberta-v3-base`) | 3 epochs, `batch=4`, `accum=2`, `lr=2e-5`, hidden size 768 (86M params) | **0.2967** (Fold 1) | — | — | 🧪 Tested |
 | **v6-base-hung** | Experiment 10 (Base + Hierarchical + Hungarian) | Master Ensemble + Hungarian | 50% DeBERTa-v3 Base + 50% Hierarchical Specialist + Hungarian Matching | **0.5006** (Fold 1) | — | — | 🧪 Tested |
 | **v6-base-sub** | [Name That LLM - Version 6](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 86M Base GPU + Hungarian Matching | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Base + Prompt Clustering + Hungarian Assignment | **0.4783** | **0.3380** | +0.1403 | ✅ Scored |
-| **v7-tri-sub** | [Name That LLM - Version 7](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Master Ensemble | 35% ModernBERT (5 folds) + 45% DeBERTa Base (5 folds) + 20% Hierarchical + Hungarian | **0.5023** | *Pending* | — | ⏳ Running |
+| **v7-tri-sub** | [Name That LLM - Version 7](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Master Ensemble | 35% ModernBERT (5 folds) + 45% DeBERTa Base (5 folds) + 20% Hierarchical + Hungarian | **0.5023** | **0.3820** | +0.1203 | ✅ Scored |
 
 ---
 
@@ -400,8 +400,14 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
   1. `dustinober/name-that-llm-modernbert-checkpoints` (All 5 fine-tuned ModernBERT-base fold checkpoints)
   2. `dustinober/name-that-llm-deberta-base-checkpoints` (All 5 fine-tuned DeBERTa-v3 Base fold checkpoints)
   3. `dustinober/name-that-llm-deberta-checkpoints`
-- **Execution Status:** Running on Kaggle GPU cluster
-- **Local CV Score:** **`0.5023` Balanced Accuracy** (Full 2,699 OOF samples)
+- **Submission Ref:** `57377856`
+- **Public Leaderboard Score:** **`0.3820`** (Progress: `0.2870` (v1) $\rightarrow$ `0.3010` (v2) $\rightarrow$ `0.3060` (v3) $\rightarrow$ `0.3290` (v4) $\rightarrow$ `0.3300` (v5) $\rightarrow$ `0.3380` (v6) $\rightarrow$ **`0.3820` (v7)**)
+- **Execution Status:** Scored ✅
+- **Local CV Score:** **`0.5023`** Balanced Accuracy (Full 2,699 OOF samples)
+  - Standalone ModernBERT-base 5-Fold: **`0.3571`**
+  - Standalone DeBERTa-v3 Base 5-Fold: **`0.2486`**
+  - Raw 35/45/20 Tri-Model Blend: **`0.3708`** (33/33/34 Blend: **`0.3823`**)
+  - **★ Tri-Model Blend + Hungarian Prompt Matching:** **`0.5023`**!
 - **Key Upgrades Deployed:**
   1. **Dual Pretrained Transformer Inference:** Combined ModernBERT-base (22 layers, RoPE, BPE) and DeBERTa-v3 Base (12 layers, disentangled attention, SPM) for maximum neural feature diversity.
   2. **Tri-Model Master Blend:** Blended ModernBERT + DeBERTa Base + 4 Hierarchical Intra-Lab Specialists.
