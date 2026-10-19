@@ -1,0 +1,412 @@
+[{"stream_name":"stderr","time":7.822383923,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.822429171,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.822433794,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.822436467,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.461860094,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.461888902,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.461899528,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.461902291,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":18.947384858,"data":"All libraries and LightGBM initialized successfully.\n"}
+,{"stream_name":"stdout","time":19.101987755,"data":"Loading data from: /kaggle/input/competitions/name-that-llm\n"}
+,{"stream_name":"stdout","time":19.102020163,"data":"Train shape: (2699, 4) | Test shape: (3, 2)\n"}
+,{"stream_name":"stdout","time":19.203569605,"data":"Extracting global feature representations...\n"}
+,{"stream_name":"stdout","time":37.211788131,"data":"Training Fold 1/5...\n"}
+,{"stream_name":"stderr","time":91.786528699,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786560679,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786566071,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786571127,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786575257,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786580177,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786584237,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786589002,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786593105,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786597905,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786602107,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786606787,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786610872,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786615626,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786619716,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786633842,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786637249,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786641044,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786644217,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786647891,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786653041,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786656807,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786660062,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786663959,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786667334,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786671109,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786674392,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786677837,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786681024,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786684861,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786688141,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786691937,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786695275,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786699007,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786702121,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786705846,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786708967,"data":"\n"}
+,{"stream_name":"stderr","time":91.786712099,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786715809,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786719136,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786726967,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786730306,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786734073,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786737472,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786740979,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786744537,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786748269,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786751591,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786755399,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786758707,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786762299,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786765652,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786769322,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786772778,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786776469,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786779693,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786783269,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786786494,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786790159,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786793453,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786797153,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786800645,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786804171,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786807282,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786810959,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786817792,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786822138,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786825396,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786829142,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786832374,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786836087,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":91.786839409,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":91.786843169,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":104.578699277,"data":"Training Fold 2/5...\n"}
+,{"stream_name":"stderr","time":150.614564859,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614605548,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614612218,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614617765,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614622038,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614626717,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614630719,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614635208,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614639293,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614650072,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614653202,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614656193,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.61465888,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614661893,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614664553,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614667656,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.61467641,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.61467898,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614681402,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614697534,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614703466,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614707843,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614711599,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614715563,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614718678,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614722337,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614725556,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614729218,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614732332,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.61473595,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614739145,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614742732,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.61474588,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614749519,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614752644,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614756353,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614765881,"data":"\n"}
+,{"stream_name":"stderr","time":150.614768538,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.61477108,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614773263,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614776125,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614779318,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.61479852,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614803233,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614807615,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.61481125,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614814912,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614818082,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614821775,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614824925,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614828547,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614831678,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.61483517,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614838348,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614841913,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614845113,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614848715,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614851895,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614855495,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614858627,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614862336,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614870479,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614873819,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614876813,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.61489081,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614895731,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614903852,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614907192,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614910849,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614914047,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614917587,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":150.614920756,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":150.614924343,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":163.161571202,"data":"Training Fold 3/5...\n"}
+,{"stream_name":"stderr","time":208.435586617,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435620392,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435625383,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435629896,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435633802,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435638158,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435659321,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435664218,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435668576,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435673528,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.43567777,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435682462,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435686689,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435691428,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435695652,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435700391,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435704585,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435719884,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435723456,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435727073,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435732107,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435748603,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435751746,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435766464,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435769693,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435773051,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435776078,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435779367,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435782409,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435785826,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435788821,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435792204,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435795135,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435798545,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435801799,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435805147,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435808171,"data":"\n"}
+,{"stream_name":"stderr","time":208.435811159,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435814609,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435817699,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435821106,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435824337,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435827686,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435835463,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435839137,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435842132,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.43584558,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435848571,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435852105,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435855183,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435858846,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435861874,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435865501,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435868571,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435872,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435874993,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435878451,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435881517,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435885193,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435888176,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435891561,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435894582,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435898031,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435900967,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435904413,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435907933,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435911369,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435914358,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435920757,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435923781,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435927168,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":208.435930368,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":208.435934088,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":222.492358643,"data":"Training Fold 4/5...\n"}
+,{"stream_name":"stderr","time":270.606006361,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606043596,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606049128,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606053906,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606058006,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.60606276,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606067123,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606071679,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606075773,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606080263,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606084416,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606088872,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.60609286,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606097395,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606101295,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606105825,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606109783,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606114277,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606118303,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606132411,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606138491,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606142194,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606145309,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606148831,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606151956,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606155543,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606158614,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606162045,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606165134,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.60616881,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606171926,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606175503,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606178805,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606182373,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.60618548,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606189166,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606192262,"data":"\n"}
+,{"stream_name":"stderr","time":270.606195477,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606198943,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606202119,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606205626,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606208741,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606212316,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606216148,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606223918,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606227247,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606230723,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606233915,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606237362,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.60624051,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606243968,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606247093,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606250583,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606253872,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606257425,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606260636,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.60626403,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606267168,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606270603,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606273749,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.60627727,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606280383,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606283812,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606286889,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606290296,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606294443,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606298327,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606301411,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606304908,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606308101,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606315419,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":270.606319065,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":270.606322547,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":285.027495733,"data":"Training Fold 5/5...\n"}
+,{"stream_name":"stderr","time":335.217092749,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217126225,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217131761,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217136519,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217141092,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217146204,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217150422,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217155117,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217159159,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217163682,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217169318,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217178691,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217182327,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217185514,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217188226,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217191221,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217193834,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217197066,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217199879,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217202829,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.21720696,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217217699,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217220099,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217222463,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217224653,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217227097,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217229203,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217231557,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217233749,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217236114,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217238215,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217240653,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217242746,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217245252,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217247332,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217249696,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217251826,"data":"\n"}
+,{"stream_name":"stderr","time":335.21725391,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217256272,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217258374,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217260732,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217262846,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217265201,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217273174,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217275722,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.21727783,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217282434,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217284646,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217287,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217289108,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217291446,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217293546,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217295894,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217298001,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217300352,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217302453,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217304794,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217306911,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217309346,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.21731156,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217313933,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217316115,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217318452,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217320625,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.21732296,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217325463,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217327816,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217329922,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217332265,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217334362,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217336877,"data":"  warnings.warn(\n"}
+,{"stream_name":"stderr","time":335.217340966,"data":"/usr/local/lib/python3.13/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but LGBMClassifier was fitted with feature names\n"}
+,{"stream_name":"stderr","time":335.217343438,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":349.028779763,"data":"Found all 5 DeBERTa fold checkpoints (microsoft_deberta-v3-base)! Running GPU inference...\n"}
+,{"stream_name":"stdout","time":371.249310433,"data":"Using inference device: cuda\n"}
+,{"stream_name":"stdout","time":371.249338509,"data":"  Loading Fold 1 weights from /kaggle/input/name-that-llm-deberta-base-checkpoints/microsoft_deberta-v3-base_fold0...\n"}
+,{"stream_name":"stdout","time":380.769643549,"data":"  Loading Fold 2 weights from /kaggle/input/name-that-llm-deberta-base-checkpoints/microsoft_deberta-v3-base_fold1...\n"}
+,{"stream_name":"stdout","time":387.147507275,"data":"  Loading Fold 3 weights from /kaggle/input/name-that-llm-deberta-base-checkpoints/microsoft_deberta-v3-base_fold2...\n"}
+,{"stream_name":"stdout","time":393.274808571,"data":"  Loading Fold 4 weights from /kaggle/input/name-that-llm-deberta-base-checkpoints/microsoft_deberta-v3-base_fold3...\n"}
+,{"stream_name":"stdout","time":399.917371587,"data":"  Loading Fold 5 weights from /kaggle/input/name-that-llm-deberta-base-checkpoints/microsoft_deberta-v3-base_fold4...\n"}
+,{"stream_name":"stdout","time":407.875396826,"data":"Successfully blended Hierarchical Specialist + 5-Fold DeBERTa-v3!\n"}
+,{"stream_name":"stdout","time":407.875429061,"data":"Recovering prompt clusters via lexical TF-IDF cosine distance...\n"}
+,{"stream_name":"stdout","time":407.875435888,"data":"Recovered 3 clusters for 3 passages.\n"}
+,{"stream_name":"stdout","time":407.951765707,"data":"✓ Successfully saved submission.parquet!\n"}
+,{"stream_name":"stdout","time":407.951790984,"data":"             id             model\n"}
+,{"stream_name":"stdout","time":407.951797052,"data":"0  00353fb1c541   claude-opus-4-8\n"}
+,{"stream_name":"stdout","time":407.951801682,"data":"1  005f5a9a6139       gpt-6-astra\n"}
+,{"stream_name":"stdout","time":407.951806196,"data":"2  0062a53d5487  gemini-3.7-flash\n"}
+,{"stream_name":"stdout","time":407.951810755,"data":"Class distribution in test predictions:\n"}
+,{"stream_name":"stdout","time":407.951817155,"data":"model\n"}
+,{"stream_name":"stdout","time":407.951825521,"data":"claude-opus-4-8     1\n"}
+,{"stream_name":"stdout","time":407.951828817,"data":"gpt-6-astra         1\n"}
+,{"stream_name":"stdout","time":407.951831779,"data":"gemini-3.7-flash    1\n"}
+,{"stream_name":"stdout","time":407.951840742,"data":"Name: count, dtype: int64\n"}
+,{"stream_name":"stderr","time":413.361386582,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":413.361414317,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":413.519239537,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":413.519272914,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":414.379940466,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":414.468381524,"data":"[NbConvertApp] Writing 106506 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":417.063594582,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":417.643487707,"data":"[NbConvertApp] Writing 432683 bytes to __results__.html\n"}
+]

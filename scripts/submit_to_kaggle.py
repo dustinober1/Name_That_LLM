@@ -59,7 +59,15 @@ def prepare_kernel_bundle(
     dest_notebook = KERNEL_DIR / "kaggle_submission.ipynb"
     shutil.copyfile(src_notebook, dest_notebook)
 
-    datasets = ["dustinober/name-that-llm-deberta-checkpoints"] if enable_gpu else []
+    datasets = (
+        [
+            "dustinober/name-that-llm-modernbert-checkpoints",
+            "dustinober/name-that-llm-deberta-base-checkpoints",
+            "dustinober/name-that-llm-deberta-checkpoints",
+        ]
+        if enable_gpu
+        else []
+    )
 
     # 2. Write kernel-metadata.json
     metadata = {

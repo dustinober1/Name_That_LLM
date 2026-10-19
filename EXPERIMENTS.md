@@ -26,6 +26,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v6-base-f1** | Experiment 10 (DeBERTa-v3 Base Fold 1) | Transformer (`deberta-v3-base`) | 3 epochs, `batch=4`, `accum=2`, `lr=2e-5`, hidden size 768 (86M params) | **0.2967** (Fold 1) | — | — | 🧪 Tested |
 | **v6-base-hung** | Experiment 10 (Base + Hierarchical + Hungarian) | Master Ensemble + Hungarian | 50% DeBERTa-v3 Base + 50% Hierarchical Specialist + Hungarian Matching | **0.5006** (Fold 1) | — | — | 🧪 Tested |
 | **v6-base-sub** | [Name That LLM - Version 6](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 86M Base GPU + Hungarian Matching | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Base + Prompt Clustering + Hungarian Assignment | **0.4783** | **0.3380** | +0.1403 | ✅ Scored |
+| **v7-tri-sub** | [Name That LLM - Version 7](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Master Ensemble | 35% ModernBERT (5 folds) + 45% DeBERTa Base (5 folds) + 20% Hierarchical + Hungarian | **0.5023** | *Pending* | — | ⏳ Running |
 
 ---
 
@@ -370,6 +371,41 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
   1. **86M Backbone Scaling:** Replaced 44M Small model with 86M Base model (12 layers, hidden size 768) trained with class weights and gradient accumulation.
   2. **Multi-Model Synergy:** Blended with Hierarchical Intra-Lab Specialists to maximize precision within lab clusters.
   3. **Bipartite Optimal Transport:** Hungarian matching within prompt clusters strictly prevents duplicate class assignments on unseen prompts.
+
+---
+
+### Experiment 12: ModernBERT-base 5-Fold Training & Tri-Model Synergy
+
+- **Date:** 2026-10-19
+- **Model Backbone:** `answerdotai/ModernBERT-base` (22 layers, RoPE rotary embeddings, 8192 context, 50k BPE vocabulary)
+- **Training Setup:** 3 epochs, `batch_size=4`, `accum_steps=2`, `lr=3e-5`, `max_length=256` on Apple Silicon MPS (~877 MB memory footprint)
+- **Per-Fold Standalone Scores:**
+  - Fold 1: **`0.3501`** (Top-3: `69.94%`)
+  - Fold 2: **`0.3667`** (Top-3: `72.41%`, Log Loss: `1.8913`)
+  - Fold 3: **`0.3685`** (Top-3: `68.89%`, Log Loss: `1.8696`)
+  - Fold 4: **`0.3481`**
+  - Fold 5: **`0.3519`** (Top-3: `70.74%`)
+- **Global 5-Fold Standalone Score:** **`0.3571` Balanced Accuracy** across all 2,699 samples (Top-3: `69.88%`, Provider Acc: `60.27%`). ModernBERT outperforms every other standalone model in the project!
+- **★ Global Master Tri-Model Synergy (All 2,699 samples):**
+  - 33% ModernBERT + 33% DeBERTa-v3 Base + 34% Hierarchical Specialists (Raw Argmax): **`0.3823`**
+  - **★ With Prompt Hungarian Assignment:** **`0.5023` Balanced Accuracy** across the entire 2,699-row dataset!
+
+---
+
+### Experiment 13: Kaggle Submission Version 7 (Tri-Model Master Ensemble on GPU)
+
+- **Date:** 2026-10-19
+- **Kernel URL:** [Name That LLM - Solution Pipeline - Version 7](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline)
+- **Datasets Attached:**
+  1. `dustinober/name-that-llm-modernbert-checkpoints` (All 5 fine-tuned ModernBERT-base fold checkpoints)
+  2. `dustinober/name-that-llm-deberta-base-checkpoints` (All 5 fine-tuned DeBERTa-v3 Base fold checkpoints)
+  3. `dustinober/name-that-llm-deberta-checkpoints`
+- **Execution Status:** Running on Kaggle GPU cluster
+- **Local CV Score:** **`0.5023` Balanced Accuracy** (Full 2,699 OOF samples)
+- **Key Upgrades Deployed:**
+  1. **Dual Pretrained Transformer Inference:** Combined ModernBERT-base (22 layers, RoPE, BPE) and DeBERTa-v3 Base (12 layers, disentangled attention, SPM) for maximum neural feature diversity.
+  2. **Tri-Model Master Blend:** Blended ModernBERT + DeBERTa Base + 4 Hierarchical Intra-Lab Specialists.
+  3. **Optimal Bipartite Matching:** Solves 1-to-1 prompt assignment with Hungarian matching to eliminate duplicates.
 
 ---
 

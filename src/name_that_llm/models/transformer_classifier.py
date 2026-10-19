@@ -111,6 +111,7 @@ class TransformerClassifier:
         )
 
         # Differential learning rate parameter groups
+        head_modules = ["classifier", "pooler", "head"]
         no_decay = ["bias", "LayerNorm.weight"]
         optimizer_grouped_parameters = [
             {
@@ -118,7 +119,7 @@ class TransformerClassifier:
                     p
                     for n, p in self.model.named_parameters()
                     if not any(nd in n for nd in no_decay)
-                    and not any(hp in n for hp in ["classifier", "pooler"])
+                    and not any(hp in n for hp in head_modules)
                 ],
                 "weight_decay": 0.01,
                 "lr": self.lr,
@@ -128,7 +129,7 @@ class TransformerClassifier:
                     p
                     for n, p in self.model.named_parameters()
                     if any(nd in n for nd in no_decay)
-                    and not any(hp in n for hp in ["classifier", "pooler"])
+                    and not any(hp in n for hp in head_modules)
                 ],
                 "weight_decay": 0.0,
                 "lr": self.lr,
@@ -137,7 +138,7 @@ class TransformerClassifier:
                 "params": [
                     p
                     for n, p in self.model.named_parameters()
-                    if any(hp in n for hp in ["classifier", "pooler"])
+                    if any(hp in n for hp in head_modules)
                 ],
                 "weight_decay": 0.01,
                 "lr": self.head_lr,

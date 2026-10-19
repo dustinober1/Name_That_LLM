@@ -9,6 +9,8 @@
   "enable_tpu": "false",
   "enable_internet": "false",
   "dataset_sources": [
+    "dustinober/name-that-llm-modernbert-checkpoints",
+    "dustinober/name-that-llm-deberta-base-checkpoints",
     "dustinober/name-that-llm-deberta-checkpoints"
   ],
   "competition_sources": [
