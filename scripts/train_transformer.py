@@ -44,6 +44,7 @@ def parse_args():
     parser.add_argument("--head-lr", type=float, default=None, help="Learning rate for classification head (defaults to 5x lr)")
     parser.add_argument("--max-length", type=int, default=384, help="Max token length")
     parser.add_argument("--seed", type=int, default=RANDOM_SEED, help="Random seed")
+    parser.add_argument("--pooling", type=str, default="cls", choices=["cls", "mean"], help="Pooling strategy")
     parser.add_argument("--fold-to-run", type=int, default=None, help="Run only a single fold (0-indexed)")
     return parser.parse_args()
 
@@ -77,6 +78,7 @@ def main():
             lr=args.lr,
             head_lr=args.head_lr,
             epochs=args.epochs,
+            pooling=args.pooling,
             device=device,
         )
 

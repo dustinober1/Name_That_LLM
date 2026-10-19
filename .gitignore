@@ -30,6 +30,7 @@ data/*.csv
 # Model checkpoints & weights
 models/checkpoints/
 models/weights/
+models/kaggle_*/
 *.pt
 *.pth
 *.bin
@@ -39,6 +40,7 @@ models/weights/
 # Submissions & logs
 submissions/
 logs/
+*.log
 wandb/
 .system_generated/
 

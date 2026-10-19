@@ -61,6 +61,7 @@ def prepare_kernel_bundle(
 
     datasets = (
         [
+            "dustinober/name-that-llm-modernbert-large-checkpoints",
             "dustinober/name-that-llm-modernbert-checkpoints",
             "dustinober/name-that-llm-deberta-base-checkpoints",
             "dustinober/name-that-llm-deberta-checkpoints",
@@ -109,7 +110,7 @@ def run_command(cmd: list) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, capture_output=True, text=True)
 
 
-def monitor_kernel(kernel_id: str, max_wait_seconds: int = 1800) -> bool:
+def monitor_kernel(kernel_id: str, max_wait_seconds: int = 7200) -> bool:
     """Poll kernel status until complete or error."""
     start_time = time.time()
     console.print(f"[cyan]Waiting for notebook execution ({kernel_id}) to complete...[/cyan]")

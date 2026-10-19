@@ -78,6 +78,7 @@ class TransformerClassifier:
         head_lr: Optional[float] = None,
         epochs: int = 4,
         accum_steps: int = 1,
+        pooling: str = "cls",
         device: Optional[torch.device] = None,
     ):
         self.model_name = model_name
@@ -88,13 +89,19 @@ class TransformerClassifier:
         self.lr = lr
         self.head_lr = head_lr or (lr * 5.0)
         self.epochs = epochs
+        self.pooling = pooling
         self.device = device or get_device()
+
+        extra_kwargs = {}
+        if "modernbert" in model_name.lower() and pooling in ["mean", "cls"]:
+            extra_kwargs["classifier_pooling"] = pooling
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.model = AutoModelForSequenceClassification.from_pretrained(
             model_name,
             num_labels=self.num_classes,
             dtype=torch.float32,
+            **extra_kwargs,
         ).to(self.device)
 
     def fit(self, train_texts: List[str], train_labels: List[int], val_texts=None, val_labels=None):

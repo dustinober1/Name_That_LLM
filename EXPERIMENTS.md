@@ -28,6 +28,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v6-base-sub** | [Name That LLM - Version 6](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 86M Base GPU + Hungarian Matching | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Base + Prompt Clustering + Hungarian Assignment | **0.4783** | **0.3380** | +0.1403 | ✅ Scored |
 | **v7-tri-sub** | [Name That LLM - Version 7](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Master Ensemble | 35% ModernBERT (5 folds) + 45% DeBERTa Base (5 folds) + 20% Hierarchical + Hungarian | **0.5023** | **0.3820** | +0.1203 | ✅ Scored |
 | **v8-tri-opt** | [Name That LLM - Version 8](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Ensemble (50% Hierarchical) | 20% ModernBERT (5 folds) + 30% DeBERTa Base (5 folds) + 50% Hierarchical + Hungarian | **0.5194** | **0.3720** | +0.1474 | ✅ Scored |
+| **v9-quad-sub** | [Name That LLM - Version 9](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model GPU Master Ensemble (630M params) | 30% ModernBERT-large + 25% ModernBERT-base + 25% DeBERTa-base + 20% Hierarchical + Hungarian | **0.5275** | **0.4010** | +0.1265 | ✅ Scored |
 
 ---
 
@@ -429,6 +430,48 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
   - However, on the **unseen, out-of-distribution hidden test prompts**, the deep neural representations (`ModernBERT-base` with 22 layers, RoPE, BPE vocabulary + `DeBERTa-v3 Base` with disentangled attention) generalize significantly better.
   - Increasing the shallow model's weight from 20% to 50% reduced generalization on novel prompts.
   - **Rule Established:** The deep transformers must constitute **75%–85% of total ensemble weight**, with the shallow intra-lab specialists reserved as a minor regularizer (15%–20%) to resolve intra-family ties.
+
+---
+
+### Experiment 15: ModernBERT-large 5-Fold Training & Master Quad-Model Synergy
+
+- **Date:** 2026-10-19
+- **Model Backbone:** `answerdotai/ModernBERT-large` (395M parameters, 28 layers, 1024 hidden size, 8192 context, RoPE)
+- **Training Setup:** 3 epochs, `batch_size=2`, `accum_steps=4`, `lr=1.5e-5`, `max_length=256` on Apple Silicon MPS (`~0.30s/step`)
+- **Standalone 5-Fold Scores:**
+  - Fold 1: **`0.3427`** (Top-3: `71.80%`, Provider Acc: `61.07%`)
+  - Fold 2: **`0.3667`** (Top-3: `73.15%`, Provider Acc: `62.96%`)
+  - Fold 3: **`0.3685`** (Top-3: `71.67%`)
+  - Fold 4: **`0.3500`**
+  - Fold 5: **`0.3481`** (Top-3: `73.33%`, Provider Acc: `62.44%`)
+- **Global 5-Fold Standalone Score:** **`0.3567` Balanced Accuracy** across all 2,699 samples
+  - **★ Top-3 Accuracy:** **`71.77%`** (highest standalone top-3 accuracy in the project)
+  - **★ Provider-Level Accuracy:** **`62.10%`** (highest standalone provider accuracy in the project)
+  - Multi-class Log Loss: `1.9261`
+- **★ Master Quad-Model Synergy Breakthrough (All 2,699 samples):**
+  - ModernBERT-large (395M, 5 folds) + ModernBERT-base (149M, 5 folds) + DeBERTa-v3 Base (86M, 5 folds) + Hierarchical Intra-Lab Specialists
+  - **★ Raw Argmax Balanced Accuracy:** **`0.4048`** (breaks past 40% raw accuracy for the first time!)
+  - **★ With Prompt Hungarian Assignment:** **`0.5275` Balanced Accuracy** across the entire 2,699-row dataset!
+
+---
+
+### Experiment 16: Version 9 Quad-Model Master Ensemble Scored on Public LB (0.4010)
+
+- **Date:** 2026-10-19
+- **Submission Ref:** `57406098`
+- **Public Leaderboard Score:** **`0.4010`** (★ Breakthrough: First submission to cross the **0.400** barrier!)
+- **Local CV Score:** **`0.5275`** (Balanced Accuracy with Hungarian Matching)
+- **Gap (CV - LB):** `+0.1265`
+- **Architecture & Checkpoint Composition (630M Parameters Total):**
+  - 5-Fold `answerdotai/ModernBERT-large` (395M params, 28 layers, 1024 hidden size) — Weight: `0.30`
+  - 5-Fold `answerdotai/ModernBERT-base` (149M params, 22 layers, 768 hidden size) — Weight: `0.25`
+  - 5-Fold `microsoft/deberta-v3-base` (86M params, 12 layers, 768 hidden size) — Weight: `0.25`
+  - 2-Stage Hierarchical Intra-Lab Specialists (OpenAI, Anthropic, Google, ZAI) — Weight: `0.20`
+  - Lexical Unsupervised TF-IDF Prompt Clustering + Hungarian Bipartite Assignment
+- **Key Takeaways & Diagnostic Insights:**
+  1. **Neural Scaling Confirmed:** Adding `ModernBERT-large` (395M) gave an instant **+0.019 jump** over Version 7 (`0.3820` $\rightarrow$ `0.4010`), confirming that large-capacity transformer trunks capture nuanced stylistic invariants across diverse prompt domains far better than smaller backbones.
+  2. **15 Checkpoints Run Under GPU Time Limits:** All 15 transformer fold checkpoints ran within Kaggle's 9-hour execution window on an `NvidiaTeslaT4` without out-of-memory errors using dynamic batching (`batch_size=16`, `max_len=256/384`).
+  3. **Robust Bipartite Matching:** The Hungarian algorithm enforces that unseen prompt clusters produce exactly one prediction per passage, unlocking massive metric gains on the hidden test set.
 
 ---
 
