@@ -25,10 +25,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v5-hungarian-sub** | [Name That LLM - Version 5](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | GPU Ensemble + Hungarian Matching | 50% Hierarchical Base + 50% DeBERTa-v3 + TF-IDF Prompt Clustering + Hungarian Bipartite Assignment | **0.4327** | **0.3300** | +0.1027 | ✅ Scored |
 | **v6-base-f1** | Experiment 10 (DeBERTa-v3 Base Fold 1) | Transformer (`deberta-v3-base`) | 3 epochs, `batch=4`, `accum=2`, `lr=2e-5`, hidden size 768 (86M params) | **0.2967** (Fold 1) | — | — | 🧪 Tested |
 | **v6-base-hung** | Experiment 10 (Base + Hierarchical + Hungarian) | Master Ensemble + Hungarian | 50% DeBERTa-v3 Base + 50% Hierarchical Specialist + Hungarian Matching | **0.5006** (Fold 1) | — | — | 🧪 Tested |
-
-
-
-
+| **v6-base-sub** | [Name That LLM - Version 6](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 86M Base GPU + Hungarian Matching | 50% Hierarchical Base + 50% 5-Fold DeBERTa-v3 Base + Prompt Clustering + Hungarian Assignment | **0.4783** | **0.3380** | +0.1403 | ✅ Scored |
 
 ---
 
@@ -355,6 +352,27 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 ---
 
+### Experiment 11: Kaggle Submission Version 6 (86M Base GPU + Hungarian Matching)
+
+- **Date:** 2026-10-19
+- **Kernel URL:** [Name That LLM - Solution Pipeline - Version 6](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline)
+- **Datasets Attached:** 
+  1. `dustinober/name-that-llm-deberta-base-checkpoints` (All 5 fine-tuned `microsoft/deberta-v3-base` 86M fold checkpoints)
+  2. `dustinober/name-that-llm-deberta-checkpoints`
+- **Submission Ref:** `57375125`
+- **Public Leaderboard Score:** **`0.3380`** (Progress: `0.2870` (v1) $\rightarrow$ `0.3010` (v2) $\rightarrow$ `0.3060` (v3) $\rightarrow$ `0.3290` (v4) $\rightarrow$ `0.3300` (v5) $\rightarrow$ **`0.3380` (v6)**)
+- **Execution Status:** Scored ✅
+- **Local CV Score:** **`0.4783`** Balanced Accuracy (Full 2,699 OOF samples)
+  - Standalone DeBERTa-v3 Base 5-Fold: **`0.2486`**
+  - Raw 50/50 Master Blend: **`0.3623`**
+  - **★ Master Blend + Hungarian Prompt Matching:** **`0.4783`**!
+- **Key Upgrades Deployed:**
+  1. **86M Backbone Scaling:** Replaced 44M Small model with 86M Base model (12 layers, hidden size 768) trained with class weights and gradient accumulation.
+  2. **Multi-Model Synergy:** Blended with Hierarchical Intra-Lab Specialists to maximize precision within lab clusters.
+  3. **Bipartite Optimal Transport:** Hungarian matching within prompt clusters strictly prevents duplicate class assignments on unseen prompts.
+
+---
+
 ## 🎯 Next Experiment Roadmap
 
 - [x] **Experiment 2 (GBDT & Non-linear Feature Interactions):** Train LightGBM (`scripts/train_lgbm.py`) on stylometric features + 128 SVD dense components.
@@ -365,8 +383,9 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 - [x] **Kaggle Kernel Submission v3 (Hierarchical Specialist):** Successfully packaged and scored **0.3060** Public LB (`ref: 57362144`).
 - [x] **Kaggle Dataset Upload & GPU Master Ensemble (v4):** Uploaded 5-fold DeBERTa-v3 Small checkpoints to Kaggle dataset and scored **0.3290** Public LB (`ref: 57370723`).
 - [x] **Experiment 8 (Prompt Clustering & Hungarian Assignment):** Implemented in `src/name_that_llm/post_processing.py`, lifting CV from **0.3556** to **0.4327** (+7.71%).
-- [x] **Kaggle Kernel Submission v5 (GPU Ensemble + Hungarian Assignment):** Pushed Version 5 and submitted for Public LB score (`ref: 57371212`).
-- [ ] **Phase 6 (Backbone Scaling):** Fine-tune `microsoft/deberta-v3-base` (86M) and `ModernBERT` with gradient accumulation to target **0.50 - 0.60+** LB!
+- [x] **Kaggle Kernel Submission v5 (GPU Ensemble + Hungarian Assignment):** Scored **0.3300** Public LB (`ref: 57371212`).
+- [x] **Experiment 10 & 11 (DeBERTa-v3 Base 5-Fold + Kernel Version 6):** Trained all 5 folds of Base (86M), reached **0.4783** CV, uploaded dataset, and launched Version 6!
+- [ ] **Phase 7 (Token Attention & LoRA):** Train ModernBERT or Qwen LoRA representations to push beyond **0.55+** LB!
 
 
 
