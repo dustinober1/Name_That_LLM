@@ -31,6 +31,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v9-quad-sub** | [Name That LLM - Version 9](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model GPU Master Ensemble (630M params) | 30% ModernBERT-large + 25% ModernBERT-base + 25% DeBERTa-base + 20% Hierarchical + Hungarian | **0.5275** | **0.4010** | +0.1265 | ✅ Scored |
 | **v10-style-sub** | [Name That LLM - Version 10](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model + StyleGrams (Shape/Function-Word) + Sinkhorn | 30% Large + 25% Base + 25% DeBERTa + 20% StyleGram Specialists + Sinkhorn Balancing + Hungarian | **0.5179** | **0.3970** | +0.1209 | ✅ Scored |
 | **v11-poe-sub** | [Name That LLM - Version 11](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 5-Way Product-of-Experts Consensus + Hungarian | 20% Large + 15% Base + 10% DeBERTa + 25% Hierarchical + 30% StyleGrams (Geometric Log-Space) | **0.5582** | **0.3960** | +0.1622 | ✅ Scored |
+| **v12-neural-sub** | [Name That LLM - Version 12](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Neural-Heavy Master Consensus (85% Neural) + Hungarian | 40% Large + 25% Base + 20% DeBERTa + 10% Hierarchical + 5% StyleGrams (Geometric Log-Space) | **0.5238** | *In Progress* | — | 🚀 Queued |
 
 ---
 
@@ -516,6 +517,28 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
      - Competitor notebooks scoring 0.56 - 0.60 rely on two key mechanisms:
        a) **Prompt-Centering / Centered Twins:** Subtracting the prompt mean $\bar{\mathbf{x}}_g$ eliminates prompt topic bias ($\mathbf{x}_i - \bar{\mathbf{x}}_g = \boldsymbol{\mu}_{\text{model}} - \bar{\boldsymbol{\mu}}$). Tested locally on 256 SVD dense vectors: prompt-centering jumped standalone accuracy from `0.3419` to **`0.4149`** (and to **`0.4571`** with Hungarian matching)!
        b) **Public Pretrained LoRA Classifiers:** Top notebooks attach published LoRA checkpoints (`nishantdahal/ntl-two-stage-lora` and `zbigniewkirchner/ntl-qwen3-8b-lora-claude-head`) trained on a 38,642-passage public pool.
+
+---
+
+### Experiment 18: Neural-Heavy Master Consensus Ensemble (v12)
+
+- **Date:** 2026-10-20
+- **Kernel Version:** 12
+- **Status:** 🚀 Launching on Kaggle GPU
+- **Public Leaderboard Score:** *In Progress*
+- **Local Validation (Full 2,699 Samples):** **`0.3878` Raw Balanced Accuracy**, **`0.5238` Hungarian Balanced Accuracy**
+- **Architecture & Weight Distribution:**
+  - 5-Fold `answerdotai/ModernBERT-large` (395M, 28 layers, 1024 hidden) — Weight: `0.40`
+  - 5-Fold `answerdotai/ModernBERT-base` (149M, 22 layers, 768 hidden) — Weight: `0.25`
+  - 5-Fold `microsoft/deberta-v3-base` (86M, 12 layers, 768 hidden) — Weight: `0.20`
+  - StyleGram-Empowered Hierarchical Specialist (OpenAI, Anthropic, Google, ZAI) — Weight: `0.10`
+  - StyleGram Linear (Shape & Function-Word Views) — Weight: `0.05`
+  - **Total Neural Capacity:** **`85%`** (630M parameters across 15 checkpoints)
+  - Geometric Log-Space Consensus Voting (Product of Experts) + Prompt Clustering & Hungarian Assignment
+- **Key Hypothesis:**
+  - In v9, the 80% neural weighting scored `0.4010` on Public LB.
+  - In v11, non-neural weight was increased to 55%, which degraded LB to `0.3960` due to linear models latching onto training prompt domains.
+  - v12 restores dominant 85% neural authority while replacing crude TF-IDF with topic-invariant StyleGram representations, targeting **`0.415 - 0.430+`** Public LB.
 
 ---
 

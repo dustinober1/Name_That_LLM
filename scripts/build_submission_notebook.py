@@ -643,25 +643,25 @@ def get_hierarchical_cells():
         "log_deberta = np.log(np.clip(p_deberta, eps, 1.0)) if (p_deberta is not None) else None\n",
         "\n",
         "if log_large is not None and log_base is not None and log_deberta is not None:\n",
-        "    final_log_probs = 0.20 * log_large + 0.15 * log_base + 0.10 * log_deberta + 0.25 * log_hier + 0.30 * log_style\n",
-        "    print('Successfully blended 5-Way Product of Experts (20% Large + 15% Base + 10% DeBERTa + 25% Hierarchical + 30% StyleGrams) in log space!')\n",
+        "    final_log_probs = 0.40 * log_large + 0.25 * log_base + 0.20 * log_deberta + 0.10 * log_hier + 0.05 * log_style\n",
+        "    print('Successfully blended 5-Way Neural-Heavy Product of Experts (40% Large + 25% Base + 20% DeBERTa + 10% Hierarchical + 5% StyleGrams) in log space!')\n",
         "elif log_large is not None and log_base is not None:\n",
-        "    final_log_probs = 0.25 * log_large + 0.20 * log_base + 0.25 * log_hier + 0.30 * log_style\n",
+        "    final_log_probs = 0.45 * log_large + 0.35 * log_base + 0.10 * log_hier + 0.10 * log_style\n",
         "    print('Blended 4-Way Product of Experts (Large + Base + Stylometry) in log space!')\n",
         "elif log_large is not None and log_deberta is not None:\n",
-        "    final_log_probs = 0.25 * log_large + 0.20 * log_deberta + 0.25 * log_hier + 0.30 * log_style\n",
+        "    final_log_probs = 0.45 * log_large + 0.35 * log_deberta + 0.10 * log_hier + 0.10 * log_style\n",
         "    print('Blended 4-Way Product of Experts (Large + DeBERTa + Stylometry) in log space!')\n",
         "elif log_base is not None and log_deberta is not None:\n",
-        "    final_log_probs = 0.25 * log_base + 0.20 * log_deberta + 0.25 * log_hier + 0.30 * log_style\n",
+        "    final_log_probs = 0.40 * log_base + 0.40 * log_deberta + 0.10 * log_hier + 0.10 * log_style\n",
         "    print('Blended 4-Way Product of Experts (Base + DeBERTa + Stylometry) in log space!')\n",
         "elif log_large is not None:\n",
-        "    final_log_probs = 0.40 * log_large + 0.30 * log_hier + 0.30 * log_style\n",
+        "    final_log_probs = 0.75 * log_large + 0.15 * log_hier + 0.10 * log_style\n",
         "elif log_base is not None:\n",
-        "    final_log_probs = 0.40 * log_base + 0.30 * log_hier + 0.30 * log_style\n",
+        "    final_log_probs = 0.75 * log_base + 0.15 * log_hier + 0.10 * log_style\n",
         "elif log_deberta is not None:\n",
-        "    final_log_probs = 0.35 * log_deberta + 0.30 * log_hier + 0.35 * log_style\n",
+        "    final_log_probs = 0.70 * log_deberta + 0.15 * log_hier + 0.15 * log_style\n",
         "else:\n",
-        "    final_log_probs = 0.45 * log_hier + 0.55 * log_style\n",
+        "    final_log_probs = 0.50 * log_hier + 0.50 * log_style\n",
         "    print('Falling back to Hierarchical Specialist + StyleGram Product of Experts.')\n",
         "\n",
         "# 6. Prompt Clustering & Hungarian Bipartite Assignment\n",
@@ -712,7 +712,7 @@ def build_submission_notebook(model_type: str = "hierarchical"):
         title_desc = "Ensemble v2: 85% Linear (Sparse TF-IDF) + 15% LightGBM (128 SVD + Stylometry)"
     elif model_type == "hierarchical":
         model_cell = get_hierarchical_cells()
-        title_desc = "Ensemble v11: 5-Way Product of Experts Consensus (ModernBERT-large + ModernBERT-base + DeBERTa-base + Hierarchical + StyleGrams) + Hungarian Prompt Matching"
+        title_desc = "Ensemble v12: Neural-Heavy Master Consensus (85% Neural: 40% Large + 25% Base + 20% DeBERTa + 15% StyleGram Specialist) + Hungarian Prompt Matching"
     else:
         model_cell = get_linear_cells()
         title_desc = "Experiment 1: 5-Fold Linear TF-IDF + Stylometry Baseline"
