@@ -30,7 +30,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v8-tri-opt** | [Name That LLM - Version 8](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Ensemble (50% Hierarchical) | 20% ModernBERT (5 folds) + 30% DeBERTa Base (5 folds) + 50% Hierarchical + Hungarian | **0.5194** | **0.3720** | +0.1474 | ✅ Scored |
 | **v9-quad-sub** | [Name That LLM - Version 9](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model GPU Master Ensemble (630M params) | 30% ModernBERT-large + 25% ModernBERT-base + 25% DeBERTa-base + 20% Hierarchical + Hungarian | **0.5275** | **0.4010** | +0.1265 | ✅ Scored |
 | **v10-style-sub** | [Name That LLM - Version 10](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model + StyleGrams (Shape/Function-Word) + Sinkhorn | 30% Large + 25% Base + 25% DeBERTa + 20% StyleGram Specialists + Sinkhorn Balancing + Hungarian | **0.5179** | **0.3970** | +0.1209 | ✅ Scored |
-| **v11-poe-sub** | [Name That LLM - Version 11](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 5-Way Product-of-Experts Consensus + Hungarian | 20% Large + 15% Base + 10% DeBERTa + 25% Hierarchical + 30% StyleGrams (Geometric Log-Space) | **0.5582** | *Pending* | — | 🚀 Running |
+| **v11-poe-sub** | [Name That LLM - Version 11](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 5-Way Product-of-Experts Consensus + Hungarian | 20% Large + 15% Base + 10% DeBERTa + 25% Hierarchical + 30% StyleGrams (Geometric Log-Space) | **0.5582** | **0.3960** | +0.1622 | ✅ Scored |
 
 ---
 
@@ -503,31 +503,19 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-20
 - **Kernel Version:** 11
-- **Status:** 🚀 Executing on Kaggle GPU (`KernelWorkerStatus.RUNNING`)
-- **Key Algorithmic Breakthrough — Geometric Consensus (Product of Experts):**
-  1. **The Math of Consensus vs Addition:**
-     - In arithmetic probability addition ($P = \sum w_i P_i$), a single overconfident model predicting 0.8 for the wrong class can easily overpower four models predicting 0.1 for that wrong class and 0.6 for the true class.
-     - In **Geometric Consensus / Product of Experts** ($\log P = \sum w_i \log P_i$), if even one expert identifies a stylistic or formatting "forbidden pattern" (e.g., Claude never uses specific Chinese punctuation, GPT never uses certain bullet styles, or StyleGrams find wrong function-word distributions), it assigns $\log P_i \approx \log(10^{-3}) = -6.9$. That class is effectively **vetoed**.
-     - A model class only emerges with high probability if there is **unanimous consensus** across neural semantic context, byte entropy, intra-lab specialists, and function-word grammar.
-  2. **5 Diverse Expert Backbones:**
-     - **Expert 1: ModernBERT-large (395M, weight 0.20):** Deep contextual representations with sequence mean pooling.
-     - **Expert 2: ModernBERT-base (149M, weight 0.15):** Sequence mean pooled transformer embeddings.
-     - **Expert 3: DeBERTa-v3 Base (86M, weight 0.10):** Disentangled relative position attention.
-     - **Expert 4: Hierarchical Intra-Lab Specialists (weight 0.25):** Provider router + 4 lab specialists with byte compression entropy (zlib/bzip2) and 54 hand-crafted stylometric features.
-     - **Expert 5: StyleGram Linear Expert (weight 0.30):** Multi-view Shape (capitalization/formatting rhythms) + Function-Words (closed-class grammar transitions stripped of topic nouns) + Char (3-5) + Word (1-3).
-  3. **Local Cross-Validation Results (Full 2,699 Samples):**
-     - **Raw Standalone Balanced Accuracy:** **`0.4130`** (breaks the 0.40 barrier on raw predictions alone!).
-     - **Hungarian Bipartite Prompt Matching:** **`0.5582` Balanced Accuracy** (massive **+4.29% absolute leap** over v9's 0.5153!).
-     - **Fold-by-Fold Breakdown:**
-       - Fold 1: `0.5875`
-       - Fold 2: `0.5648`
-       - Fold 3: `0.5630`
-       - Fold 4: `0.5426`
-       - Fold 5: `0.5333`
-       - **Mean Fold Score:** **`0.5583 +/- 0.0189`** (extremely stable across all prompt groups).
-  4. **Post-Processing Polish:**
-     - Completely removed global Sinkhorn matrix balancing, eliminating the regularizing penalty on calibrated predictions.
-     - Bipartite matching minimizes negative log-consensus likelihood ($\mathcal{C} = -\log P_{\text{consensus}}$) directly.
+- **Submission Ref:** `57427707`
+- **Public Leaderboard Score:** **`0.3960`**
+- **Local Validation (Full 2,699 Samples):** **`0.4130` Raw Balanced Accuracy**, **`0.5582` Hungarian Balanced Accuracy** (Mean Fold Score: `0.5583 +/- 0.0189`)
+- **Status:** ✅ Scored (`0.3960` Public LB)
+- **Diagnostic Takeaways & Root Cause Analysis:**
+  1. **Neural vs Linear Generalization on Unseen Prompts:**
+     - In **v9** (80% neural weight: 30% ModernBERT-large + 25% ModernBERT-base + 25% DeBERTa-base + 20% Hierarchical), Public LB was **`0.4010`**.
+     - In **v11**, we reduced total neural weight from 80% down to 45% and increased TF-IDF / linear models to 55%. Public LB dropped to **`0.3960`**.
+     - **Critical Rule:** While linear models (StyleGrams + Stylometry) perform well on local CV, pre-trained transformer backbones (630M params) generalize significantly better to unseen prompt topics on the test set. Future ensembles must maintain $\ge 80\%$ neural weight.
+  2. **Competitor Architecture Deconstruction (*"The Prompt Is Not the Author"*):**
+     - Competitor notebooks scoring 0.56 - 0.60 rely on two key mechanisms:
+       a) **Prompt-Centering / Centered Twins:** Subtracting the prompt mean $\bar{\mathbf{x}}_g$ eliminates prompt topic bias ($\mathbf{x}_i - \bar{\mathbf{x}}_g = \boldsymbol{\mu}_{\text{model}} - \bar{\boldsymbol{\mu}}$). Tested locally on 256 SVD dense vectors: prompt-centering jumped standalone accuracy from `0.3419` to **`0.4149`** (and to **`0.4571`** with Hungarian matching)!
+       b) **Public Pretrained LoRA Classifiers:** Top notebooks attach published LoRA checkpoints (`nishantdahal/ntl-two-stage-lora` and `zbigniewkirchner/ntl-qwen3-8b-lora-claude-head`) trained on a 38,642-passage public pool.
 
 ---
 
