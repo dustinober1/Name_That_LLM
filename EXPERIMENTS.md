@@ -29,6 +29,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v7-tri-sub** | [Name That LLM - Version 7](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Master Ensemble | 35% ModernBERT (5 folds) + 45% DeBERTa Base (5 folds) + 20% Hierarchical + Hungarian | **0.5023** | **0.3820** | +0.1203 | ✅ Scored |
 | **v8-tri-opt** | [Name That LLM - Version 8](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Tri-Model GPU Ensemble (50% Hierarchical) | 20% ModernBERT (5 folds) + 30% DeBERTa Base (5 folds) + 50% Hierarchical + Hungarian | **0.5194** | **0.3720** | +0.1474 | ✅ Scored |
 | **v9-quad-sub** | [Name That LLM - Version 9](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model GPU Master Ensemble (630M params) | 30% ModernBERT-large + 25% ModernBERT-base + 25% DeBERTa-base + 20% Hierarchical + Hungarian | **0.5275** | **0.4010** | +0.1265 | ✅ Scored |
+| **v10-style-sub** | [Name That LLM - Version 10](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model + StyleGrams (Shape/Function-Word) + Sinkhorn | 30% Large + 25% Base + 25% DeBERTa + 20% StyleGram Specialists + Sinkhorn Balancing + Hungarian | **0.5179** | *Pending* | — | 🚀 Running |
 
 ---
 
@@ -472,6 +473,26 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
   1. **Neural Scaling Confirmed:** Adding `ModernBERT-large` (395M) gave an instant **+0.019 jump** over Version 7 (`0.3820` $\rightarrow$ `0.4010`), confirming that large-capacity transformer trunks capture nuanced stylistic invariants across diverse prompt domains far better than smaller backbones.
   2. **15 Checkpoints Run Under GPU Time Limits:** All 15 transformer fold checkpoints ran within Kaggle's 9-hour execution window on an `NvidiaTeslaT4` without out-of-memory errors using dynamic batching (`batch_size=16`, `max_len=256/384`).
   3. **Robust Bipartite Matching:** The Hungarian algorithm enforces that unseen prompt clusters produce exactly one prediction per passage, unlocking massive metric gains on the hidden test set.
+
+---
+
+### Experiment 17: Version 10 Quad-Model + StyleGrams (Shape/Function-Word) + Sinkhorn Balancing
+
+- **Date:** 2026-10-19
+- **Kernel Version:** 10
+- **Status:** 🚀 Executing on Kaggle GPU (`KernelWorkerStatus.RUNNING`)
+- **Key Architectural Upgrades Inspired by "The Prompt Is Not the Author":**
+  1. **StyleGram Extractor (`src/name_that_llm/features/stylegrams.py`):**
+     - **Shape View:** Masks letters to `X` (uppercase) and `x` (lowercase), preserving punctuation, digits, whitespace, markdown formatting, bullet structures, and capitalization rhythms while stripping all prompt topic words.
+     - **Function-Word View:** Strips all topical nouns, verbs, and domain terms, replacing them with `'CONTENT'` and keeping ONLY English closed-class grammatical function words (`the`, `and`, `however`, `although`, `which`, `because`).
+     - **Stacked Multi-View Extraction:** Stacked raw char (3-5), raw word (1-3, weight 0.7), shape char (2-6, weight 0.5), and function word (1-3, weight 0.5) n-grams.
+     - **Standalone Breakthrough:** StyleGrams alone achieves **`0.3675` Balanced Accuracy** across all 2,699 samples (beating raw TF-IDF `0.3245` by **+0.0430**).
+  2. **Prompt-Invariant Intra-Lab Specialists:**
+     - Replaced standard TF-IDF inside each intra-lab specialist (OpenAI, Anthropic, Google, ZAI) with `StyleGramExtractor`. This prevents intra-family specialists from confusing sibling models based on prompt domain terminology.
+  3. **Full Sinkhorn-Knopp Matrix Balancing:**
+     - In unweighted Balanced Accuracy, every model class has an identical uniform prior mass of $1/18$.
+     - Ran 50 iterations of Sinkhorn-Knopp column/row normalization before Hungarian matching, eliminating probability mass skew.
+- **Local Validation (Full 2,699 Samples):** **`0.5179` Balanced Accuracy** with Sinkhorn + Hungarian Matching.
 
 ---
 

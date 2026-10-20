@@ -14,6 +14,33 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from name_that_llm.config import NUM_CLASSES, TARGET_MODELS
 
 
+def sinkhorn_balance(
+    probabilities: np.ndarray,
+    num_iterations: int = 50,
+    min_samples: int = 50,
+) -> np.ndarray:
+    """Balance the probability matrix using Sinkhorn-Knopp algorithm so every class
+    receives uniform total probability mass (N / K), aligning directly with the competition Balanced Accuracy metric.
+
+    Args:
+        probabilities: (N, K) array of predicted class probabilities.
+        num_iterations: Number of Sinkhorn normalization steps (default: 50).
+        min_samples: Minimum test samples required before applying balancing.
+
+    Returns:
+        (N, K) array of balanced probabilities.
+    """
+    p = np.asarray(probabilities, dtype=np.float64).copy()
+    n_samples, n_classes = p.shape
+    if n_samples < min_samples:
+        return p
+    target = np.full(n_classes, n_samples / float(n_classes))
+    for _ in range(num_iterations):
+        p *= target / (p.sum(axis=0) + 1e-12)
+        p /= p.sum(axis=1, keepdims=True) + 1e-12
+    return p
+
+
 def cluster_passages_by_prompt(
     texts: List[str],
     distance_threshold: float = 0.90,
