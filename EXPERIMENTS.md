@@ -33,6 +33,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v11-poe-sub** | [Name That LLM - Version 11](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 5-Way Product-of-Experts Consensus + Hungarian | 20% Large + 15% Base + 10% DeBERTa + 25% Hierarchical + 30% StyleGrams (Geometric Log-Space) | **0.5582** | **0.3960** | +0.1622 | ✅ Scored |
 | **v12-neural-sub** | [Name That LLM - Version 12](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Neural-Heavy Master Consensus (85% Neural) + Hungarian | 40% Large + 25% Base + 20% DeBERTa + 10% Hierarchical + 5% StyleGrams (Geometric Log-Space) | **0.5238** | *Scoring* | — | ⏳ Scoring |
 | **v13-lora-sub** | [Name That LLM - Two Stage LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-lora-pipeline) | Two-Stage LoRA Pipeline (0.592 Tier) | Truncated Qwen3-8B/14B LoRA (keep=24/27) + Centered Twins + 4-View Pool SVC (41k) + Sinkhorn | **0.592** (Public Ref) | *Executing* | — | 🚀 Running |
+| **v14-grand-sub** | [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus) | Grand Master Consensus (Decoders + Encoders) | Qwen3-8B/14B Two-Stage LoRAs + 15F ModernBERT/DeBERTa + 4-View Pool SVC + Sinkhorn | **>0.600** (Target) | *Packaged* | — | 📦 Ready |
 
 ---
 
@@ -564,6 +565,28 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
      - **Centered Twin Head:** Subtracts prompt group mean $Z_c = Z - \bar{Z}_p$ for prompt clusters ($\ge 2$ passages), strictly removing topic shift $\boldsymbol{\delta}_{\text{prompt}}$.
   5. **100-Iteration Sinkhorn Balancing:**
      - Enforces exact uniform distribution across all 18 classes to optimize unweighted Balanced Accuracy.
+
+---
+
+### Experiment 20: Grand Master Consensus Ensemble (Decoder LoRAs + Encoder Transformers - v14)
+
+- **Date:** 2026-10-20
+- **Kernel URL:** [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus)
+- **Status:** 📦 Packaged and Ready for Final Launch
+- **Target Public Leaderboard Score:** **`>0.600`**
+- **Architecture & Cross-Family Fusion:**
+  1. **Autoregressive Decoders (Qwen3-8B & 14B LoRAs):**
+     - Truncated Qwen3-8B (24 layers) & Qwen3-14B (27 layers) decoder trunks.
+     - 8-Layer Latent Pooling + LayerNorms ($8 \times 4096 = 32,768$ dims).
+     - Plain Head ($Z W_p^T + b_p$) + Centered Twin Head ($Z_c W_c^T + b_c$).
+  2. **Bidirectional Encoders (15 Fine-Tuned Checkpoints):**
+     - 5-Fold `answerdotai/ModernBERT-large` (395M) — Weight: `0.20`
+     - 5-Fold `answerdotai/ModernBERT-base` (149M) — Weight: `0.12`
+     - 5-Fold `microsoft/deberta-v3-base` (86M) — Weight: `0.08`
+  3. **Multi-Gram Stylometry on 41k Passages:**
+     - 4-View `LinearSVC` on `train + pool_v1.parquet` — Weight: `0.85`
+  4. **Log-Consensus Fusion + Sinkhorn Uniform Calibration:**
+     - Integrates Decoder + Encoder + Stylometry predictions into joint log-likelihood before 100-iteration Sinkhorn column balancing.
 
 ---
 
