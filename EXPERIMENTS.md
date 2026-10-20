@@ -31,7 +31,8 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v9-quad-sub** | [Name That LLM - Version 9](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model GPU Master Ensemble (630M params) | 30% ModernBERT-large + 25% ModernBERT-base + 25% DeBERTa-base + 20% Hierarchical + Hungarian | **0.5275** | **0.4010** | +0.1265 | ✅ Scored |
 | **v10-style-sub** | [Name That LLM - Version 10](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model + StyleGrams (Shape/Function-Word) + Sinkhorn | 30% Large + 25% Base + 25% DeBERTa + 20% StyleGram Specialists + Sinkhorn Balancing + Hungarian | **0.5179** | **0.3970** | +0.1209 | ✅ Scored |
 | **v11-poe-sub** | [Name That LLM - Version 11](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 5-Way Product-of-Experts Consensus + Hungarian | 20% Large + 15% Base + 10% DeBERTa + 25% Hierarchical + 30% StyleGrams (Geometric Log-Space) | **0.5582** | **0.3960** | +0.1622 | ✅ Scored |
-| **v12-neural-sub** | [Name That LLM - Version 12](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Neural-Heavy Master Consensus (85% Neural) + Hungarian | 40% Large + 25% Base + 20% DeBERTa + 10% Hierarchical + 5% StyleGrams (Geometric Log-Space) | **0.5238** | *In Progress* | — | 🚀 Queued |
+| **v12-neural-sub** | [Name That LLM - Version 12](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Neural-Heavy Master Consensus (85% Neural) + Hungarian | 40% Large + 25% Base + 20% DeBERTa + 10% Hierarchical + 5% StyleGrams (Geometric Log-Space) | **0.5238** | *Scoring* | — | ⏳ Scoring |
+| **v13-lora-sub** | [Name That LLM - Two Stage LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-lora-pipeline) | Two-Stage LoRA Pipeline (0.592 Tier) | Truncated Qwen3-8B/14B LoRA (keep=24/27) + Centered Twins + 4-View Pool SVC (41k) + Sinkhorn | **0.592** (Public Ref) | *Executing* | — | 🚀 Running |
 
 ---
 
@@ -539,6 +540,30 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
   - In v9, the 80% neural weighting scored `0.4010` on Public LB.
   - In v11, non-neural weight was increased to 55%, which degraded LB to `0.3960` due to linear models latching onto training prompt domains.
   - v12 restores dominant 85% neural authority while replacing crude TF-IDF with topic-invariant StyleGram representations, targeting **`0.415 - 0.430+`** Public LB.
+
+---
+
+### Experiment 19: Two-Stage LoRA Pipeline (0.592 Tier - v13)
+
+- **Date:** 2026-10-20
+- **Kernel URL:** [Name That LLM - Two Stage LoRA Pipeline](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-lora-pipeline)
+- **Status:** 🚀 Executing on Kaggle GPU
+- **Public Leaderboard Reference Score:** **`0.592`** (Nishant Dahal)
+- **Key Architectural Breakthroughs:**
+  1. **Public Pool Pretraining (38,642 Passages):**
+     - LinearSVC fit on `train (2,699) + pool_v1.parquet (38,642)` with class-weighted cross-entropy.
+     - 4-View multi-gram feature extraction: Raw Char (3-5), Word (1-3), Shape View (2-6), Function-Word View (1-3).
+  2. **Truncated Qwen3 Trunks (`keep=24` and `keep=27`):**
+     - Loads first 24 layers of Qwen3-8B-Base and first 27 layers of Qwen3-14B-Base.
+     - Low VRAM footprint (fits comfortably in 16 GB VRAM on Tesla T4).
+  3. **Zero-Dependency In-Place LoRA Merge:**
+     - Directly computes $W_{\text{linear}} \leftarrow W_{\text{linear}} + \frac{\alpha}{r} (B A)$ via PyTorch tensor addition.
+  4. **8-Layer Latent Pooling & Prompt-Centered Twins:**
+     - Pools hidden states across 8 layers through independent LayerNorms ($8 \times 4096 = 32,768$ features).
+     - **Plain Head:** Evaluates raw features $Z W_p^T + b_p$.
+     - **Centered Twin Head:** Subtracts prompt group mean $Z_c = Z - \bar{Z}_p$ for prompt clusters ($\ge 2$ passages), strictly removing topic shift $\boldsymbol{\delta}_{\text{prompt}}$.
+  5. **100-Iteration Sinkhorn Balancing:**
+     - Enforces exact uniform distribution across all 18 classes to optimize unweighted Balanced Accuracy.
 
 ---
 
