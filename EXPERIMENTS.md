@@ -32,7 +32,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v10-style-sub** | [Name That LLM - Version 10](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Quad-Model + StyleGrams (Shape/Function-Word) + Sinkhorn | 30% Large + 25% Base + 25% DeBERTa + 20% StyleGram Specialists + Sinkhorn Balancing + Hungarian | **0.5179** | **0.3970** | +0.1209 | ✅ Scored |
 | **v11-poe-sub** | [Name That LLM - Version 11](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 5-Way Product-of-Experts Consensus + Hungarian | 20% Large + 15% Base + 10% DeBERTa + 25% Hierarchical + 30% StyleGrams (Geometric Log-Space) | **0.5582** | **0.3960** | +0.1622 | ✅ Scored |
 | **v12-neural-sub** | [Name That LLM - Version 12](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Neural-Heavy Master Consensus (85% Neural) + Hungarian | 40% Large + 25% Base + 20% DeBERTa + 10% Hierarchical + 5% StyleGrams (Geometric Log-Space) | **0.5238** | *Scoring* | — | ⏳ Scoring |
-| **v13-lora-sub** | [Name That LLM - Two Stage LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-lora-pipeline) | Two-Stage LoRA Pipeline (0.592 Tier) | Truncated Qwen3-8B/14B LoRA (keep=24/27) + Centered Twins + 4-View Pool SVC (41k) + Sinkhorn | **0.592** (Public Ref) | *Executing* | — | 🚀 Running |
+| **v13-lora-sub** | [Name That LLM - Two Stage LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-lora-pipeline) | Two-Stage LoRA Pipeline (0.592 Tier) | Truncated Qwen3-8B/14B LoRA (keep=24/27) + Centered Twins + 4-View Pool SVC (41k) + Sinkhorn | **0.592** (Public Ref) | **0.5920** | 0.0000 | ✅ Scored |
 | **v14-grand-sub** | [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus) | Grand Master Consensus (Decoders + Encoders) | Qwen3-8B/14B Two-Stage LoRAs + 15F ModernBERT/DeBERTa + 4-View Pool SVC + Sinkhorn | **>0.600** (Target) | *Packaged* | — | 📦 Ready |
 
 ---
@@ -548,8 +548,10 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-20
 - **Kernel URL:** [Name That LLM - Two Stage LoRA Pipeline](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-lora-pipeline)
-- **Status:** 🚀 Executing on Kaggle GPU
-- **Public Leaderboard Reference Score:** **`0.592`** (Nishant Dahal)
+- **Status:** ✅ Scored (`0.5920` Public LB)
+- **Submission Ref:** `57432120`
+- **Public Leaderboard Score:** **`0.5920`** (Official Competition Score)
+- **Net Improvement:** **+0.1910 (+19.1%) absolute gain over previous best `0.4010`!**
 - **Key Architectural Breakthroughs:**
   1. **Public Pool Pretraining (38,642 Passages):**
      - LinearSVC fit on `train (2,699) + pool_v1.parquet (38,642)` with class-weighted cross-entropy.
