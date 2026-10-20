@@ -236,6 +236,21 @@ def main():
         "-m",
         args.message,
     ]
+
+    if not detected_version:
+        try:
+            import urllib.request, json
+            owner, k_slug = kernel_id.split("/")
+            req = urllib.request.Request(
+                f"https://www.kaggle.com/api/v1/kernels/pull?userName={owner}&kernelSlug={k_slug}",
+                headers={"User-Agent": "Mozilla/5.0"}
+            )
+            with urllib.request.urlopen(req) as resp:
+                d = json.loads(resp.read().decode("utf-8"))
+                detected_version = str(d.get("metadata", {}).get("currentVersionNumberNullable", 1))
+        except Exception:
+            detected_version = "1"
+
     if detected_version:
         submit_cmd.extend(["-v", detected_version])
 
