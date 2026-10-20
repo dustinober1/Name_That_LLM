@@ -110,7 +110,7 @@ def run_command(cmd: list) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, capture_output=True, text=True)
 
 
-def monitor_kernel(kernel_id: str, max_wait_seconds: int = 7200) -> bool:
+def monitor_kernel(kernel_id: str, max_wait_seconds: int = 21600) -> bool:
     """Poll kernel status until complete or error."""
     start_time = time.time()
     console.print(f"[cyan]Waiting for notebook execution ({kernel_id}) to complete...[/cyan]")
@@ -159,6 +159,7 @@ def main():
     parser.add_argument("--gpu", action="store_true", help="Enable GPU on Kaggle")
     parser.add_argument("--push-only", action="store_true", help="Only push notebook without submitting")
     parser.add_argument("--submit-only", action="store_true", help="Submit already-executed kernel output")
+    parser.add_argument("--watch", action="store_true", help="Watch an already-running kernel and submit on completion")
     args = parser.parse_args()
 
     username = args.username or get_kaggle_username()
@@ -175,7 +176,13 @@ def main():
         )
         sys.exit(1)
 
-    if not args.submit_only:
+    if args.watch:
+        detected_version = str(args.version) if args.version else None
+        console.print(f"[bold cyan]Watching existing running kernel {kernel_id} (version: {detected_version or 'latest'})...[/bold cyan]")
+        success = monitor_kernel(kernel_id)
+        if not success:
+            sys.exit(1)
+    elif not args.submit_only:
         # 1. Prepare bundle
         prepare_kernel_bundle(
             kernel_slug=args.kernel_slug,
