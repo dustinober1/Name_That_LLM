@@ -119,16 +119,18 @@ def monitor_kernel(kernel_id: str, max_wait_seconds: int = 21600) -> bool:
         res = run_command(["kaggle", "kernels", "status", kernel_id])
         output = (res.stdout + res.stderr).lower()
 
-        if "complete" in output:
+        if "complete" in output and "kernelworkerstatus.complete" in output:
             console.print("[bold green]✓ Notebook execution completed successfully![/bold green]")
             return True
-        elif "error" in output or "failed" in output:
+        elif "kernelworkerstatus.failed" in output or "kernelworkerstatus.error" in output or ("failed" in output and "503" not in output and "service unavailable" not in output):
             console.print(f"[bold red]✗ Notebook execution failed:[/bold red]\n{res.stdout}\n{res.stderr}")
             return False
         elif "running" in output:
             console.print("[dim]Notebook is currently running in Kaggle container...[/dim]")
         elif "queued" in output:
             console.print("[dim]Notebook is queued in Kaggle cluster...[/dim]")
+        elif "503" in output or "502" in output or "service unavailable" in output:
+            console.print("[yellow]Transient Kaggle API error (503/502). Retrying in 20s...[/yellow]")
         else:
             console.print(f"[dim]Status: {res.stdout.strip()}[/dim]")
 
