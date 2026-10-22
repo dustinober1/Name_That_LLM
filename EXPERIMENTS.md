@@ -36,7 +36,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v14-grand-sub** | [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus) | Grand Master Consensus (Decoders + Encoders) | Qwen3-8B/14B Two-Stage LoRAs + 15F ModernBERT/DeBERTa + 4-View Pool SVC + Sinkhorn | **>0.600** (Target) | **0.5850** | — | ✅ Scored |
 | **v15-atlas-sub** | [Name That LLM - SOTA ATLAS Gaussian LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-sota-atlas-gaussian-lora) | SOTA Two-Stage LoRA + Gaussian + 10% ATLAS | Qwen3-8B/14B Two-Stage LoRAs + Shared-Prompt Gaussian Head + 10% ATLAS Adapter + Sinkhorn | **0.607** (Target) | **0.5920** | — | ✅ Scored |
 | **v16-sota-sub** | [Name That LLM - SOTA 0.607 ATLAS Ensemble](https://www.kaggle.com/code/dustinober/name-that-llm-sota-0-607-atlas-ensemble) | Complete SOTA 0.607 Master Ensemble (10 Datasets + 4 Models) | 85% Two-Stage LoRA (Qwen 8B/14B) + 15% 4-Gaussian Stack + 4-View Pool SVC + 10% ATLAS + Sinkhorn | **0.607** (Target) | *Failed* | — | ❌ Error |
-| **v17-early-sub** | [Name That LLM - Two Stage ATLAS Early](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early) | Two-Stage LoRA + Qwen 4B Early Layers + 10% ATLAS | 80% Two-Stage LoRA (Qwen 8B/14B) + 10% Qwen 4B Early Layers + 10% ATLAS + Sinkhorn | **0.596** (Target) | *Running* | — | 🚀 Running |
+| **v17-early-sub** | [Name That LLM - Two Stage ATLAS Early](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early) | Two-Stage LoRA + Qwen 4B Early Layers + 10% ATLAS | 80% Two-Stage LoRA (Qwen 8B/14B) + 10% Qwen 4B Early Layers + 10% ATLAS + Sinkhorn | **0.596** (Target) | *Evaluating* | — | ⏳ Scoring |
 
 ---
 
@@ -620,7 +620,8 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-22
 - **Kernel URL:** [Name That LLM - Two Stage ATLAS Early](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early)
-- **Status:** 🚀 Executing on Kaggle GPU (Watcher Active)
+- **Status:** ⏳ Evaluating on Private Test Set (Kaggle Cluster)
+- **Submission Ref:** `57535765`
 - **Target Public Leaderboard Score:** **`0.5960`** (+0.004 absolute gain over 0.592)
 - **Architecture & Verified Additions:**
   1. **Primary Two-Stage LoRA Baseline (Weight: `0.80`):**
