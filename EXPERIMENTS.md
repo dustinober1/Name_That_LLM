@@ -35,7 +35,8 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v13-lora-sub** | [Name That LLM - Two Stage LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-lora-pipeline) | Two-Stage LoRA Pipeline (0.592 Tier) | Truncated Qwen3-8B/14B LoRA (keep=24/27) + Centered Twins + 4-View Pool SVC (41k) + Sinkhorn | **0.592** (Public Ref) | **0.5920** | 0.0000 | ✅ Scored |
 | **v14-grand-sub** | [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus) | Grand Master Consensus (Decoders + Encoders) | Qwen3-8B/14B Two-Stage LoRAs + 15F ModernBERT/DeBERTa + 4-View Pool SVC + Sinkhorn | **>0.600** (Target) | **0.5850** | — | ✅ Scored |
 | **v15-atlas-sub** | [Name That LLM - SOTA ATLAS Gaussian LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-sota-atlas-gaussian-lora) | SOTA Two-Stage LoRA + Gaussian + 10% ATLAS | Qwen3-8B/14B Two-Stage LoRAs + Shared-Prompt Gaussian Head + 10% ATLAS Adapter + Sinkhorn | **0.607** (Target) | **0.5920** | — | ✅ Scored |
-| **v16-sota-sub** | [Name That LLM - SOTA 0.607 ATLAS Ensemble](https://www.kaggle.com/code/dustinober/name-that-llm-sota-0-607-atlas-ensemble) | Complete SOTA 0.607 Master Ensemble (10 Datasets + 4 Models) | 85% Two-Stage LoRA (Qwen 8B/14B) + 15% 4-Gaussian Stack + 4-View Pool SVC + 10% ATLAS + Sinkhorn | **0.607** (Target) | *Running* | — | 🚀 Running |
+| **v16-sota-sub** | [Name That LLM - SOTA 0.607 ATLAS Ensemble](https://www.kaggle.com/code/dustinober/name-that-llm-sota-0-607-atlas-ensemble) | Complete SOTA 0.607 Master Ensemble (10 Datasets + 4 Models) | 85% Two-Stage LoRA (Qwen 8B/14B) + 15% 4-Gaussian Stack + 4-View Pool SVC + 10% ATLAS + Sinkhorn | **0.607** (Target) | *Failed* | — | ❌ Error |
+| **v17-early-sub** | [Name That LLM - Two Stage ATLAS Early](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early) | Two-Stage LoRA + Qwen 4B Early Layers + 10% ATLAS | 80% Two-Stage LoRA (Qwen 8B/14B) + 10% Qwen 4B Early Layers + 10% ATLAS + Sinkhorn | **0.596** (Target) | *Running* | — | 🚀 Running |
 
 ---
 
@@ -608,19 +609,33 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-22
 - **Kernel URL:** [Name That LLM - SOTA 0.607 ATLAS Ensemble](https://www.kaggle.com/code/dustinober/name-that-llm-sota-0-607-atlas-ensemble)
-- **Status:** 🚀 Executing on Kaggle GPU
-- **Target Public Leaderboard Score:** **`0.607`** (Official Competition SOTA Tier)
-- **Full 10-Dataset & 4-Model Integration:**
-  1. **Primary Two-Stage LoRA Stack (Weight: `0.85`):**
-     - Truncated Qwen3-8B & 14B LoRAs with plain, centered twin, and shared-prompt Gaussian heads.
+- **Status:** ❌ Failed (Kernel Error)
+- **Error Analysis:**
+  - **Error:** `AssertionError: no glm4 checkpoint with hidden size 4096 under /kaggle/input` in `_GAUSSIAN_SOURCE` `load()`.
+  - **Root Cause:** The upstream legacy script embedded in Joseph Adamski's candidate notebook contains an inactive feature extraction block for `glm9b` that hard-asserts the presence of a GLM-4 base model under `/kaggle/input`. On Kaggle, the official `THUDM/glm-4` model instance is restricted (`403 Forbidden`), causing the execution to abort.
+
+---
+
+### Experiment 23: Two-Stage LoRA + Qwen3-4B Early Layers + 10% ATLAS (v17)
+
+- **Date:** 2026-10-22
+- **Kernel URL:** [Name That LLM - Two Stage ATLAS Early](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early)
+- **Status:** 🚀 Executing on Kaggle GPU (Watcher Active)
+- **Target Public Leaderboard Score:** **`0.5960`** (+0.004 absolute gain over 0.592)
+- **Architecture & Verified Additions:**
+  1. **Primary Two-Stage LoRA Baseline (Weight: `0.80`):**
+     - Truncated Qwen3-8B (24 layers) & Qwen3-14B (27 layers) decoder trunks.
      - 4-View multi-gram LinearSVC on 41k public pool (`1.021` weight).
-  2. **Complementary Four-Gaussian Feature Stack (Weight: `0.15`):**
-     - Full `_GAUSSIAN_SOURCE` execution powered by `bbucxi/qwen35-9b-safetensors`, `pjmathematician/ultrabert-380m-ntl`, `zbigniewkirchner/ntl-qwen3-8b-lora-claude-head`, and proxy generations.
-  3. **ATLAS 8B Adapter Injection (Weight: `0.10`):**
-     - Evaluates source-conditioned token sequence likelihoods on Qwen3-8B trunk:
-       $$P_{\text{final}} = 0.90 \times P_{\text{ensemble}} + 0.10 \times P_{\text{ATLAS}}$$
-  4. **100-Iteration Sinkhorn Mass Calibration:**
-     - Enforces exact uniform column marginals ($N / 18$) for maximum unweighted Balanced Accuracy.
+     - Plain and prompt-centered twin heads ($Z_c = Z - \bar{Z}_p$).
+  2. **Qwen3-4B Early-Layer Syntactic Features (Weight: `0.10`):**
+     - Extracts mean hidden states from layers 1, 2, and 3 of frozen Qwen3-4B-Base ($3 \times 2560 = 7,680$ dimensions).
+     - Standardized and classified via L2-regularized Logistic Regression ($C=0.0025$, `max_iter=1200`) fitted on the 2,699 training rows.
+     - Captures low-level tokenization cadence, punctuation patterns, and formatting style preceding deep semantic abstraction.
+  3. **ATLAS 8B Adapter Sequence Likelihoods (Weight: `0.10`):**
+     - Source-conditioned sequence likelihoods computed via Qwen3-8B trunk (`ntl-atlas-qwen3-8b-v1`).
+  4. **Tri-Partite Probability Blend & Uniform Balancing:**
+     $$P = 0.80 \times P_{\text{original}} + 0.10 \times P_{\text{atlas}} + 0.10 \times P_{\text{early}}$$
+     - 100-Iteration Sinkhorn mass balancing enforces uniform marginal distributions ($N / 18$) across all 18 classes.
 
 ---
 
