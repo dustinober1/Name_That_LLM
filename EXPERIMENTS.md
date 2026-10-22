@@ -33,7 +33,8 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v11-poe-sub** | [Name That LLM - Version 11](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 5-Way Product-of-Experts Consensus + Hungarian | 20% Large + 15% Base + 10% DeBERTa + 25% Hierarchical + 30% StyleGrams (Geometric Log-Space) | **0.5582** | **0.3960** | +0.1622 | ✅ Scored |
 | **v12-neural-sub** | [Name That LLM - Version 12](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Neural-Heavy Master Consensus (85% Neural) + Hungarian | 40% Large + 25% Base + 20% DeBERTa + 10% Hierarchical + 5% StyleGrams (Geometric Log-Space) | **0.5238** | **0.4000** | +0.1238 | ✅ Scored |
 | **v13-lora-sub** | [Name That LLM - Two Stage LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-lora-pipeline) | Two-Stage LoRA Pipeline (0.592 Tier) | Truncated Qwen3-8B/14B LoRA (keep=24/27) + Centered Twins + 4-View Pool SVC (41k) + Sinkhorn | **0.592** (Public Ref) | **0.5920** | 0.0000 | ✅ Scored |
-| **v14-grand-sub** | [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus) | Grand Master Consensus (Decoders + Encoders) | Qwen3-8B/14B Two-Stage LoRAs + 15F ModernBERT/DeBERTa + 4-View Pool SVC + Sinkhorn | **>0.600** (Target) | *Evaluating* | — | ⏳ Scoring |
+| **v14-grand-sub** | [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus) | Grand Master Consensus (Decoders + Encoders) | Qwen3-8B/14B Two-Stage LoRAs + 15F ModernBERT/DeBERTa + 4-View Pool SVC + Sinkhorn | **>0.600** (Target) | **0.5850** | — | ✅ Scored |
+| **v15-atlas-sub** | [Name That LLM - SOTA ATLAS Gaussian LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-sota-atlas-gaussian-lora) | SOTA Two-Stage LoRA + Gaussian + 10% ATLAS | Qwen3-8B/14B Two-Stage LoRAs + Shared-Prompt Gaussian Head + 10% ATLAS Adapter + Sinkhorn | **0.607** (Target) | *Queued* | — | 🚀 Prepared |
 
 ---
 
@@ -575,22 +576,40 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-22
 - **Kernel URL:** [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus)
-- **Status:** ⏳ Evaluating on Private Test Set (Kaggle Cluster)
+- **Status:** ✅ Scored
 - **Submission Ref:** `57507742`
-- **Target Public Leaderboard Score:** **`>0.600`**
-- **Architecture & Cross-Family Fusion:**
-  1. **Autoregressive Decoders (Qwen3-8B & 14B LoRAs):**
-     - Truncated Qwen3-8B (24 layers) & Qwen3-14B (27 layers) decoder trunks.
-     - 8-Layer Latent Pooling + LayerNorms ($8 \times 4096 = 32,768$ dims).
-     - Plain Head ($Z W_p^T + b_p$) + Centered Twin Head ($Z_c W_c^T + b_c$).
-  2. **Bidirectional Encoders (15 Fine-Tuned Checkpoints):**
-     - 5-Fold `answerdotai/ModernBERT-large` (395M) — Weight: `0.20`
-     - 5-Fold `answerdotai/ModernBERT-base` (149M) — Weight: `0.12`
-     - 5-Fold `microsoft/deberta-v3-base` (86M) — Weight: `0.08`
-  3. **Multi-Gram Stylometry on 41k Passages:**
-     - 4-View `LinearSVC` on `train + pool_v1.parquet` — Weight: `0.85`
-  4. **Log-Consensus Fusion + Sinkhorn Uniform Calibration:**
-     - Integrates Decoder + Encoder + Stylometry predictions into joint log-likelihood before 100-iteration Sinkhorn column balancing.
+- **Public Leaderboard Score:** **`0.5850`**
+- **Outcome & Diagnostic Analysis:**
+  - **The Gap (0.5920 vs 0.5850):** Adding the 15-checkpoint encoder family (ModernBERT Large/Base + DeBERTa Base, total weight 0.40) resulted in a 0.007 drop compared to the pure Two-Stage LoRA baseline (`0.5920`).
+  - **Root Cause:**
+    1. The encoders were fine-tuned exclusively on the 2,699 training passages without the 38k public pool.
+    2. The encoders lacked the prompt-centered twin latent subtraction ($Z_c = Z - \bar{Z}_p$), so their predictions still carried residual prompt topic bias.
+    3. Blending a model with ~0.401 accuracy at a heavy 40% logit weight pulled probability mass away from the superior 0.592 decoder predictions.
+  - **Strategic Takeaway:** Top-tier performance (>0.600) requires models trained on the large public pool with prompt-invariant representations (Gaussian heads + centered twins), rather than mixing in weaker standard supervised encoders.
+
+---
+
+### Experiment 21: SOTA Two-Stage LoRA + Shared-Prompt Gaussian + 10% ATLAS (v15)
+
+- **Date:** 2026-10-22
+- **Kernel URL:** [Name That LLM - SOTA ATLAS Gaussian LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-sota-atlas-gaussian-lora)
+- **Status:** 🚀 Prepared for Deployment
+- **Target Public Leaderboard Score:** **`0.607+`** (Public SOTA Tier)
+- **Architecture & Upstream Innovations:**
+  1. **Public Pool 4-View Multi-Gram LinearSVC (Weight `1.021`):**
+     - Raw Char (3-5), Word (1-3), Shape (2-6), Function-Word (1-3) on `train (2,699) + pool_v1.parquet (38,642)`.
+  2. **Truncated Qwen3-8B Two-Stage LoRA (`keep=24`, 8-layer pooling):**
+     - Plain Head (Weight: `0.226`) + Centered Twin Head (Weight: `0.079` on clusters $2 \le n \le 18$).
+     - **Shared-Prompt Gaussian Head (Weight: `0.10`):** WPCA ($d=128$), Ledoit-Wolf shrinkage, temperature $T=3.0$, and Cavity EM with repulsion prior on shared-prompt clusters. (Kirill / prvsiyan breakthrough: +0.008 LB).
+  3. **Truncated Qwen3-14B Two-Stage LoRA (`keep=27`, 8-layer pooling):**
+     - Plain Head (Weight: `0.429`) + Centered Twin Head (Weight: `0.150` on clusters $2 \le n \le 18$).
+  4. **ATLAS 8B Adapter (`ntl-atlas-qwen3-8b-v1` by Joseph Adamski):**
+     - Computes source-conditioned token sequence likelihoods on Qwen3-8B trunk.
+     - Blended directly into probability space before balancing:
+       $$P = 0.90 \times P_{\text{Gaussian-TwoStage}} + 0.10 \times P_{\text{ATLAS}}$$
+     - Proven to add +0.007 LB across all tested pipelines.
+  5. **100-Iteration Sinkhorn Mass Calibration:**
+     - Enforces exact uniform column marginals ($N / 18$) across all test predictions.
 
 ---
 
