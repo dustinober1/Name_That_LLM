@@ -33,7 +33,7 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v11-poe-sub** | [Name That LLM - Version 11](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | 5-Way Product-of-Experts Consensus + Hungarian | 20% Large + 15% Base + 10% DeBERTa + 25% Hierarchical + 30% StyleGrams (Geometric Log-Space) | **0.5582** | **0.3960** | +0.1622 | ✅ Scored |
 | **v12-neural-sub** | [Name That LLM - Version 12](https://www.kaggle.com/code/dustinober/name-that-llm-solution-pipeline) | Neural-Heavy Master Consensus (85% Neural) + Hungarian | 40% Large + 25% Base + 20% DeBERTa + 10% Hierarchical + 5% StyleGrams (Geometric Log-Space) | **0.5238** | **0.4000** | +0.1238 | ✅ Scored |
 | **v13-lora-sub** | [Name That LLM - Two Stage LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-lora-pipeline) | Two-Stage LoRA Pipeline (0.592 Tier) | Truncated Qwen3-8B/14B LoRA (keep=24/27) + Centered Twins + 4-View Pool SVC (41k) + Sinkhorn | **0.592** (Public Ref) | **0.5920** | 0.0000 | ✅ Scored |
-| **v14-grand-sub** | [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus) | Grand Master Consensus (Decoders + Encoders) | Qwen3-8B/14B Two-Stage LoRAs + 15F ModernBERT/DeBERTa + 4-View Pool SVC + Sinkhorn | **>0.600** (Target) | *Packaged* | — | 📦 Ready |
+| **v14-grand-sub** | [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus) | Grand Master Consensus (Decoders + Encoders) | Qwen3-8B/14B Two-Stage LoRAs + 15F ModernBERT/DeBERTa + 4-View Pool SVC + Sinkhorn | **>0.600** (Target) | *Executing* | — | 🚀 Running |
 
 ---
 
@@ -575,7 +575,7 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-20
 - **Kernel URL:** [Name That LLM - Grand Master Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-grand-master-consensus)
-- **Status:** 📦 Packaged and Ready for Final Launch
+- **Status:** 🚀 Executing on Kaggle GPU
 - **Target Public Leaderboard Score:** **`>0.600`**
 - **Architecture & Cross-Family Fusion:**
   1. **Autoregressive Decoders (Qwen3-8B & 14B LoRAs):**
