@@ -47,6 +47,7 @@ wandb/
 # Jupyter & IDE
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
-.vscode/
 .idea/
+scratch/
+submission.parquet
 .DS_Store
