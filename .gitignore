@@ -51,4 +51,3 @@ wandb/
 scratch/
 submission.parquet
 .DS_Store
-submission.parquet

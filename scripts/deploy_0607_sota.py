@@ -15,7 +15,7 @@ import shutil
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent
 SOURCE_NOTEBOOK = PROJECT_ROOT / "scratch" / "teach_the_model_10_atlas" / "teach-the-model-10-atlas.ipynb"
-DEST_DIR = PROJECT_ROOT / "kaggle_kernel_sota_0607"
+DEST_DIR = PROJECT_ROOT / "kernels" / "sota_0607"
 
 
 def prepare_bundle():

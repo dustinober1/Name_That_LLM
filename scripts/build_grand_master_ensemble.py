@@ -17,7 +17,7 @@ import os
 import pathlib
 import sys
 
-KERNEL_DIR = pathlib.Path("kaggle_kernel_grand")
+KERNEL_DIR = pathlib.Path("kernels/grand")
 NOTEBOOK_DIR = pathlib.Path("notebooks")
 
 
@@ -371,7 +371,7 @@ def get_grand_master_cells():
     with open(KERNEL_DIR / "kernel-metadata.json", "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2)
 
-    print("✓ Grand Master Consensus bundle prepared in kaggle_kernel_grand!")
+    print("✓ Grand Master Consensus bundle prepared in kernels/grand!")
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ import shutil
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parent.parent
 SOURCE_NOTEBOOK = PROJECT_ROOT / "scratch" / "two_stage_atlas_early" / "two-stage-lora-atlas-and-early-layers.ipynb"
-DEST_DIR = PROJECT_ROOT / "kaggle_kernel_atlas_early"
+DEST_DIR = PROJECT_ROOT / "kernels" / "atlas_early"
 
 
 def prepare_bundle():

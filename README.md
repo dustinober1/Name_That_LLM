@@ -149,8 +149,8 @@ uv run python scripts/submit_to_kaggle.py -m "TF-IDF + Stylometry 5-fold baselin
 ### Option 2: Step-by-Step Kaggle CLI Commands
 If you prefer running individual CLI commands:
 ```bash
-# 1. Push the notebook to Kaggle (pre-configured in kaggle_kernel/)
-kaggle kernels push -p kaggle_kernel
+# 1. Push the notebook to Kaggle (pre-configured in kernels/base/)
+kaggle kernels push -p kernels/base
 
 # 2. Check execution status until it reports 'Complete'
 kaggle kernels status dustinober/name-that-llm-baseline

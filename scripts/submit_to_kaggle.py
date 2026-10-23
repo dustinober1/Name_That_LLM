@@ -26,7 +26,7 @@ from build_submission_notebook import build_submission_notebook
 from name_that_llm.config import COMPETITION_NAME, SUBMISSION_FILE
 
 console = Console()
-KERNEL_DIR = PROJECT_ROOT / "kaggle_kernel"
+KERNEL_DIR = PROJECT_ROOT / "kernels" / "base"
 
 
 def get_kaggle_username() -> str:

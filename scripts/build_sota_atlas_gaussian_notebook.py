@@ -18,7 +18,7 @@ import os
 import pathlib
 import sys
 
-KERNEL_DIR = pathlib.Path("kaggle_kernel_sota")
+KERNEL_DIR = pathlib.Path("kernels/sota")
 NOTEBOOK_DIR = pathlib.Path("notebooks")
 
 

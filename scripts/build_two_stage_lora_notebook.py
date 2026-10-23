@@ -12,7 +12,7 @@ import os
 import pathlib
 import sys
 
-KERNEL_DIR = pathlib.Path("kaggle_kernel_lora")
+KERNEL_DIR = pathlib.Path("kernels/lora")
 NOTEBOOK_DIR = pathlib.Path("notebooks")
 
 
