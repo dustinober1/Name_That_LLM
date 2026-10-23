@@ -37,6 +37,8 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v15-atlas-sub** | [Name That LLM - SOTA ATLAS Gaussian LoRA](https://www.kaggle.com/code/dustinober/name-that-llm-sota-atlas-gaussian-lora) | SOTA Two-Stage LoRA + Gaussian + 10% ATLAS | Qwen3-8B/14B Two-Stage LoRAs + Shared-Prompt Gaussian Head + 10% ATLAS Adapter + Sinkhorn | **0.607** (Target) | **0.5920** | — | ✅ Scored |
 | **v16-sota-sub** | [Name That LLM - SOTA 0.607 ATLAS Ensemble](https://www.kaggle.com/code/dustinober/name-that-llm-sota-0-607-atlas-ensemble) | Complete SOTA 0.607 Master Ensemble (10 Datasets + 4 Models) | 85% Two-Stage LoRA (Qwen 8B/14B) + 15% 4-Gaussian Stack + 4-View Pool SVC + 10% ATLAS + Sinkhorn | **0.607** (Target) | *Failed* | — | ❌ Error |
 | **v17-early-sub** | [Name That LLM - Two Stage ATLAS Early](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early) | Two-Stage LoRA + Qwen 4B Early Layers + 10% ATLAS | 80% Two-Stage LoRA (Qwen 8B/14B) + 10% Qwen 4B Early Layers + 10% ATLAS + Sinkhorn | **0.596** (Target) | **0.5960** | 0.0000 | ✅ Scored |
+| **v18-early-dual** | [Name That LLM - Two Stage ATLAS Early v18](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early-v18) | Two-Stage LoRA + Dual Early (4B + 8B Centered) + 10% ATLAS | 75% Two-Stage LoRA + 15% Dual Early Layers (4B + 8B Centered Twins) + 10% ATLAS + Sinkhorn | **>0.600** (Target) | **0.5910** | — | ✅ Scored (`ref: 57561164`) |
+| **v19-early-ultra** | [Name That LLM - ATLAS Early UltraBERT v19](https://www.kaggle.com/code/dustinober/name-that-llm-atlas-early-ultrabert-v19) | Two-Stage LoRA + 4B Early + UltraBERT 5F + 10% ATLAS | 75% Two-Stage LoRA + 10% Qwen 4B Early + 10% ATLAS + 5% UltraBERT 5-Fold + Sinkhorn | **>0.600** (Target) | *Running* | — | ⏳ In Progress |
 
 ---
 
@@ -640,6 +642,55 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
   4. **Tri-Partite Probability Blend & Uniform Balancing:**
      $$P = 0.80 \times P_{\text{original}} + 0.10 \times P_{\text{atlas}} + 0.10 \times P_{\text{early}}$$
      - 100-Iteration Sinkhorn mass balancing enforces uniform marginal distributions ($N / 18$) across all 18 classes.
+
+---
+
+### Experiment 24: Two-Stage LoRA + Dual Early Layers (4B + 8B Centered Twins) + ATLAS (v18)
+
+- **Date:** 2026-10-23
+- **Kernel URL:** [Name That LLM - Two Stage ATLAS Early v18](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early-v18)
+- **Status:** ✅ Scored
+- **Submission Ref:** `57561164`
+- **Execution Time:** ~674 seconds on Kaggle Dual T4 (Run Complete ✅)
+- **Public Leaderboard Score:** **`0.5910`** (vs `0.5960` for v17 and `0.5920` for baseline)
+- **Diagnostic Takeaways & Root Cause:**
+  1. **Dimensionality vs Sample Size Mismatch:** Concatenating 4B ($7,680$) + 8B ($12,288$) created a $19,968$-dimensional vector trained on only 2,699 samples. Without the 41k public pool, the logistic regression head overfit to the training prompt vocabulary.
+  2. **Over-Weighting Early Features (15% vs 10%):** Raising the early layer weight from $0.10 \rightarrow 0.15$ simultaneously weakened the 0.592 LoRA trunk authority from $0.80 \rightarrow 0.75$.
+  3. **Centered Twin Heuristic on Early Features:** In v17, the early classifier was uncentered and purely syntactic. Applying a prompt-centering twin with simple TF-IDF clustering on early layers proved slightly noisy compared to the deep LoRA centered twin.
+  4. **Key Rule Established:** Early layer representations are most effective as a pure, lightweight syntactic regularizer ($w \le 0.10$) keeping dimensionality compact (4B alone or PCA/pool-trained).
+- **Architecture & Verified Additions:**
+  1. **Dual Trunk Early-Layer Features (Qwen3-4B + Qwen3-8B):**
+     - Layers 1, 2, and 3 from frozen Qwen3-4B ($3 \times 2560 = 7,680$ dim) + frozen Qwen3-8B ($3 \times 4096 = 12,288$ dim).
+     - Combined $19,968$-dimensional early syntactic representation capturing both byte-level tokenization cadence and sub-layer formatting rhythms.
+  2. **Prompt-Centering Twin on Early Features ($Z_c = Z - \bar{Z}_p$):**
+     - For test passages belonging to topic clusters ($\ge 2$ passages), applies cluster-mean subtraction to cancel prompt topic bias on early states before scoring.
+  3. **Optimal Tri-Partite Blend:**
+     $$P = 0.75 \times P_{\text{original}} + 0.15 \times P_{\text{early\_dual}} + 0.10 \times P_{\text{atlas}}$$
+     - Boosts early syntactic representation weight from $0.10 \rightarrow 0.15$.
+  4. **100-Iteration Sinkhorn Balancing:**
+     - Enforces exact uniform distribution across all 18 classes.
+
+---
+
+### Experiment 25: Two-Stage LoRA + 4B Early Layers + 10% ATLAS + 5% UltraBERT 5-Fold (v19)
+
+- **Date:** 2026-10-23
+- **Kernel URL:** [Name That LLM - ATLAS Early UltraBERT v19](https://www.kaggle.com/code/dustinober/name-that-llm-atlas-early-ultrabert-v19)
+- **Status:** ⏳ Running on Kaggle Cluster (Dual T4)
+- **Target Public Leaderboard Score:** **`>0.600`** (Targeting 0.602 - 0.605)
+- **Architecture & Verified Additions:**
+  1. **Primary Two-Stage LoRA Baseline (Weight: `0.75`):**
+     - Truncated Qwen3-8B (24 layers) & Qwen3-14B (27 layers) decoder trunks.
+     - 4-View multi-gram LinearSVC on 41k public pool.
+     - Plain and prompt-centered twin heads.
+  2. **Lean Qwen3-4B Early-Layer Syntactic Features (Weight: `0.10`):**
+     - Layers 1, 2, and 3 from frozen Qwen3-4B-Base ($3 \times 2560 = 7,680$ dim) with L2-regularized Logistic Regression.
+  3. **ATLAS 8B Adapter Likelihoods (Weight: `0.10`):**
+     - Source-conditioned token likelihoods via Qwen3-8B trunk.
+  4. **UltraBERT-380M 5-Fold Sequence Classifier (Weight: `0.05`):**
+     - Averaged logits across all 5 folds of `pjmathematician/ultrabert-380m-ntl` to provide deep encoder token-level generalization.
+  5. **100-Iteration Sinkhorn Balancing:**
+     - Enforces exact uniform distribution across all 18 classes.
 
 ---
 
