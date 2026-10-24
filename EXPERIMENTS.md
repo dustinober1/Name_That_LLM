@@ -38,7 +38,9 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v16-sota-sub** | [Name That LLM - SOTA 0.607 ATLAS Ensemble](https://www.kaggle.com/code/dustinober/name-that-llm-sota-0-607-atlas-ensemble) | Complete SOTA 0.607 Master Ensemble (10 Datasets + 4 Models) | 85% Two-Stage LoRA (Qwen 8B/14B) + 15% 4-Gaussian Stack + 4-View Pool SVC + 10% ATLAS + Sinkhorn | **0.607** (Target) | *Failed* | — | ❌ Error |
 | **v17-early-sub** | [Name That LLM - Two Stage ATLAS Early](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early) | Two-Stage LoRA + Qwen 4B Early Layers + 10% ATLAS | 80% Two-Stage LoRA (Qwen 8B/14B) + 10% Qwen 4B Early Layers + 10% ATLAS + Sinkhorn | **0.596** (Target) | **0.5960** | 0.0000 | ✅ Scored |
 | **v18-early-dual** | [Name That LLM - Two Stage ATLAS Early v18](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-atlas-early-v18) | Two-Stage LoRA + Dual Early (4B + 8B Centered) + 10% ATLAS | 75% Two-Stage LoRA + 15% Dual Early Layers (4B + 8B Centered Twins) + 10% ATLAS + Sinkhorn | **>0.600** (Target) | **0.5910** | — | ✅ Scored (`ref: 57561164`) |
-| **v19-early-ultra** | [Name That LLM - ATLAS Early UltraBERT v19](https://www.kaggle.com/code/dustinober/name-that-llm-atlas-early-ultrabert-v19) | Two-Stage LoRA + 4B Early + UltraBERT 5F + 10% ATLAS | 75% Two-Stage LoRA + 10% Qwen 4B Early + 10% ATLAS + 5% UltraBERT 5-Fold + Sinkhorn | **>0.600** (Target) | *Running* | — | ⏳ In Progress |
+| **v19-early-ultra** | [Name That LLM - ATLAS Early UltraBERT v19](https://www.kaggle.com/code/dustinober/name-that-llm-atlas-early-ultrabert-v19) | Two-Stage LoRA + 4B Early + UltraBERT 5F + 10% ATLAS | 75% Two-Stage LoRA + 10% Qwen 4B Early + 10% ATLAS + 5% UltraBERT 5-Fold + Sinkhorn | **>0.600** (Target) | **0.5930** | — | ✅ Scored (`ref: 57572989`) |
+| **v20-part2-blend** | [Name That LLM - Two Stage Part Two Blend v20](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-part-two-blend-v20) | Two-Stage LoRA Part Two (75k Pool + Qwen3 14B + Qwen2.5 14B + DeBERTa Large) | Qwen3-14B LoRA (0.40) + Qwen2.5-14B LoRA (0.20) + DeBERTa-v3-Large (0.25) + 4-View SVC on 75k Pool (1.0) + Centered Twins + Sinkhorn | **0.620 - 0.627** (Target) | **0.6200** | +0.0220 | ✅ Scored (`ref: 57596903`) |
+| **v21-part2-atlas** | [Name That LLM Part2 ATLAS Blend v21](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-blend-v21) | Two-Stage Part Two (75k Pool) + 10% ATLAS Token Likelihoods | 90% Part Two Blend (Qwen3 14B + Qwen2.5 14B + DeBERTa Large + 75k SVC) + 10% ATLAS + Sinkhorn | **0.627 - 0.630** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57604182`) |
 
 ---
 
@@ -676,8 +678,14 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-23
 - **Kernel URL:** [Name That LLM - ATLAS Early UltraBERT v19](https://www.kaggle.com/code/dustinober/name-that-llm-atlas-early-ultrabert-v19)
-- **Status:** ⏳ Running on Kaggle Cluster (Dual T4)
-- **Target Public Leaderboard Score:** **`>0.600`** (Targeting 0.602 - 0.605)
+- **Status:** ✅ Scored
+- **Submission Ref:** `57572989`
+- **Execution Time:** ~622 seconds on Kaggle Dual T4 (Run Complete ✅)
+- **Public Leaderboard Score:** **`0.5930`** (vs `0.5960` for v17 and `0.5910` for v18)
+- **Diagnostic Takeaways & Root Cause:**
+  1. Adding 5% UltraBERT 5-Fold probability slightly improved over v18 (`0.5910` $\rightarrow$ `0.5930`), but still did not match our best pure syntactic configuration v17 (`0.5960`).
+  2. UltraBERT was trained on training prompts without centered-twin latent subtraction ($Z_c = Z - \bar{Z}_p$), so its probability output still carries topic bias.
+  3. **Core Conclusion on Syntactic Ensembling:** The strongest standalone boost over the two-stage LoRA baseline (`0.5920`) remains the uncentered Qwen3-4B early layers 1–3 at 10% weight (`0.5960`).
 - **Architecture & Verified Additions:**
   1. **Primary Two-Stage LoRA Baseline (Weight: `0.75`):**
      - Truncated Qwen3-8B (24 layers) & Qwen3-14B (27 layers) decoder trunks.
@@ -691,6 +699,50 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
      - Averaged logits across all 5 folds of `pjmathematician/ultrabert-380m-ntl` to provide deep encoder token-level generalization.
   5. **100-Iteration Sinkhorn Balancing:**
      - Enforces exact uniform distribution across all 18 classes.
+
+---
+
+### Experiment 26: Two-Stage LoRA Part Two Blend (75k Pool + Qwen3 14B + Qwen2.5 14B + DeBERTa Large - v20)
+
+- **Date:** 2026-10-23
+- **Kernel URL:** [Name That LLM - Two Stage Part Two Blend v20](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-part-two-blend-v20)
+- **Status:** ✅ Scored
+- **Submission Ref:** `57596903`
+- **Public Leaderboard Score:** **`0.6200`** (★ Breakthrough: **+0.0240 (+2.4%) jump** over previous best `0.5960`!)
+- **Local CV Score:** **`0.6420`** (Gap: `+0.0220`)
+- **Key Validation & Breakthrough Insights:**
+  1. **The 75k Public Pool Milestone:** Training the 4-View LinearSVC and fine-tuning Qwen3-14B, Qwen2.5-14B, and DeBERTa-v3-Large on the 75,783-passage pool (`pool_v4.parquet`) delivered an immediate, massive leap from the 0.59-tier straight into **`0.620`**.
+  2. **Triple-Backbone Diversity:** Blending two distinct decoder trunks (Qwen3-14B at $0.40$ + Qwen2.5-14B at $0.20$) alongside a deep encoder (DeBERTa-v3-Large at $0.25$) and 75k LinearSVC ($1.00$) breaks past individual model ceilings.
+  3. **High Generalization on Unseen Test:** The gap between CV (`0.642`) and Public LB (`0.620`) is only $0.022$, proving exceptional stability on the hidden test set.
+- **Why This Is the Pivotal Jump:**
+  - The competition leaderboard escalated rapidly to 0.620 - 0.700 due to a new **75,783-passage cleaned public pool (`pool_v4.parquet`)** and the **Two-Stage LoRA Part Two** architecture (`nishantdahal/ntl-handwriting-blend`).
+  - Standalone model OOF performance on the expanded 75k pool:
+    - n-gram SVC (fit on 75k pool): **`0.473`** (vs `0.435` previously)
+    - Qwen3-14B LoRA (27 of 40 layers): **`0.611`** (vs `0.569` previously)
+    - Qwen2.5-14B LoRA (32 of 48 layers): **`0.569`**
+    - DeBERTa-v3-large (full fine-tune on 75k pool): **`0.546`**
+- **Architecture & Verified Weights:**
+  1. **Log-probability voting:**
+     $$\text{LOGIT} = 1.0 \times \text{SVC}_{75k} + 0.40 \times \text{Qwen3\_14B} + 0.20 \times \text{Qwen2.5\_14B} + 0.25 \times \text{DeBERTa\_v3\_Large}$$
+  2. **Centred-Twin Heads:** Test topic clustering with $Z_c = Z - \bar{Z}_p$ for clusters of 2–18 passages at weight $0.10$ per LoRA.
+  3. **300-Iteration Sinkhorn Balancing:** Enforces exact uniform distribution across all 18 classes.
+
+---
+
+### Experiment 27: Two-Stage Part Two (75k Pool) + 10% ATLAS Token Likelihoods (v21)
+
+- **Date:** 2026-10-24
+- **Kernel URL:** [Name That LLM Part2 ATLAS Blend v21](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-blend-v21)
+- **Status:** ⏳ Evaluating on Private Test Set (Kaggle Cluster)
+- **Submission Ref:** `57604182`
+- **Target Public Leaderboard Score:** **`0.627 - 0.630`** (+0.007 to +0.010 gain over 0.620)
+- **Key Hypothesis & Architectural Additions:**
+  1. **Building on the 0.620 Foundation:** The Two-Stage Part Two ensemble (`0.6200` LB) uses Qwen3-14B LoRA, Qwen2.5-14B LoRA, DeBERTa-v3-Large, and 4-view LinearSVC on the 75k pool.
+  2. **Orthogonal Token-Likelihood Head (ATLAS 8B):**
+     - Computes source-conditioned sequence likelihoods via the Qwen3-8B trunk (`josephadamski91/ntl-atlas-qwen3-8b-v1`), matching the exact integration method used in the top-scoring 0.636 public ensemble (`cosmorin`).
+  3. **Probability Combination:**
+     $$P = 0.90 \times P_{\text{part2\_blend}} + 0.10 \times P_{\text{atlas}}$$
+     followed by 300-iteration Sinkhorn uniform balancing across all 18 classes.
 
 ---
 
