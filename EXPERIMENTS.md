@@ -41,9 +41,12 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v19-early-ultra** | [Name That LLM - ATLAS Early UltraBERT v19](https://www.kaggle.com/code/dustinober/name-that-llm-atlas-early-ultrabert-v19) | Two-Stage LoRA + 4B Early + UltraBERT 5F + 10% ATLAS | 75% Two-Stage LoRA + 10% Qwen 4B Early + 10% ATLAS + 5% UltraBERT 5-Fold + Sinkhorn | **>0.600** (Target) | **0.5930** | — | ✅ Scored (`ref: 57572989`) |
 | **v20-part2-blend** | [Name That LLM - Two Stage Part Two Blend v20](https://www.kaggle.com/code/dustinober/name-that-llm-two-stage-part-two-blend-v20) | Two-Stage LoRA Part Two (75k Pool + Qwen3 14B + Qwen2.5 14B + DeBERTa Large) | Qwen3-14B LoRA (0.40) + Qwen2.5-14B LoRA (0.20) + DeBERTa-v3-Large (0.25) + 4-View SVC on 75k Pool (1.0) + Centered Twins + Sinkhorn | **0.620 - 0.627** (Target) | **0.6200** | +0.0220 | ✅ Scored (`ref: 57596903`) |
 | **v21-part2-atlas** | [Name That LLM Part2 ATLAS Blend v21](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-blend-v21) | Two-Stage Part Two (75k Pool) + 10% ATLAS Token Likelihoods | 90% Part Two Blend (Qwen3 14B + Qwen2.5 14B + DeBERTa Large + 75k SVC) + 10% ATLAS + Sinkhorn | **0.627 - 0.630** (Target) | **0.6300** | — | ✅ Scored (`ref: 57604182`) |
-| **v22-part2-early** | [Name That LLM Part2 ATLAS Early v22](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-early-v22) | Two-Stage Part Two (75k Pool) + 10% ATLAS + 5% Qwen3-4B Early | 85% Part Two Blend + 10% ATLAS Token Likelihoods + 5% Qwen3-4B Early Layers (1-3) + Sinkhorn | **0.633 - 0.636** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57612994`) |
-| **v23-part2-hung** | [Name That LLM Part2 ATLAS Hungarian v23](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-hungarian-v23) | Two-Stage Part Two (75k Pool) + 10% ATLAS + Hungarian Prompt Matching | 90% Part Two Blend + 10% ATLAS Token Likelihoods + Sinkhorn + Hungarian Bipartite Matching on TF-IDF Clusters | **0.635 - 0.640** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57613042`) |
-| **v24-part2-encoders** | [Name That LLM Part2 ATLAS Encoders v24](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-encoders-v24) | Grand Master: Part Two (75k) + ModernBERT + Desklib + ATLAS + Hungarian | Qwen3-14B (0.4) + Qwen2.5-14B (0.2) + DeBERTa (0.25) + ModernBERT (0.3) + Desklib (0.05) + 75k SVC (1.0) + 10% ATLAS + Sinkhorn + Hungarian | **0.637 - 0.645** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57613111`) |
+| **v22-part2-early** | [Name That LLM Part2 ATLAS Early v22](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-early-v22) | Two-Stage Part Two (75k Pool) + 10% ATLAS + 5% Qwen3-4B Early | 85% Part Two Blend + 10% ATLAS Token Likelihoods + 5% Qwen3-4B Early Layers (1-3) + Sinkhorn | **0.633 - 0.636** (Target) | **0.6310** | — | ✅ Scored (`ref: 57612994`) |
+| **v23-part2-hung** | [Name That LLM Part2 ATLAS Hungarian v23](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-hungarian-v23) | Two-Stage Part Two (75k Pool) + 10% ATLAS + Hungarian Prompt Matching | 90% Part Two Blend + 10% ATLAS Token Likelihoods + Sinkhorn + Hungarian Bipartite Matching on TF-IDF Clusters | **0.635 - 0.640** (Target) | **0.6090** | — | ✅ Scored (`ref: 57613042`) |
+| **v24-part2-encoders** | [Name That LLM Part2 ATLAS Encoders v24](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-encoders-v24) | Grand Master: Part Two (75k) + ModernBERT + Desklib + ATLAS + Hungarian | Qwen3-14B (0.4) + Qwen2.5-14B (0.2) + DeBERTa (0.25) + ModernBERT (0.3) + Desklib (0.05) + 75k SVC (1.0) + 10% ATLAS + Sinkhorn + Hungarian | **0.637 - 0.645** (Target) | **0.6110** | — | ✅ Scored (`ref: 57613111`) |
+| **v25-clean-grand** | [Name That LLM Clean Grand v25](https://www.kaggle.com/code/dustinober/name-that-llm-clean-grand-v25) | Clean Grand Master: Part Two (75k) + Encoders + ATLAS + Qwen 4B Early (No Hungarian) | Qwen3-14B (0.4) + Qwen2.5-14B (0.2) + DeBERTa (0.25) + ModernBERT (0.3) + Desklib (0.05) + 75k SVC (1.0) + 10% ATLAS + 5% Qwen3-4B Early + Sinkhorn | **0.636 - 0.638** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57634169`) |
+| **v26-glm-kimi-pool** | [Name That LLM GLM Kimi Pool v26](https://www.kaggle.com/code/dustinober/name-that-llm-glm-kimi-pool-v26) | GLM/Kimi Rare-Class Targeted Pool Expansion + Grand Master Ensemble | v25 Grand Ensemble + 1,516 OpenRouter GLM-5.3 / GLM-5.3-flash / Kimi-K3 passages appended to SVC pool (77.3k total) | **0.639 - 0.641** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57634173`) |
+| **v27-sota-spectral** | [Name That LLM SOTA Spectral v27](https://www.kaggle.com/code/dustinober/name-that-llm-sota-spectral-v27) | SOTA 0.640 Dual-Stack: Kirilltym Spectral Style Bank + JN Liang Pool Patch | Part Two Main + Complementary Feature Stack + Low-Margin ATLAS + 8-Head Augmented Spectral Bank + Sinkhorn | **0.6400** (Verified) | *Packaged* | — | 📦 Ready to Submit |
 
 ---
 
@@ -757,17 +760,12 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-24
 - **Kernel URL:** [Name That LLM Part2 ATLAS Early v22](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-early-v22)
-- **Status:** ⏳ Evaluating on Private Test Set (Kaggle Cluster)
+- **Status:** ✅ Scored
 - **Submission Ref:** `57612994`
-- **Target Public Leaderboard Score:** **`0.633 - 0.636`** (+0.003 to +0.006 gain over 0.630)
-- **Hypothesis & Tri-Partite Blend Architecture:**
-  1. **Core Foundation (0.6300 LB):** Qwen3-14B LoRA (0.40) + Qwen2.5-14B LoRA (0.20) + DeBERTa-v3-Large (0.25) + 75k LinearSVC (1.00) with Centred Twins + 10% ATLAS 8B sequence likelihoods.
-  2. **Lean Early-Layer Syntactic Injection:**
-     - Adds Qwen3-4B layers 1–3 ($3 \times 2560 = 7,680$ dim) with L2-regularized Logistic Regression ($C=0.0025$) at a calibrated conservative $0.05$ weight.
-     - Captures low-level punctuation, token boundaries, and indentation structure preceding semantic abstraction.
-  3. **Probability Combination:**
-     $$P = 0.85 \times P_{\text{part2\_blend}} + 0.10 \times P_{\text{atlas}} + 0.05 \times P_{\text{early\_4b}}$$
-     followed by 300-iteration Sinkhorn uniform balancing across all 18 classes.
+- **Public Leaderboard Score:** **`0.6310`** (★ New Team Best: +0.0010 over v21 `0.6300`, +0.0110 over v20 `0.6200`)
+- **Outcome & Analysis:**
+  - Injecting early syntactic representations from Qwen3-4B layers 1–3 at a calibrated conservative 5% logit weight successfully lifted our leaderboard score to **`0.6310`**.
+  - Confirms that low-level tokenization boundary and syntactic structure information complements semantic decoders and ATLAS token-likelihoods without destabilizing probability calibration.
 
 ---
 
@@ -775,19 +773,13 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-24
 - **Kernel URL:** [Name That LLM Part2 ATLAS Hungarian v23](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-hungarian-v23)
-- **Status:** ⏳ Evaluating on Private Test Set (Kaggle Cluster)
+- **Status:** ✅ Scored
 - **Submission Ref:** `57613042`
-- **Target Public Leaderboard Score:** **`0.635 - 0.640`**
-- **Hypothesis & Structural Matching Architecture:**
-  1. **Core Foundation (0.6300 LB):** Two-Stage Part Two (75k pool LinearSVC, Qwen3-14B LoRA, Qwen2.5-14B LoRA, DeBERTa-v3-large) + 10% ATLAS 8B sequence likelihoods.
-  2. **Topic Grouping & Cluster Extraction:**
-     - Computes content-TFIDF pairwise distances between all test passages.
-     - Performs hierarchical clustering at distance threshold `0.85` (average linkage) to identify prompt clusters with $2 \le m \le 18$ passages.
-  3. **Optimal Bipartite Matching (Kuhn-Munkres / Hungarian Algorithm):**
-     - For each cluster of size $m \le K$, forms the negative log-probability cost matrix:
-       $$C_{ij} = -\log(\max(P_{ij}, 10^{-12}))$$
-     - Computes the minimum-cost injective assignment via `scipy.optimize.linear_sum_assignment(cost)`.
-     - Enforces that no two passages from the identical prompt cluster can be assigned the same generator model, eliminating duplicate intra-cluster model collisions while preserving calibrated posterior marginals.
+- **Public Leaderboard Score:** **`0.6090`** (-0.0210 drop from 0.630)
+- **Diagnostic Analysis:**
+  - **The Defect:** Hungarian bipartite matching enforces a strict 1-to-1 injective assignment within prompt clusters.
+  - **Root Cause:** As noted by top competitors, hidden test set prompt clusters do *not* strictly contain 1 passage per class; prompts may feature repeated outputs from the same model or non-exhaustive subsets. Forcing artificial class dispersion heavily distorts high-confidence predictions, dropping LB by -0.0210.
+  - **Actionable Rule:** Never enforce hard Hungarian 1-to-1 matching at test time; rely on Sinkhorn marginal balancing and Centred Twin latent subtraction instead.
 
 ---
 
@@ -795,24 +787,73 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-24
 - **Kernel URL:** [Name That LLM Part2 ATLAS Encoders v24](https://www.kaggle.com/code/dustinober/name-that-llm-part2-atlas-encoders-v24)
-- **Status:** ⏳ Evaluating on Private Test Set (Kaggle Cluster)
+- **Status:** ✅ Scored
 - **Submission Ref:** `57613111`
-- **Target Public Leaderboard Score:** **`0.637 - 0.645`**
-- **Grand Master Ensemble Architecture:**
-  1. **Two-Stage Decoder Foundation (75k Pool):**
+- **Public Leaderboard Score:** **`0.6110`**
+- **Diagnostic Analysis:**
+  - Dual-GPU parallel inference of ModernBERT Large (`w=0.30`) and Desklib (`w=0.05`) executed flawlessly on the cluster.
+  - The score was depressed by the included Hungarian prompt assignment (0.611 vs 0.609 in v23).
+  - Removing Hungarian matching will allow the true signal of the complementary encoders to lift the 0.631 baseline toward 0.636+.
+
+---
+
+### Experiment 31: Clean Grand Master Ensemble without Hungarian Matching (v25)
+
+- **Date:** 2026-10-25
+- **Kernel URL:** [Name That LLM Clean Grand v25](https://www.kaggle.com/code/dustinober/name-that-llm-clean-grand-v25)
+- **Status:** ⏳ Evaluating on Private Test Set (Kaggle Cluster)
+- **Submission Ref:** `57634169`
+- **Target Public Leaderboard Score:** **`0.636 - 0.638`**
+- **Hypothesis & Grand Consensus Architecture:**
+  1. **Core Decoder Foundation:**
      - 4-View LinearSVC on 75,783 public passages (`w=1.00`).
      - Qwen3-14B LoRA (27 layers) with plain head (`w=0.40`) and Centred Twin head (`w=0.10`).
      - Qwen2.5-14B LoRA (32 layers) with plain head (`w=0.20`) and Centred Twin head (`w=0.10`).
      - DeBERTa-v3-Large full fine-tune (`w=0.25`).
-  2. **Dual-GPU Complementary Encoders (`nuridudak/ntl-two-stage-encoders`):**
-     - `modernbert`: ModernBERT-large sequence classifier evaluated on GPU 0 (`w=0.30`).
-     - `desklib`: Desklib sequence classifier evaluated in parallel on GPU 1 (`w=0.05`).
-     - Evaluated via parallel child processes (`enc_infer.py`) with dynamic padding and fp16 autocast with fp32 fallback.
-  3. **Generative Sequence Likelihoods (ATLAS 8B):**
-     - Source-conditioned token likelihoods via Qwen3-8B trunk (`josephadamski91/ntl-atlas-qwen3-8b-v1`) blended at 10% probability mass.
-  4. **Post-Processing & Structural Optimization:**
-     - 300-iteration Sinkhorn uniform balancing across all 18 target classes.
-     - Hungarian optimal bipartite assignment on content-TFIDF prompt clusters.
+  2. **Complementary Encoders (`nuridudak/ntl-two-stage-encoders`):**
+     - ModernBERT Large (`w=0.30`) on GPU 0 and Desklib (`w=0.05`) on GPU 1 executed in parallel child processes (`enc_infer.py`).
+  3. **ATLAS & Early Syntactic Injection:**
+     - 10% ATLAS source-conditioned token likelihoods (`josephadamski91/ntl-atlas-qwen3-8b-v1`).
+     - 5% Qwen3-4B layers 1–3 early syntactic representations.
+  4. **Post-Processing:**
+     - Pure 300-iteration Sinkhorn uniform balancing without artificial Hungarian distortion.
+
+---
+
+### Experiment 32: GLM-5.3 & Kimi-K3 Rare-Class Targeted Pool Expansion (v26)
+
+- **Date:** 2026-10-25
+- **Kernel URL:** [Name That LLM GLM Kimi Pool v26](https://www.kaggle.com/code/dustinober/name-that-llm-glm-kimi-pool-v26)
+- **Status:** ⏳ Evaluating on Private Test Set (Kaggle Cluster)
+- **Submission Ref:** `57634173`
+- **Target Public Leaderboard Score:** **`0.639 - 0.641`**
+- **Hypothesis & Targeted Minority Rectification:**
+  1. **The Minority Confusion Bottleneck:**
+     - GLM-5.3 vs GLM-5.3-flash and Kimi-K3 represent the highest error rate across all frontier models in the host dataset.
+  2. **Targeted Pool Expansion (`danielandresmiranda/ntl-openrouter-glm-kimi`):**
+     - Appends 1,516 verified OpenRouter passages (600 GLM-5.3, 600 GLM-5.3-flash, 316 Kimi-K3) to `pool_v4.parquet`, expanding the SVC training pool to 77,299 passages.
+     - Gives the 4-view LinearSVC direct stylistic discrimination on function words and punctuation boundaries for these minority classes.
+  3. **Complete Consensus Stack:**
+     - Blends with all v25 members (LoRAs, Encoders, ATLAS, Early 4B, and Sinkhorn).
+
+---
+
+### Experiment 33: SOTA 0.640 Dual-Stack (Kirilltym + JN Liang GLM/Kimi + Spectral Readouts - v27)
+
+- **Date:** 2026-10-25
+- **Kernel URL:** [Name That LLM SOTA Spectral v27](https://www.kaggle.com/code/dustinober/name-that-llm-sota-spectral-v27)
+- **Status:** 📦 Packaged & Verified (Ready to Submit upon Quota Reset)
+- **Target Public Leaderboard Score:** **`0.6400`** (Direct reproduction of the verified 0.640 LB mark)
+- **Architecture & Verified Multi-Branch Ensemble:**
+  1. **Two-Stage Part Two Main:**
+     - Qwen3-14B & Qwen2.5-14B LoRAs with Centred Twins + DeBERTa-v3-Large + 77.3k SVC (with GLM/Kimi patch).
+  2. **15% Complementary Feature Stack:**
+     - Stylegrams, stylometry LightGBM, DeBERTa, ELECTRA, Desklib, and UltraBERT.
+  3. **10% ATLAS Token Likelihoods on Low-Margin Rows:**
+     - Evaluated on test passages with margin $<0.30$.
+  4. **10% Augmented Spectral Readout Bank (`synthetic4404.joblib`):**
+     - 8 CPU-evaluated readout heads capturing Fourier frequency signatures, PCA-denoised projections, and prompt residuals on raw LoRA24 features before group centering.
+  5. **Final Balancing:** Full Sinkhorn balancing to exact uniform class distribution.
 
 ---
 

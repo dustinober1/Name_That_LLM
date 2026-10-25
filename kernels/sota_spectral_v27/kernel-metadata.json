@@ -1,0 +1,42 @@
+{
+  "id": "dustinober/name-that-llm-sota-spectral-v27",
+  "title": "name that llm sota spectral v27",
+  "code_file": "kaggle_submission.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "false",
+  "dataset_sources": [
+    "nishantdahal/ntl-handwriting-blend",
+    "danielandresmiranda/ntl-openrouter-glm-kimi",
+    "nishantdahal/ntl-two-stage-lora",
+    "kirilltym/ntl-spectral-style-heads-paired-4404",
+    "josephadamski91/ntl-atlas-qwen3-8b-v1",
+    "fleongg/ntl-quality-selected-public-svc-pool",
+    "fleongg/ntl-legacy-qwen24-recovery",
+    "dhruvtibarewal/nlm-l24-adapters",
+    "dhruvtibarewal/nlm-matched-clean",
+    "dhruvtibarewal/nlm-offline-wheels",
+    "seyitkaangunes/ntl-extra-api-passages",
+    "prvsiyan/prvsiyans-extended-name-that-llm-dataset",
+    "abdullah1afify/ntl-generations",
+    "dophuchung/ntl-proxy-generations",
+    "lucasboesen/ntl-free-proxy-generations",
+    "zbigniewkirchner/ntl-qwen3-8b-lora-claude-head",
+    "bbucxi/qwen35-9b-safetensors",
+    "pjmathematician/ultrabert-380m-ntl"
+  ],
+  "competition_sources": [
+    "name-that-llm"
+  ],
+  "kernel_sources": [],
+  "model_sources": [
+    "qwen-lm/qwen-3/Transformers/14b-base/1",
+    "qwen-lm/qwen2.5/Transformers/14b/1",
+    "qwen-lm/qwen-3/Transformers/8b-base/1",
+    "qwen-lm/qwen-3/Transformers/4b-base/1",
+    "qwen-lm/qwen2.5/Transformers/7b/1"
+  ]
+}
