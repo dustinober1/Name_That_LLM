@@ -1,0 +1,43 @@
+{
+  "id": "dustinober/name-that-llm-nlm-v27-nollama-v29",
+  "title": "name that llm nlm v27 nollama v29",
+  "code_file": "kaggle_submission.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "false",
+  "dataset_sources": [
+    "dhruvtibarewal/nlm-l24-adapters-v5",
+    "dhruvtibarewal/nlm-l24-adapters",
+    "dhruvtibarewal/nlm-matched-clean",
+    "dhruvtibarewal/nlm-offline-wheels",
+    "nishantdahal/ntl-two-stage-lora",
+    "nishantdahal/ntl-handwriting-blend",
+    "josephadamski91/ntl-atlas-qwen3-8b-v1",
+    "zbigniewkirchner/ntl-qwen3-8b-lora-claude-head",
+    "pjmathematician/ultrabert-380m-ntl",
+    "prvsiyan/prvsiyans-extended-name-that-llm-dataset",
+    "seyitkaangunes/ntl-extra-api-passages",
+    "lucasboesen/ntl-free-proxy-generations",
+    "abdullah1afify/ntl-generations",
+    "dophuchung/ntl-proxy-generations",
+    "bbucxi/qwen35-9b-safetensors"
+  ],
+  "competition_sources": [
+    "name-that-llm"
+  ],
+  "kernel_sources": [
+    "vnton37nguyn/ntl-train-lora-qwen25-instyle",
+    "lucasboesen/name-that-llm-train-lora24-s7"
+  ],
+  "model_sources": [
+    "qwen-lm/qwen-3/Transformers/14b-base/1",
+    "qwen-lm/qwen-3/Transformers/8b-base/1",
+    "qwen-lm/qwen-3/Transformers/14b/1",
+    "qwen-lm/qwen-3/Transformers/8b/1",
+    "qwen-lm/qwen2.5/Transformers/14b/1",
+    "qwen-lm/qwen2.5/Transformers/7b/1"
+  ]
+}
