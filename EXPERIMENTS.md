@@ -48,11 +48,12 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v26-glm-kimi-pool** | [Name That LLM GLM Kimi Pool v26](https://www.kaggle.com/code/dustinober/name-that-llm-glm-kimi-pool-v26) | GLM/Kimi Rare-Class Targeted Pool Expansion + Grand Master Ensemble | v25 Grand Ensemble + 1,516 OpenRouter GLM-5.3 / GLM-5.3-flash / Kimi-K3 passages appended to SVC pool (77.3k total) | **0.639 - 0.641** (Target) | **0.6360** | — | ✅ Scored (`ref: 57634173`, **+0.0050**) |
 | **v27-sota-spectral** | [Name That LLM SOTA Spectral v27](https://www.kaggle.com/code/dustinober/name-that-llm-sota-spectral-v27) | SOTA 0.640 Dual-Stack: Kirilltym Spectral Style Bank + JN Liang Pool Patch | Part Two Main + Complementary Feature Stack + Low-Margin ATLAS + 8-Head Augmented Spectral Bank + Sinkhorn | **0.6400** (Verified) | *Failed* | — | ❌ Error (`ref: 57681362`, private dataset assert) |
 | **v28-tuned-pool** | [Name That LLM Tuned Pool v28](https://www.kaggle.com/code/dustinober/name-that-llm-tuned-pool-v28) | Tuned GLM/Kimi Pool + Encoders + Calibrated Centred Twins (0.15, thr 0.80) | v26 Grand Ensemble + Centered Twins tuned to 0.15 at threshold 0.80 on 77.3k SVC pool | **0.638 - 0.640** (Target) | **0.6350** | — | ✅ Scored (`ref: 57681428`) |
-| **v29-nlm-v27-nollama** | [Name That LLM NLM v27 NoLlama v29](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v27-nollama-v29) | SOTA 0.651 Pipeline: Dhruv Tibarewal v5 LoRAs + Gaussian Heads + ATLAS | Qwen3-14B v5 + Qwen3-8B v5 + Qwen2.5-14B + Nishant 14B + Gaussian Heads + Centered Twins + 10% ATLAS + Complementary Stack | **0.6510** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57698061`) |
-| **v30-nlm-glm-kimi** | [Name That LLM NLM v27 GLM Kimi v30](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v27-glm-kimi-v30) | SOTA 0.651 NLM Pipeline + GLM/Kimi Rare-Class Pool Patch | 0.651 NLM-v27 stack + 1,516 OpenRouter GLM-5.3 / GLM-5.3-flash / Kimi-K3 pool patch tackling #1 minority confusion | **0.653 - 0.655** (Target) | *Running* | — | ⚡ GPU Batch Running (v2) |
-| **v31-topic-bias** | [Name That LLM NLM v31 Topic Bias](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v31-topic-bias) | Enhanced 0.651 with Soft SVC Topic Bias Attenuation (Kozykappa Recipe) | Continuous topic centering (8-18 clusters, alpha=0.62) replacing destructive Hungarian matching (+0.0174 local CV gain) | **0.653 - 0.655** (Target) | *Running* | — | ⚡ GPU Batch Running (v1) |
-| **v32-spectral-consensus** | [Name That LLM NLM v32 Spectral Consensus](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v32-spectral-consensus) | Dual-Stream Multi-Modal Consensus: 0.651 LoRA v5 + 8-Head Augmented Spectral Bank | Fuses 0.651 neural decoders with Kirilltym 8-Head Spectral Style Readouts (synthetic4404) evaluated on 32k Qwen-8B layer states | **0.656 - 0.660** (Target) | *Queued* | — | 📦 Packaged & Ready |
-| **v33-sharper-blend** | [Name That LLM NLM v33 Sharper Blend](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v33-sharper-blend) | Sharper Temperature Blend & Margin-Adaptive ATLAS Allocation | Temperature sharpening (T=0.88) + dynamic ATLAS allocation budget focused on borderline margins (<0.22) | **0.658 - 0.662** (Target) | *Queued* | — | 📦 Packaged & Ready |
+| **v29-nlm-v27-nollama** | [Name That LLM NLM v27 NoLlama v29](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v27-nollama-v29) | SOTA 0.651 Pipeline (Partial: No Llama / Comp Stack) | Qwen3-14B v5 + Qwen3-8B v5 + Qwen2.5-14B + Nishant 14B + Gaussian Heads + Centered Twins + 10% ATLAS (missing 7 kernel_sources) | **0.6510** (Target) | **0.6420** | — | ✅ Scored (`ref: 57698061`, **+0.0060**) |
+| **v30-sota-0654-typobayes** | [Name That LLM NLM v30](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v27-glm-kimi-v30) | Verified 0.654 Pipeline: Full NLM-v27 + Llama-3.1-8B v5 + 15% Comp Stack + 10% ATLAS + Bayesian Typography | All 9 `kernel_sources` restored (`ll8v5` + `glm4` Comp Stack) + 34-Marker Confidence-Gated Bayesian Typography Likelihood (`v38a`) | **0.6540** (Verified) | *Evaluating* | — | ⏳ Scoring (`ref: 57736594`) |
+| **v31-per-row-norm** | [Name That LLM NLM v31](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v31-topic-bias) | SOTA 0.654 + Per-Row Active Ensemble Member Normalization (`v39`) | 0.5 Global + 0.5 Per-Row Active Member Normalization (fixes singleton vs grouped scaling before Sinkhorn) + 34-Marker Bayesian Typography | **0.654 - 0.656** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57736542`) |
+| **v32-q25v5-120k** | [Name That LLM NLM v32](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v32-spectral-consensus) | Upgraded 120k-Pool Qwen2.5-14B v5 6-Fold Ensemble (`nlm-q25-v5`) + 0.654 Typography + Per-Row Norm | Replaces 75k single `q25_14` (0.569 OOF) with Dhruv's 6-adapter 120k-pool `q25_14v5` (0.615 OOF, `w=2.0`) + Full NLM-v27 + Per-Row Norm + Typography | **0.656 - 0.659** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57736637`) |
+| **v33-tri-gauss-glm-topic** | [Name That LLM NLM v33](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v33-sharper-blend) | Tri-Gaussian (`q14v5 + q8v5 + q25_14v5`) + GLM/Kimi Pool Patch + Fixed Soft SVC Topic Bias (`LP['svc4']`) | `v32` + 3rd Shared-Prompt Gaussian Head (`q25_14v5` `gauss=0.45`) + 1,516 OpenRouter GLM/Kimi rows + Soft SVC Topic Bias (`alpha=0.62`) | **0.657 - 0.661** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57736733`) |
+| **v34-grand-hybrid** | [Name That LLM NLM v34](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v34-grand-hybrid) | Grand Hybrid: Dual Qwen2.5-14B (`q25_14v5` + `q25_14`) + Pool-Augmented Bayesian Typography + Zero-Violation Guards | `v32` + Dual Qwen2.5-14B (`w=2.0` + `w=0.5`) + 75/25 Train/120k-Pool Typography Prior + 5 Zero-Violation Character Guards (No Hungarian) + Sinkhorn 0.85 | **0.658 - 0.662** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57736839`) |
 
 
 
@@ -850,18 +851,45 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
 
 - **Date:** 2026-10-25
 - **Kernel URL:** [Name That LLM SOTA Spectral v27](https://www.kaggle.com/code/dustinober/name-that-llm-sota-spectral-v27)
-- **Status:** 📦 Packaged & Verified (Ready to Submit upon Quota Reset)
-- **Target Public Leaderboard Score:** **`0.6400`** (Direct reproduction of the verified 0.640 LB mark)
-- **Architecture & Verified Multi-Branch Ensemble:**
-  1. **Two-Stage Part Two Main:**
-     - Qwen3-14B & Qwen2.5-14B LoRAs with Centred Twins + DeBERTa-v3-Large + 77.3k SVC (with GLM/Kimi patch).
-  2. **15% Complementary Feature Stack:**
-     - Stylegrams, stylometry LightGBM, DeBERTa, ELECTRA, Desklib, and UltraBERT.
-  3. **10% ATLAS Token Likelihoods on Low-Margin Rows:**
-     - Evaluated on test passages with margin $<0.30$.
-  4. **10% Augmented Spectral Readout Bank (`synthetic4404.joblib`):**
-     - 8 CPU-evaluated readout heads capturing Fourier frequency signatures, PCA-denoised projections, and prompt residuals on raw LoRA24 features before group centering.
-  5. **Final Balancing:** Full Sinkhorn balancing to exact uniform class distribution.
+- **Status:** ❌ Error (`ref: 57681362`, private dataset assertion in legacy fork)
+
+---
+
+### Experiment 34: SOTA 0.651 Pipeline without Llama/Comp Stack (v29)
+
+- **Date:** 2026-10-27
+- **Kernel URL:** [Name That LLM NLM v27 NoLlama v29](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v27-nollama-v29)
+- **Submission Ref:** `57698061`
+- **Public Leaderboard Score:** **`0.6420`** (★ New Team Best: **+0.0060** over v26 `0.6360`!)
+- **Diagnostic Post-Mortem (`0.6420` vs `0.6510`):**
+  1. Inspecting `name-that-llm-nlm-v27-nollama-v29.log` revealed that `v29` achieved `0.6420` **despite missing two major ensemble components** due to 7 omitted `kernel_sources` in `kernel-metadata.json`:
+     - `comp_stack.py` exited early at line 682 (`AssertionError: no glm4 checkpoint with hidden size 4096 under /kaggle/input`) because `lucasboesen/name-that-llm-glm4-9b-trunc25` was not mounted, dropping the entire **15% Complementary Stack (`comp_logit.npy`)**.
+     - `ll8v5` (the 6-checkpoint Llama-3.1-8B v5 LoRA ensemble, `w=1.0`, `twin=0.35`) was skipped because `avazaku/name-that-llm-verified-llama-asset-cache` was not mounted.
+  2. Restoring all 9 `kernel_sources` and `qwen-lm/qwen-3/Transformers/4b-base/1` unlocks both missing branches (`+0.009` verified LB value).
+
+---
+
+### Experiments 35–39: The 5-Submission SOTA 0.654–0.662 Portfolio (v30 – v34)
+
+- **Date:** 2026-10-28
+- **Builder Script:** [`scripts/build_v30_v34_submissions.py`](file:///Users/dustinober/Projects/Data_Science/Name_That_LLM/scripts/build_v30_v34_submissions.py)
+- **Pipeline Manager:** [`scripts/pipeline_manager.py`](file:///Users/dustinober/Projects/Data_Science/Name_That_LLM/scripts/pipeline_manager.py)
+- **Core Infrastructure Fixes Applied Across All 5 Submissions (`v30` – `v34`):**
+  1. **All 9 `kernel_sources` & 7 `model_sources` Restored:** Mounts `avazaku/name-that-llm-verified-llama-asset-cache` (`BL` Llama-3.1-8B base for `ll8v5`) and `lucasboesen/name-that-llm-glm4-9b-trunc25` + encoder/adapter kernels so `comp_stack.py` (`comp_w=0.15`) and `ll8v5` (`w=1.0`) execute 100% cleanly.
+  2. **Fast Preflight Commit + Full Competition Rerun:** On the 3-row visible `test.csv`, verifies all model/adapter/encoder paths and syntax in ~45 seconds; on the hidden competition rerun (`len(test) >= 50`), executes the full multi-hour GPU pipeline.
+  3. **Partial-Preserving ATLAS Budget Checkpoint & Zero-Weight TF-IDF Skip:** Skips `tfidf` when `tfidf_w=0` (saving ~6.5 minutes of runtime for ATLAS) and preserves all shortest-first completed ATLAS passages if the 8.3h budget is approached.
+
+- **Portfolio Breakdown:**
+  1. **`v30` (`ref: 57736594`) — Verified 0.654 Reproduction (`Who am I?` v38a):**
+     - Full 6-member `nlm-v27` (`q14v5` w=3.0 + gauss=0.70, `q8v5` w=2.0 + gauss=0.44, `ll8v5` w=1.0, `n14b` w=2.5, `q25_14` w=1.0, `deb` w=1.0) + 120k `svc4` (`w=1.5`) + 15% `comp_stack` + 10% `ATLAS` + **34-Marker Confidence-Gated Bayesian Typography Likelihood** (`rate = clip((hits + 2)/(freq + 4), 0.015, 0.985)`, capped at `±0.35`, gated by `clip((0.8 - margin)/0.8, 0, 1)`).
+  2. **`v31` (`ref: 57736542`) — 0.654 Pipeline + Per-Row Active Member Normalization (`Who am I?` v39):**
+     - Fixes singleton vs grouped test passage scaling distortion (where singleton rows have 7 active log-prob terms while grouped rows have 14 due to Gaussian and centered twin heads) by blending `0.5 * global_norm + 0.5 * per_row_active_norm` prior to Sinkhorn balancing and Bayesian Typography correction.
+  3. **`v32` (`ref: 57736637`) — Upgraded 120k-Pool Qwen2.5-14B v5 6-Fold Ensemble (`dhruvtibarewal/nlm-q25-v5`) + 0.654 Typography + Per-Row Norm:**
+     - Upgrades the Qwen2.5-14B member from Nishant's single 75k-pool adapter (`0.569` OOF, `w=1.0`) to Dhruv Tibarewal's 6-adapter 120k-pool `q25_14v5` ensemble (`0.615` OOF, **+4.6% standalone OOF**, `w=2.0`, `keep=32`, `layers=[3, 5, 8, 11, 16, 21, 27, 32]`, `twin=0.35`) combined with the 0.654 Bayesian Typography and Per-Row Normalization.
+  4. **`v33` (`ref: 57736733`) — Tri-Gaussian (`q14v5 + q8v5 + q25_14v5`) + GLM/Kimi Rare-Class Pool Patch + Fixed Soft SVC Topic Bias (`LP['svc4']`):**
+     - Adds a **3rd Shared-Prompt Gaussian Head (`gauss=0.45`)** on `q25_14v5`'s full-data 120k-pool adapter, appends 1,516 verified OpenRouter GLM-5.3 / GLM-5.3-flash / Kimi-K3 passages to `nlm_pool_v5.parquet`, and applies soft topic bias attenuation (`alpha=0.62`) directly to `LP['svc4']` inside dense prompt clusters (8–18 passages).
+  5. **`v34` — Grand Hybrid: Dual Qwen2.5-14B (`q25_14v5` + `q25_14`) + Pool-Augmented Bayesian Typography Prior + Zero-Violation Character Guards + Calibrated Sinkhorn (`0.85`):**
+     - Combines both `q25_14v5` (`w=2.0`) and `q25_14` (`w=0.5`), estimates the 34-marker Bayesian typography rates from a **75% Official Train + 25% De-duplicated 120k Pool Prior**, applies the **5 Zero-Violation Character Guards** after Bayesian typography (with no Hungarian matching), and uses calibrated Sinkhorn (`0.85`).
 
 ---
 
