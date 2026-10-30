@@ -1,11 +1,11 @@
-"""Automated Kaggle 5-Submission Pipeline Manager (v30 - v34).
+"""Automated Kaggle 5-Submission Pipeline Manager (v35 - v39).
 
 Manages the 5-experiment SOTA queue:
-- v30 (ver 3): Verified 0.654 Pipeline (Full nlm-v27 + Llama-3.1-8B v5 + 15% Comp Stack + 10% ATLAS + v38a 34-Marker Bayesian Typography)
-- v31 (ver 2): 0.654 Pipeline + v39 Per-Row Active Ensemble Member Normalization (0.5 global + 0.5 row-active before Sinkhorn)
-- v32 (ver 1): Upgraded 120k-Pool Qwen2.5-14B v5 6-Fold Ensemble (dhruvtibarewal/nlm-q25-v5, w=2.0) + 0.654 Typography + Per-Row Norm
-- v33 (ver 1): v32 + 3rd Shared-Prompt Gaussian Head (q25_14v5 gauss=0.45) + GLM/Kimi 1,516-Passage Pool Patch + Fixed Soft SVC Topic Bias (LP['svc4'], alpha=0.62)
-- v34 (ver 1): Grand Hybrid (Dual Qwen2.5-14B: q25_14v5 w=2.0 + q25_14 w=0.5) + Pool-Augmented Bayesian Typography Prior (75% Train + 25% 120k Pool) + Zero-Violation Typography Guards + Sinkhorn 0.85
+- v35: Verified SOTA 0.663 Pipeline (Dual-T4 Data Parallel + ATLAS 20% + 15% Comp Stack + 34-Marker Bayesian Typography + Robust Llama)
+- v36: 0.663 Pipeline + V40A Family-Only Stylometry Sibling Residual (5-Fold GroupKFold OOF Calibrated, Cross-Family Invariant)
+- v37: NTL v41 Grandmaster Horizon (Calibrated Pool Stylometry 0.50 + Expanded ATLAS 25% Margin 0.35 + Soft Sinkhorn 0.50/0.40)
+- v38: Grandmaster Horizon v41 + V40A Sibling Style Residual (max_alpha=0.06) + Zero-Violation Typography Guards
+- v39: Grand Master Consensus Blend (Balanced Pool 0.42 + ATLAS 22% Margin 0.33 + Per-Row Member Normalization + Sibling Residual + Sinkhorn 0.48)
 """
 
 import argparse
@@ -21,87 +21,85 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 EXPERIMENT_QUEUE = [
     {
-        "id": "v30",
-        "slug": "name-that-llm-nlm-v27-glm-kimi-v30",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v27_glm_kimi_v30",
-        "version": "3",
-        "message": "SOTA 0.654 Verified Reproduction (Full nlm-v27 + Llama-3.1-8B v5 + 15% Comp Stack + 10% ATLAS + 34-Marker Bayesian Typography) v30",
-    },
-    {
-        "id": "v31",
-        "slug": "name-that-llm-nlm-v31-topic-bias",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v31_topic_bias",
+        "id": "v35",
+        "slug": "name-that-llm-sota-0663-v35",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v35_sota_0663",
         "version": "2",
-        "message": "SOTA 0.654 + Per-Row Active Ensemble Member Normalization (0.5 Global + 0.5 Row-Active) + Bayesian Typography v31",
+        "message": "Verified SOTA 0.663 Reproduction (Dual-T4 Data Parallel + ATLAS 20% + 15% Comp Stack + 34-Marker Bayesian Typography + Robust Llama) v35",
     },
     {
-        "id": "v32",
-        "slug": "name-that-llm-nlm-v32-spectral-consensus",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v32_spectral_consensus",
-        "version": "1",
-        "message": "Upgraded 120k-Pool Qwen2.5-14B v5 6-Fold Ensemble (nlm-q25-v5, w=2.0) + Full nlm-v27 + 0.654 Typography + Per-Row Norm v32",
+        "id": "v36",
+        "slug": "name-that-llm-sibling-style-v36",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v36_sibling_style",
+        "version": "2",
+        "message": "0.663 Pipeline + V40A Family-Only Stylometry Sibling Residual (5-Fold GroupKFold OOF Calibrated, Cross-Family Invariant) v36",
     },
     {
-        "id": "v33",
-        "slug": "name-that-llm-nlm-v33-sharper-blend",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v33_sharper_blend",
-        "version": "1",
-        "message": "Tri-Gaussian (q14v5 + q8v5 + q25_14v5 gauss=0.45) + GLM/Kimi Pool Patch + Fixed Soft SVC Topic Bias (svc4, alpha=0.62) + 0.654 Typography v33",
+        "id": "v37",
+        "slug": "name-that-llm-ntl-v41-grandmaster-horizon-v37",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v37_grandmaster_horizon",
+        "version": "2",
+        "message": "NTL v41 Grandmaster Horizon: Calibrated Pool Stylometry (0.50) + Expanded ATLAS 25% (Margin 0.35) + Soft Sinkhorn (0.50 / 0.40) v37",
     },
     {
-        "id": "v34",
-        "slug": "name-that-llm-nlm-v34-grand-hybrid",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v34_grand_hybrid",
-        "version": "1",
-        "message": "Grand Hybrid: Dual Qwen2.5-14B (q25_14v5 w=2.0 + q25_14 w=0.5) + Pool-Augmented Bayesian Typography Prior + Zero-Violation Guards + Sinkhorn 0.85 v34",
+        "id": "v38",
+        "slug": "name-that-llm-horizon-sibling-v38",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v38_horizon_sibling",
+        "version": "2",
+        "message": "Grandmaster Horizon v41 + V40A Sibling Style Residual (max_alpha=0.06) + Zero-Violation Typography Guards v38",
+    },
+    {
+        "id": "v39",
+        "slug": "name-that-llm-consensus-blend-v39",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v39_consensus_blend",
+        "version": "2",
+        "message": "Grand Master Consensus: Balanced V31/V41 Multi-Modal Ensemble + Per-Row Member Normalization + Sibling Residual + Calibrated Sinkhorn (0.48) v39",
     },
 ]
 
 
 def run_cmd(cmd: list) -> subprocess.CompletedProcess:
-    return subprocess.run(cmd, capture_output=True, text=True)
+    return subprocess.run(
+        [sys.executable, "-m"] + cmd,
+        cwd=PROJECT_ROOT,
+        capture_output=True,
+        text=True,
+    )
 
 
-def get_kernel_status(slug: str, username: str = "dustinober") -> str:
-    res = run_cmd(["kaggle", "kernels", "status", f"{username}/{slug}"])
-    out = (res.stdout + res.stderr).lower()
-    if "kernelworkerstatus.complete" in out:
+def get_kernel_status(slug: str) -> str:
+    res = run_cmd(["kaggle", "kernels", "status", f"dustinober/{slug}"])
+    lines = [l for l in res.stdout.splitlines() if not l.startswith("Warning:")]
+    out = "\n".join(lines).strip()
+    out_lower = out.lower()
+    if 'complete' in out_lower:
         return "COMPLETE"
-    elif "kernelworkerstatus.running" in out:
+    elif 'running' in out_lower:
         return "RUNNING"
-    elif "kernelworkerstatus.queued" in out:
+    elif 'queued' in out_lower:
         return "QUEUED"
-    elif "kernelworkerstatus.failed" in out or "kernelworkerstatus.error" in out:
-        return "FAILED"
-    elif "not found" in out or "404" in out or "cannot access kernel" in out:
+    elif 'error' in out_lower:
+        return "ERROR"
+    elif "404" in res.stderr or "notfound" in res.stderr.lower() or "404" in out or not out:
         return "NOT_PUSHED"
-    return "UNKNOWN"
+    return out or "UNKNOWN"
 
 
 def get_submitted_messages() -> str:
-    sub_res = run_cmd(["kaggle", "competitions", "submissions", "name-that-llm"])
-    return sub_res.stdout
+    res = run_cmd(["kaggle", "competitions", "submissions", "-c", "name-that-llm"])
+    return res.stdout
 
 
-def submit_kernel(exp: dict, username: str = "dustinober") -> bool:
-    kernel_id = f"{username}/{exp['slug']}"
-    cmd = [
-        "kaggle",
-        "competitions",
-        "submit",
-        "-c",
-        "name-that-llm",
-        "-f",
-        "submission.parquet",
-        "-k",
-        kernel_id,
-        "-v",
-        exp["version"],
-        "-m",
-        exp["message"],
-    ]
-    console.print(f"[bold cyan]Submitting {exp['id']} ({kernel_id} v{exp['version']})...[/bold cyan]")
-    res = run_cmd(cmd)
+def submit_kernel(exp: dict) -> bool:
+    console.print(f"[bold green]Submitting {exp['id']} (dustinober/{exp['slug']} v{exp['version']})...[/bold green]")
+    res = run_cmd([
+        "kaggle", "competitions", "submit",
+        "-c", "name-that-llm",
+        "-f", "submission.parquet",
+        "-m", exp["message"],
+        "-k", f"dustinober/{exp['slug']}",
+        "-v", exp["version"]
+    ])
     console.print(res.stdout.strip())
     if res.returncode != 0:
         console.print(f"[bold red]Submission failed for {exp['id']}:[/bold red] {res.stderr.strip()}")
@@ -123,7 +121,7 @@ def push_kernel(exp: dict) -> bool:
 
 
 def advance_pipeline(auto_push_and_submit: bool = False):
-    console.rule("[bold cyan]5-Experiment SOTA Execution & Submission Status (v30 - v34)[/bold cyan]")
+    console.rule("[bold cyan]5-Experiment SOTA Execution & Submission Status (v35 - v39)[/bold cyan]")
 
     sub_out = get_submitted_messages()
     lines = [l for l in sub_out.split("\n") if l.strip() and not l.startswith("Warning")][:10]
@@ -131,7 +129,7 @@ def advance_pipeline(auto_push_and_submit: bool = False):
     for l in lines:
         console.print(f"  {l}")
 
-    console.print("\n[bold yellow]5 Submissions Queue (v30 - v34):[/bold yellow]")
+    console.print("\n[bold yellow]5 Submissions Queue (v35 - v39):[/bold yellow]")
     active_gpu_commits = 0
     statuses = {}
     for exp in EXPERIMENT_QUEUE:
