@@ -54,11 +54,16 @@ Tracking cross-validation (CV) vs Public Leaderboard (LB) scores, model iteratio
 | **v32-q25v5-120k** | [Name That LLM NLM v32](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v32-spectral-consensus) | Upgraded 120k-Pool Qwen2.5-14B v5 6-Fold Ensemble (`nlm-q25-v5`) + 0.654 Typography + Per-Row Norm | Replaces 75k single `q25_14` (0.569 OOF) with Dhruv's 6-adapter 120k-pool `q25_14v5` (0.615 OOF, `w=2.0`) + Full NLM-v27 + Per-Row Norm + Typography | **0.656 - 0.659** (Target) | **0.6480** | — | ✅ Scored (`ref: 57736637`, adapter swap hurt) |
 | **v33-tri-gauss-glm-topic** | [Name That LLM NLM v33](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v33-sharper-blend) | Tri-Gaussian (`q14v5 + q8v5 + q25_14v5`) + GLM/Kimi Pool Patch + Fixed Soft SVC Topic Bias (`LP['svc4']`) | `v32` + 3rd Shared-Prompt Gaussian Head (`q25_14v5` `gauss=0.45`) + 1,516 OpenRouter GLM/Kimi rows + Soft SVC Topic Bias (`alpha=0.62`) | **0.657 - 0.661** (Target) | **0.6450** | — | ✅ Scored (`ref: 57736733`) |
 | **v34-grand-hybrid** | [Name That LLM NLM v34](https://www.kaggle.com/code/dustinober/name-that-llm-nlm-v34-grand-hybrid) | Grand Hybrid: Dual Qwen2.5-14B (`q25_14v5` + `q25_14`) + Pool-Augmented Bayesian Typography + Zero-Violation Guards | `v32` + Dual Qwen2.5-14B (`w=2.0` + `w=0.5`) + 75/25 Train/120k-Pool Typography Prior + 5 Zero-Violation Character Guards (No Hungarian) + Sinkhorn 0.85 | **0.658 - 0.662** (Target) | **0.6450** | — | ✅ Scored (`ref: 57736839`) |
-| **v35-sota-0663** | [Name That LLM SOTA 0663 v35](https://www.kaggle.com/code/dustinober/name-that-llm-sota-0663-v35) | Verified 0.663 Pipeline: Dual-T4 Data Parallel + ATLAS 20% + Comp Stack + Typography | 2-GPU DP inference (`dp: True`) for 8B LoRAs + ATLAS 20% (`margin=0.30`) + robust Llama-3.1-8B model source + 34-marker Bayesian typography | **0.6630** (Verified) | *Evaluating* | — | ⏳ Scoring (`ref: 57804938`) |
-| **v36-sibling-style** | [Name That LLM Sibling Style v36](https://www.kaggle.com/code/dustinober/name-that-llm-sibling-style-v36) | 0.663 Pipeline + V40A Sibling Style Residual | `v35` + 5-Fold GroupKFold OOF Calibrated Intra-Family Stylometry Residual (`max_alpha=0.08`, cross-family mass invariant) | **0.664 - 0.667** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57804946`) |
-| **v37-grandmaster-horizon** | [Name That LLM Horizon v37](https://www.kaggle.com/code/dustinober/name-that-llm-ntl-v41-grandmaster-horizon-v37) | NTL v41 Grandmaster Horizon | Open pool auxiliary weight `0.50` in 4-view SVC + Expanded ATLAS 25% (`margin=0.35`) + Soft Sinkhorn (`0.50 / 0.40`) | **0.664 - 0.668** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57805056`) |
-| **v38-horizon-sibling** | [Name That LLM Horizon Sibling v38](https://www.kaggle.com/code/dustinober/name-that-llm-horizon-sibling-v38) | Grandmaster Horizon v41 + V40A Sibling Style Residual | `v37` Horizon + V40A Grouped Sibling Stylometry (`max_alpha=0.06`) + Zero-Violation Character Guards | **0.666 - 0.670** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57805045`) |
-| **v39-consensus-blend** | [Name That LLM Consensus Blend v39](https://www.kaggle.com/code/dustinober/name-that-llm-consensus-blend-v39) | Grand Master Consensus Blend | Balanced Pool 0.42 + ATLAS 22% (`margin=0.33`) + Per-Row Member Normalization + Sibling Residual + Calibrated Sinkhorn 0.48 | **0.665 - 0.671** (Target) | *Evaluating* | — | ⏳ Scoring (`ref: 57805194`) |
+| **v35-sota-0663** | [Name That LLM SOTA 0663 v35](https://www.kaggle.com/code/dustinober/name-that-llm-sota-0663-v35) | Verified 0.663 Pipeline: Dual-T4 Data Parallel + ATLAS 20% + Comp Stack + Typography | 2-GPU DP inference (`dp: True`) for 8B LoRAs + ATLAS 20% (`margin=0.30`) + robust Llama-3.1-8B model source + 34-marker Bayesian typography | **0.6630** (Verified) | **0.6620** | +0.0010 | ✅ Scored (`ref: 57804938`, **Team SOTA**) |
+| **v36-sibling-style** | [Name That LLM Sibling Style v36](https://www.kaggle.com/code/dustinober/name-that-llm-sibling-style-v36) | 0.663 Pipeline + V40A Sibling Style Residual | `v35` + 5-Fold GroupKFold OOF Calibrated Intra-Family Stylometry Residual (`max_alpha=0.08`, cross-family mass invariant) | **0.664 - 0.667** (Target) | **0.6610** | — | ✅ Scored (`ref: 57804946`) |
+| **v37-grandmaster-horizon** | [Name That LLM Horizon v37](https://www.kaggle.com/code/dustinober/name-that-llm-ntl-v41-grandmaster-horizon-v37) | NTL v41 Grandmaster Horizon | Open pool auxiliary weight `0.50` in 4-view SVC + Expanded ATLAS 25% (`margin=0.35`) + Soft Sinkhorn (`0.50 / 0.40`) | **0.664 - 0.668** (Target) | **0.6600** | — | ✅ Scored (`ref: 57805056`) |
+| **v38-horizon-sibling** | [Name That LLM Horizon Sibling v38](https://www.kaggle.com/code/dustinober/name-that-llm-horizon-sibling-v38) | Grandmaster Horizon v41 + V40A Sibling Style Residual | `v37` Horizon + V40A Grouped Sibling Stylometry (`max_alpha=0.06`) + Zero-Violation Character Guards | **0.666 - 0.670** (Target) | **0.6590** | — | ✅ Scored (`ref: 57805045`) |
+| **v39-consensus-blend** | [Name That LLM Consensus Blend v39](https://www.kaggle.com/code/dustinober/name-that-llm-consensus-blend-v39) | Grand Master Consensus Blend | Balanced Pool 0.42 + ATLAS 22% (`margin=0.33`) + Per-Row Member Normalization + Sibling Residual + Calibrated Sinkhorn 0.48 | **0.665 - 0.671** (Target) | **0.6580** | — | ✅ Scored (`ref: 57805194`) |
+| **v40-sota-0664-tuned** | [Name That LLM SOTA 0664 Tuned v40](https://www.kaggle.com/code/dustinober/name-that-llm-sota-0664-tuned-v40) | Verified SOTA 0.664 Reproduction: Softened Typography + Sinkhorn 0.60 | Softened Bayesian typography evidence multiplier `1.2` (vs 1.5) + Calibrated Sinkhorn `0.60` (`target_mix=0.35`) + 120k Pool | **0.6640** (Verified) | *Evaluating* | — | ⏳ Evaluating (`ref: 57854678`) |
+| **v41-open-pool-198k** | [Name That LLM Open Pool 198k v41](https://www.kaggle.com/code/dustinober/name-that-llm-open-pool-198k-v41) | 198k Clean Open Pool SOTA (crtproduction) + SVC Weight 12.0 | `crtproduction/name-that-llm-open-pool` (198k passages, `~flag_train_prompt_regen`) + `--svc_w 12.0` + Sinkhorn 0.45 | **0.6640** (Verified) | *Evaluating* | — | ⏳ Evaluating (`ref: 57854733`) |
+| **v42-open-pool-synergy** | [Name That LLM Open Pool Synergy v42](https://www.kaggle.com/code/dustinober/name-that-llm-open-pool-synergy-v42) | Grandmaster Synergy: 198k Open Pool + Calibrated Typography 1.2 + Sinkhorn 0.55 | Dual 0.664 Breakthrough Synergy: 198k Open Pool + Softened Typography (1.2x) + Balanced `--svc_w 4.0` + Sinkhorn `0.55` (`target_mix=0.30`) | **0.666 - 0.668** (Target) | *Evaluating* | — | ⏳ Evaluating (`ref: 57855174`) |
+| **v43-atlas-calibrated** | [Name That LLM ATLAS Calibrated v43](https://www.kaggle.com/code/dustinober/name-that-llm-atlas-calibrated-v43) | Open-Pool Calibrated ATLAS: Margin 0.28 / Weight 0.22 | 198k Open Pool + Softened Typography (1.2x) + High-Precision Ambiguity Gate (`--atlas_margin 0.28`, `--atlas_w 0.22`) + Sinkhorn 0.58 | **0.665 - 0.669** (Target) | *Evaluating* | — | ⏳ Evaluating (`ref: 57855179`) |
+| **v44-master-consensus** | [Name That LLM Master Consensus v44](https://www.kaggle.com/code/dustinober/name-that-llm-master-consensus-v44) | Horizon Master Consensus: 198k Pool + Typography 1.2x + Family Invariant Sibling Residual | 198k Open Pool + Softened Typography (1.2x) + Family-Preserving Sibling Residual (`max_alpha=0.04`) + Balanced Sinkhorn `0.50` (`target_mix=0.35`) | **0.666 - 0.670** (Target) | *Evaluating* | — | ⏳ Evaluating (`ref: 57855397`) |
 
 
 
@@ -895,6 +900,33 @@ LightGBM's tree splits heavily favored the hand-crafted stylometric features ove
      - Adds a **3rd Shared-Prompt Gaussian Head (`gauss=0.45`)** on `q25_14v5`'s full-data 120k-pool adapter, appends 1,516 verified OpenRouter GLM-5.3 / GLM-5.3-flash / Kimi-K3 passages to `nlm_pool_v5.parquet`, and applies soft topic bias attenuation (`alpha=0.62`) directly to `LP['svc4']` inside dense prompt clusters (8–18 passages).
   5. **`v34` — Grand Hybrid: Dual Qwen2.5-14B (`q25_14v5` + `q25_14`) + Pool-Augmented Bayesian Typography Prior + Zero-Violation Character Guards + Calibrated Sinkhorn (`0.85`):**
      - Combines both `q25_14v5` (`w=2.0`) and `q25_14` (`w=0.5`), estimates the 34-marker Bayesian typography rates from a **75% Official Train + 25% De-duplicated 120k Pool Prior**, applies the **5 Zero-Violation Character Guards** after Bayesian typography (with no Hungarian matching), and uses calibrated Sinkhorn (`0.85`).
+
+---
+
+### Experiments 40–44: The SOTA 0.664+ Optimization & Open-Pool Portfolio (v35 – v39 Post-Mortem & v40 – v44 Generation)
+
+- **Date:** 2026-10-31
+- **Builder Script:** [`scripts/build_v40_v44_submissions.py`](file:///Users/dustinober/Projects/Data_Science/Name_That_LLM/scripts/build_v40_v44_submissions.py)
+- **Pipeline Manager:** [`scripts/pipeline_manager.py`](file:///Users/dustinober/Projects/Data_Science/Name_That_LLM/scripts/pipeline_manager.py)
+
+#### 1. Takeaways from v35 – v39 Scored Submissions:
+- **v35 (`ref: 57804938`) scored `0.6620`**, proving our fast-commit Dual-T4 pipeline reproduction is rock solid and established a new team best.
+- **v36 (`0.6610`), v37 (`0.6600`), v38 (`0.6590`), v39 (`0.6580`)**: Heuristic penalties (per-row norm, strict zero-violation masks, aggressive sibling re-ranking) degraded the well-calibrated posterior distribution of the core ensemble. Simpler, cleaner mathematical balancing preserves the raw LoRA decoder discriminative signals best.
+
+#### 2. Key Breakthroughs Integrated into v40 – v44:
+1. **Softened Bayesian Typography Evidence (Shiner 0.664):**
+   - The original 1.5x evidence scaling over-amplified punctuation noise. Softening to `1.2x` (`np.clip(1.2 * _evidence / max(float(_fw.sum()), 1e-6), -0.30, 0.30)`) combined with `--sinkhorn 0.60` yielded **0.664** on the public leaderboard.
+2. **198k Clean Open Pool (`crtproduction/name-that-llm-open-pool`, Zbigniew Kirchner 0.664):**
+   - Expanding the 4-view SVC training set to 198k cleaned passages (excluding `flag_train_prompt_regen`) boosted prompt-grouped CV from 0.4805 to 0.5008 (+2.0%), scoring **0.664** on public LB with `--svc_w 12.0`.
+3. **Synergy Architecture (v42 - v44):**
+   - Fusing the 198k Open Pool representations with softened typography evidence (`1.2x`), balanced Sinkhorn marginals (`0.50 - 0.58`), and refined low-margin ATLAS targeting (`margin 0.28`).
+
+#### 3. Portfolio Breakdown:
+- **`v40` (`nlm_v40_sota_0664_tuned`)**: Exact Shiner 0.664 tuned reproduction (1.2x evidence, Sinkhorn 0.60, 120k pool, `--svc_w 1.5`).
+- **`v41` (`nlm_v41_open_pool_198k`)**: Exact Zbigniew Kirchner 0.664 open-pool reproduction (198k pool, `--svc_w 12.0`, Sinkhorn 0.45).
+- **`v42` (`nlm_v42_open_pool_tuned_synergy`)**: Grandmaster Synergy (198k pool + 1.2x evidence + `--svc_w 4.0` + Sinkhorn 0.55).
+- **`v43` (`nlm_v43_atlas_calibrated`)**: High-Precision Ambiguity ATLAS (198k pool + `--atlas_margin 0.28` + `--atlas_w 0.22` + Sinkhorn 0.58).
+- **`v44` (`nlm_v44_master_consensus`)**: Horizon Master Consensus (198k pool + 1.2x evidence + strictly invariant sibling residual `max_alpha=0.04` + Sinkhorn 0.50).
 
 ---
 

@@ -1,15 +1,18 @@
-"""Automated Kaggle 5-Submission Pipeline Manager (v35 - v39).
+"""Automated Kaggle 5-Submission Pipeline Manager (v40 - v44).
 
 Manages the 5-experiment SOTA queue:
-- v35: Verified SOTA 0.663 Pipeline (Dual-T4 Data Parallel + ATLAS 20% + 15% Comp Stack + 34-Marker Bayesian Typography + Robust Llama)
-- v36: 0.663 Pipeline + V40A Family-Only Stylometry Sibling Residual (5-Fold GroupKFold OOF Calibrated, Cross-Family Invariant)
-- v37: NTL v41 Grandmaster Horizon (Calibrated Pool Stylometry 0.50 + Expanded ATLAS 25% Margin 0.35 + Soft Sinkhorn 0.50/0.40)
-- v38: Grandmaster Horizon v41 + V40A Sibling Style Residual (max_alpha=0.06) + Zero-Violation Typography Guards
-- v39: Grand Master Consensus Blend (Balanced Pool 0.42 + ATLAS 22% Margin 0.33 + Per-Row Member Normalization + Sibling Residual + Sinkhorn 0.48)
+- v40: Verified SOTA 0.664 Reproduction (Softened Typography Evidence 1.2x + Marginally Balanced Sinkhorn 0.60)
+- v41: 198k Clean Open Pool SOTA (crtproduction/name-that-llm-open-pool + svc_w 12.0)
+- v42: Grandmaster Synergy (198k Open Pool + Softened Typography 1.2x + Calibrated Sinkhorn 0.55 + svc_w 4.0)
+- v43: Open-Pool Calibrated ATLAS (198k Pool + Refined ATLAS Margin 0.28 / Weight 0.22 + Sinkhorn 0.58)
+- v44: Horizon Master Consensus (198k Pool + Typography 1.2x + Family Invariant Sibling Residual + Calibrated Sinkhorn 0.50)
 """
 
 import argparse
+import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -19,48 +22,50 @@ from rich.console import Console
 console = Console()
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
+KAGGLE_BIN = shutil.which("kaggle") or "/Users/dustinober/.local/bin/kaggle"
+
 EXPERIMENT_QUEUE = [
     {
-        "id": "v35",
-        "slug": "name-that-llm-sota-0663-v35",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v35_sota_0663",
-        "version": "2",
-        "message": "Verified SOTA 0.663 Reproduction (Dual-T4 Data Parallel + ATLAS 20% + 15% Comp Stack + 34-Marker Bayesian Typography + Robust Llama) v35",
+        "id": "v40",
+        "slug": "name-that-llm-sota-0664-tuned-v40",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v40_sota_0664_tuned",
+        "version": "1",
+        "message": "Verified SOTA 0.664 Reproduction: Softened Typography Evidence (1.2x) + Marginally Balanced Sinkhorn (0.60) v40",
     },
     {
-        "id": "v36",
-        "slug": "name-that-llm-sibling-style-v36",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v36_sibling_style",
-        "version": "2",
-        "message": "0.663 Pipeline + V40A Family-Only Stylometry Sibling Residual (5-Fold GroupKFold OOF Calibrated, Cross-Family Invariant) v36",
+        "id": "v41",
+        "slug": "name-that-llm-open-pool-198k-v41",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v41_open_pool_198k",
+        "version": "1",
+        "message": "198k Clean Open Pool SOTA: crtproduction/name-that-llm-open-pool (198k Clean Passages) + svc_w 12.0 v41",
     },
     {
-        "id": "v37",
-        "slug": "name-that-llm-ntl-v41-grandmaster-horizon-v37",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v37_grandmaster_horizon",
-        "version": "2",
-        "message": "NTL v41 Grandmaster Horizon: Calibrated Pool Stylometry (0.50) + Expanded ATLAS 25% (Margin 0.35) + Soft Sinkhorn (0.50 / 0.40) v37",
+        "id": "v42",
+        "slug": "name-that-llm-open-pool-synergy-v42",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v42_open_pool_tuned_synergy",
+        "version": "1",
+        "message": "Grandmaster Synergy: 198k Open Pool + Softened Typography (1.2x) + Calibrated Sinkhorn (0.55) + svc_w 4.0 v42",
     },
     {
-        "id": "v38",
-        "slug": "name-that-llm-horizon-sibling-v38",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v38_horizon_sibling",
-        "version": "2",
-        "message": "Grandmaster Horizon v41 + V40A Sibling Style Residual (max_alpha=0.06) + Zero-Violation Typography Guards v38",
+        "id": "v43",
+        "slug": "name-that-llm-atlas-calibrated-v43",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v43_atlas_calibrated",
+        "version": "1",
+        "message": "Open-Pool Calibrated ATLAS: 198k Pool + Refined ATLAS Margin (0.28) / Weight (0.22) + Sinkhorn (0.58) v43",
     },
     {
-        "id": "v39",
-        "slug": "name-that-llm-consensus-blend-v39",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v39_consensus_blend",
-        "version": "2",
-        "message": "Grand Master Consensus: Balanced V31/V41 Multi-Modal Ensemble + Per-Row Member Normalization + Sibling Residual + Calibrated Sinkhorn (0.48) v39",
+        "id": "v44",
+        "slug": "name-that-llm-master-consensus-v44",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v44_master_consensus",
+        "version": "1",
+        "message": "Horizon Master Consensus: 198k Pool + Typography (1.2x) + Family Invariant Sibling Residual + Calibrated Sinkhorn (0.50) v44",
     },
 ]
 
 
-def run_cmd(cmd: list) -> subprocess.CompletedProcess:
+def run_kaggle_cmd(args: list) -> subprocess.CompletedProcess:
     return subprocess.run(
-        [sys.executable, "-m"] + cmd,
+        [KAGGLE_BIN] + args,
         cwd=PROJECT_ROOT,
         capture_output=True,
         text=True,
@@ -68,32 +73,32 @@ def run_cmd(cmd: list) -> subprocess.CompletedProcess:
 
 
 def get_kernel_status(slug: str) -> str:
-    res = run_cmd(["kaggle", "kernels", "status", f"dustinober/{slug}"])
+    res = run_kaggle_cmd(["kernels", "status", f"dustinober/{slug}"])
     lines = [l for l in res.stdout.splitlines() if not l.startswith("Warning:")]
     out = "\n".join(lines).strip()
     out_lower = out.lower()
-    if 'complete' in out_lower:
+    if "complete" in out_lower:
         return "COMPLETE"
-    elif 'running' in out_lower:
+    elif "running" in out_lower:
         return "RUNNING"
-    elif 'queued' in out_lower:
+    elif "queued" in out_lower:
         return "QUEUED"
-    elif 'error' in out_lower:
+    elif "error" in out_lower:
         return "ERROR"
-    elif "404" in res.stderr or "notfound" in res.stderr.lower() or "404" in out or not out:
+    elif "denied" in res.stderr.lower() or "not found" in res.stderr.lower() or "404" in res.stderr or "denied" in out_lower or not out:
         return "NOT_PUSHED"
     return out or "UNKNOWN"
 
 
 def get_submitted_messages() -> str:
-    res = run_cmd(["kaggle", "competitions", "submissions", "-c", "name-that-llm"])
+    res = run_kaggle_cmd(["competitions", "submissions", "-c", "name-that-llm"])
     return res.stdout
 
 
 def submit_kernel(exp: dict) -> bool:
     console.print(f"[bold green]Submitting {exp['id']} (dustinober/{exp['slug']} v{exp['version']})...[/bold green]")
-    res = run_cmd([
-        "kaggle", "competitions", "submit",
+    res = run_kaggle_cmd([
+        "competitions", "submit",
         "-c", "name-that-llm",
         "-f", "submission.parquet",
         "-m", exp["message"],
@@ -109,7 +114,7 @@ def submit_kernel(exp: dict) -> bool:
 
 def push_kernel(exp: dict) -> bool:
     console.print(f"[bold yellow]Pushing {exp['id']} ({exp['slug']})...[/bold yellow]")
-    res = run_cmd(["kaggle", "kernels", "push", "-p", str(exp["dir"])])
+    res = run_kaggle_cmd(["kernels", "push", "-p", str(exp["dir"])])
     console.print(res.stdout.strip())
     if res.returncode != 0:
         console.print(f"[bold red]Push failed for {exp['id']}:[/bold red] {res.stderr.strip()}")
@@ -117,36 +122,55 @@ def push_kernel(exp: dict) -> bool:
     m = re.search(r"Kernel version (\d+)", res.stdout)
     if m:
         exp["version"] = m.group(1)
+    else:
+        exp["version"] = "1"
     return True
 
 
-def advance_pipeline(auto_push_and_submit: bool = False):
-    console.rule("[bold cyan]5-Experiment SOTA Execution & Submission Status (v35 - v39)[/bold cyan]")
-
+def is_already_submitted(exp: dict, sub_out: str) -> bool:
+    for line in sub_out.splitlines():
+        if exp["slug"] in line:
+            return True
+        if re.search(rf"\b{exp['id']}\s+SubmissionStatus", line):
+            return True
+    return False
     sub_out = get_submitted_messages()
-    lines = [l for l in sub_out.split("\n") if l.strip() and not l.startswith("Warning")][:10]
+    lines = [l for l in sub_out.splitlines() if l.strip() and not l.startswith("Warning")][:10]
     console.print("[bold green]Recent Competition Submissions:[/bold green]")
     for l in lines:
         console.print(f"  {l}")
 
-    console.print("\n[bold yellow]5 Submissions Queue (v35 - v39):[/bold yellow]")
-    active_gpu_commits = 0
+def status_overview():
+    sub_out = get_submitted_messages()
+    lines = [l for l in sub_out.splitlines() if l.strip() and not l.startswith("Warning")][:10]
+    console.print("[bold green]Recent Competition Submissions:[/bold green]")
+    for l in lines:
+        console.print(f"  {l}")
+
+    console.print("\n[bold yellow]5 Submissions Queue (v40 - v44):[/bold yellow]")
+    for exp in EXPERIMENT_QUEUE:
+        st = get_kernel_status(exp["slug"])
+        already_sub = is_already_submitted(exp, sub_out)
+        sub_tag = "✅ SUBMITTED" if already_sub else "⏳ Pending Submit"
+        console.print(f"  [{exp['id']}] {exp['slug']} (v{exp['version']}): [bold]{st}[/bold] | {sub_tag}")
+
+
+def run_pipeline_step():
+    console.rule("[bold cyan]Executing Kaggle 5-Submission Pipeline (v40 - v44)[/bold cyan]")
+    sub_out = get_submitted_messages()
+
+    # Track statuses
     statuses = {}
+    active_gpu_commits = 0
     for exp in EXPERIMENT_QUEUE:
         st = get_kernel_status(exp["slug"])
         statuses[exp["id"]] = st
         if st in ("RUNNING", "QUEUED"):
             active_gpu_commits += 1
-        already_sub = f" {exp['id']}" in sub_out
-        sub_tag = "✅ SUBMITTED" if already_sub else "⏳ Pending Submit"
-        console.print(f"  [{exp['id']}] {exp['slug']} (v{exp['version']}): [bold]{st}[/bold] | {sub_tag}")
 
-    if not auto_push_and_submit:
-        return
-
-    # 1. Submit any COMPLETE kernels that haven't been submitted yet
+    # 1. Submit any COMPLETE kernels not yet submitted
     for exp in EXPERIMENT_QUEUE:
-        already_sub = f" {exp['id']}" in sub_out
+        already_sub = is_already_submitted(exp, sub_out)
         if statuses[exp["id"]] == "COMPLETE" and not already_sub:
             if submit_kernel(exp):
                 sub_out = get_submitted_messages()
@@ -158,10 +182,15 @@ def advance_pipeline(auto_push_and_submit: bool = False):
         if statuses[exp["id"]] == "NOT_PUSHED":
             if push_kernel(exp):
                 active_gpu_commits += 1
+                statuses[exp["id"]] = "RUNNING"
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--advance", action="store_true", help="Auto-submit completed kernels and push queued ones")
     args = parser.parse_args()
-    advance_pipeline(auto_push_and_submit=args.advance)
+
+    if args.advance:
+        run_pipeline_step()
+    else:
+        status_overview()
