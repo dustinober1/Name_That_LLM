@@ -1,11 +1,11 @@
-"""Automated Kaggle 5-Submission Pipeline Manager (v40 - v44).
+"""Automated Kaggle 5-Submission Pipeline Manager (v45 - v49).
 
 Manages the 5-experiment SOTA queue:
-- v40: Verified SOTA 0.664 Reproduction (Softened Typography Evidence 1.2x + Marginally Balanced Sinkhorn 0.60)
-- v41: 198k Clean Open Pool SOTA (crtproduction/name-that-llm-open-pool + svc_w 12.0)
-- v42: Grandmaster Synergy (198k Open Pool + Softened Typography 1.2x + Calibrated Sinkhorn 0.55 + svc_w 4.0)
-- v43: Open-Pool Calibrated ATLAS (198k Pool + Refined ATLAS Margin 0.28 / Weight 0.22 + Sinkhorn 0.58)
-- v44: Horizon Master Consensus (198k Pool + Typography 1.2x + Family Invariant Sibling Residual + Calibrated Sinkhorn 0.50)
+- v45: SOTA 0.664 Peak Master (198k Open Pool + svc_w 16.0 + Sinkhorn 0.45 + Target Mix 0.35)
+- v46: Open-Pool High-Precision ATLAS Synergy (198k Open Pool + svc_w 14.0 + Refined ATLAS Margin 0.28 / Weight 0.22)
+- v47: Balanced Marginal Horizon (198k Open Pool + svc_w 12.0 + Sinkhorn 0.42 + Target Mix 0.32)
+- v48: 198k Pool Sample Weight Optimization (_srcw 0.45 in SVC + svc_w 12.0 + Sinkhorn 0.45)
+- v49: Grand Master Champion Consensus (198k Open Pool _srcw 0.40 + svc_w 15.0 + ATLAS Margin 0.28 / Weight 0.22 + Sinkhorn 0.45)
 """
 
 import argparse
@@ -26,39 +26,39 @@ KAGGLE_BIN = shutil.which("kaggle") or "/Users/dustinober/.local/bin/kaggle"
 
 EXPERIMENT_QUEUE = [
     {
-        "id": "v40",
-        "slug": "name-that-llm-sota-0664-tuned-v40",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v40_sota_0664_tuned",
+        "id": "v45",
+        "slug": "name-that-llm-open-pool-apex-16-v45",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v45_open_pool_apex_16",
         "version": "1",
-        "message": "Verified SOTA 0.664 Reproduction: Softened Typography Evidence (1.2x) + Marginally Balanced Sinkhorn (0.60) v40",
+        "message": "SOTA 0.664 Peak Master: 198k Open Pool + svc_w 16.0 + Sinkhorn 0.45 + Target Mix 0.35 v45",
     },
     {
-        "id": "v41",
-        "slug": "name-that-llm-open-pool-198k-v41",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v41_open_pool_198k",
+        "id": "v46",
+        "slug": "name-that-llm-atlas-precision-14-v46",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v46_atlas_precision_14",
         "version": "1",
-        "message": "198k Clean Open Pool SOTA: crtproduction/name-that-llm-open-pool (198k Clean Passages) + svc_w 12.0 v41",
+        "message": "Open-Pool High-Precision ATLAS Synergy: 198k Open Pool + svc_w 14.0 + Refined ATLAS Margin 0.28 / Weight 0.22 v46",
     },
     {
-        "id": "v42",
-        "slug": "name-that-llm-open-pool-synergy-v42",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v42_open_pool_tuned_synergy",
+        "id": "v47",
+        "slug": "name-that-llm-sinkhorn-calibrated-v47",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v47_sinkhorn_calibrated",
         "version": "1",
-        "message": "Grandmaster Synergy: 198k Open Pool + Softened Typography (1.2x) + Calibrated Sinkhorn (0.55) + svc_w 4.0 v42",
+        "message": "Balanced Marginal Horizon: 198k Open Pool + svc_w 12.0 + Sinkhorn 0.42 + Target Mix 0.32 v47",
     },
     {
-        "id": "v43",
-        "slug": "name-that-llm-atlas-calibrated-v43",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v43_atlas_calibrated",
+        "id": "v48",
+        "slug": "name-that-llm-pool-weight-tune-v48",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v48_pool_weight_tune",
         "version": "1",
-        "message": "Open-Pool Calibrated ATLAS: 198k Pool + Refined ATLAS Margin (0.28) / Weight (0.22) + Sinkhorn (0.58) v43",
+        "message": "198k Pool Sample Weight Optimization: _srcw 0.45 in SVC + svc_w 12.0 + Sinkhorn 0.45 v48",
     },
     {
-        "id": "v44",
-        "slug": "name-that-llm-master-consensus-v44",
-        "dir": PROJECT_ROOT / "kernels" / "nlm_v44_master_consensus",
+        "id": "v49",
+        "slug": "name-that-llm-grandmaster-champion-v49",
+        "dir": PROJECT_ROOT / "kernels" / "nlm_v49_grandmaster_champion",
         "version": "1",
-        "message": "Horizon Master Consensus: 198k Pool + Typography (1.2x) + Family Invariant Sibling Residual + Calibrated Sinkhorn (0.50) v44",
+        "message": "Grand Master Champion Consensus: 198k Open Pool _srcw 0.40 + svc_w 15.0 + ATLAS Margin 0.28 / Weight 0.22 + Sinkhorn 0.45 v49",
     },
 ]
 
@@ -134,11 +134,7 @@ def is_already_submitted(exp: dict, sub_out: str) -> bool:
         if re.search(rf"\b{exp['id']}\s+SubmissionStatus", line):
             return True
     return False
-    sub_out = get_submitted_messages()
-    lines = [l for l in sub_out.splitlines() if l.strip() and not l.startswith("Warning")][:10]
-    console.print("[bold green]Recent Competition Submissions:[/bold green]")
-    for l in lines:
-        console.print(f"  {l}")
+
 
 def status_overview():
     sub_out = get_submitted_messages()
@@ -147,7 +143,7 @@ def status_overview():
     for l in lines:
         console.print(f"  {l}")
 
-    console.print("\n[bold yellow]5 Submissions Queue (v40 - v44):[/bold yellow]")
+    console.print("\n[bold yellow]5 Submissions Queue (v45 - v49):[/bold yellow]")
     for exp in EXPERIMENT_QUEUE:
         st = get_kernel_status(exp["slug"])
         already_sub = is_already_submitted(exp, sub_out)
@@ -156,7 +152,7 @@ def status_overview():
 
 
 def run_pipeline_step():
-    console.rule("[bold cyan]Executing Kaggle 5-Submission Pipeline (v40 - v44)[/bold cyan]")
+    console.rule("[bold cyan]Executing Kaggle 5-Submission Pipeline (v45 - v49)[/bold cyan]")
     sub_out = get_submitted_messages()
 
     # Track statuses
